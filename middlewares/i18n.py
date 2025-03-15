@@ -5,7 +5,7 @@ from aiogram.types import CallbackQuery, Message, TelegramObject
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select
 
-from database import get_session
+from i18n_setup import get_i18n
 from models import User
 
 
@@ -41,6 +41,7 @@ class I18nMiddleware(BaseMiddleware):
         # Если пользователь найден в БД, используем его язык
         if db_user:
             self.i18n.current_language = db_user.language
+            get_i18n().current_language = db_user.language
 
         # Вызываем следующий обработчик
         return await handler(event, data)

@@ -11,6 +11,21 @@ from middlewares.throttling import ThrottlingMiddleware
 from models import UserRole
 
 
+# Изменения в middlewares/__init__.py
+
+from aiogram import Bot, Dispatcher, BaseMiddleware
+from aiogram.utils.i18n import I18n
+from aiogram.types import TelegramObject
+from typing import Any, Awaitable, Callable, Dict
+
+from config import Config
+from database import get_session, async_session_factory
+from middlewares.i18n import I18nMiddleware
+from middlewares.role import RoleMiddleware
+from middlewares.throttling import ThrottlingMiddleware
+from models import UserRole
+
+
 class DBSessionMiddleware(BaseMiddleware):
     async def __call__(
             self,
@@ -18,9 +33,7 @@ class DBSessionMiddleware(BaseMiddleware):
             event: TelegramObject,
             data: Dict[str, Any]
     ) -> Any:
-        from sqlalchemy.ext.asyncio import AsyncSession
-
-        async with AsyncSession() as session:
+        async with async_session_factory() as session:
             data["session"] = session
             result = await handler(event, data)
 

@@ -23,7 +23,7 @@ from utils import (
     UserStates,
     Paginator,
     TICKET_STATUS_EMOJI,
-    RATING_EMOJI
+    RATING_EMOJI, build_rating_keyboard
 )
 
 # Инициализация логгера
@@ -208,34 +208,21 @@ async def take_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSes
 
     await session.commit()
 
-    # Формируем сообщение с историей тикета
+    # Отправляем информацию о тикете
     message_text = (
         f"🔄 <b>Тикет #{ticket.id} принят в работу</b>\n\n"
         f"👤 Пользователь: {ticket.user.full_name}\n"
         f"📝 Тема: {ticket.subject or 'Не указана'}\n"
         f"📅 Создан: {ticket.created_at.strftime('%d.%m.%Y %H:%M')}\n\n"
-        f"<b>История переписки:</b>\n\n"
     )
 
-    for msg in ticket.messages:
-        sender = "Пользователь" if msg.sender_id == ticket.user_id else "Модератор"
-        time = msg.sent_at.strftime("%d.%m.%Y %H:%M")
-
-        if msg.message_type == MessageType.SYSTEM:
-            message_text += f"🔔 <i>{msg.text}</i>\n\n"
-        else:
-            message_text += f"<b>{sender}</b> [{time}]:\n{msg.text}\n\n"
-
-    message_text += (
-        "<i>Чтобы ответить пользователю, просто отправьте сообщение в этот чат.</i>"
-    )
-
-    # Отправляем сообщение модератору
+    # Создаем клавиатуру
     kb = InlineKeyboardBuilder()
     kb.add(InlineKeyboardButton(text="✅ Отметить как решённый", callback_data=f"mod:resolve_ticket:{ticket.id}"))
     kb.add(InlineKeyboardButton(text="🔄 Переназначить", callback_data=f"mod:reassign_ticket:{ticket.id}"))
     kb.add(InlineKeyboardButton(text="🔙 В меню", callback_data="mod:back_to_menu"))
 
+    # Отправляем информацию о тикете
     await callback_query.message.edit_text(
         message_text,
         reply_markup=kb.as_markup()
@@ -244,6 +231,45 @@ async def take_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSes
     # Устанавливаем состояние работы с тикетом
     await state.set_state(ModeratorStates.WORKING_WITH_TICKET)
     await state.update_data(active_ticket_id=ticket.id)
+
+    # Отправляем историю сообщений отдельными сообщениями
+    if ticket.messages:
+        await callback_query.message.answer("📜 <b>История сообщений:</b>")
+
+        for msg in ticket.messages:
+            sender = "Пользователь" if msg.sender_id == ticket.user_id else "Модератор"
+            time = msg.sent_at.strftime("%d.%m.%Y %H:%M")
+
+            if msg.message_type == MessageType.SYSTEM:
+                await callback_query.message.answer(f"🔔 <i>{msg.text}</i>")
+            elif msg.message_type == MessageType.TEXT:
+                await callback_query.message.answer(f"<b>{sender}</b> [{time}]:\n{msg.text}")
+            elif msg.message_type == MessageType.PHOTO:
+                caption = f"<b>{sender}</b> [{time}]:" + (f"\n{msg.text.replace('[ФОТО] ', '')}" if msg.text else "")
+                await bot.send_photo(
+                    chat_id=callback_query.from_user.id,
+                    photo=msg.file_id,
+                    caption=caption
+                )
+            elif msg.message_type == MessageType.VIDEO:
+                caption = f"<b>{sender}</b> [{time}]:" + (f"\n{msg.text.replace('[ВИДЕО] ', '')}" if msg.text else "")
+                await bot.send_video(
+                    chat_id=callback_query.from_user.id,
+                    video=msg.file_id,
+                    caption=caption
+                )
+            elif msg.message_type == MessageType.DOCUMENT:
+                caption = f"<b>{sender}</b> [{time}]:" + (
+                    f"\n{msg.text.replace('[ДОКУМЕНТ: ', '').split(']')[1] if ']' in msg.text else ""}" if msg.text else "")
+                await bot.send_document(
+                    chat_id=callback_query.from_user.id,
+                    document=msg.file_id,
+                    caption=caption
+                )
+
+        await callback_query.message.answer(
+            "<i>Чтобы ответить пользователю, просто отправьте сообщение в этот чат.</i>"
+        )
 
     # Уведомляем пользователя о том, что его тикет принят в работу
     try:
@@ -369,7 +395,7 @@ async def confirm_resolve_ticket(callback_query: CallbackQuery, bot: Bot, sessio
 
     # Сбрасываем состояние
     await state.set_state(ModeratorStates.MAIN_MENU)
-    await state.clear_data()
+    await state.clear()
 
     # Уведомляем пользователя о решении тикета
     try:
@@ -564,8 +590,7 @@ async def assign_to_moderator(callback_query: CallbackQuery, bot: Bot, session: 
 
     # Сбрасываем состояние
     await state.set_state(ModeratorStates.MAIN_MENU)
-    await state.clear_data()
-
+    await state.clear()
     # Отправляем уведомление новому модератору
     try:
         # Формируем сообщение с историей тикета
@@ -855,12 +880,12 @@ async def back_to_menu(callback_query: CallbackQuery, state: FSMContext):
     )
 
     await state.set_state(ModeratorStates.MAIN_MENU)
-    await state.clear_data()
+    await state.clear()
     await callback_query.answer()
 
 
 @router.callback_query(F.data == "mod:back_to_ticket")
-async def back_to_ticket(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def back_to_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
     """
     Обработчик возврата к активному тикету
     """
@@ -906,40 +931,12 @@ async def back_to_ticket(callback_query: CallbackQuery, session: AsyncSession, s
         await callback_query.answer()
         return
 
-    # Формируем сообщение с историей тикета
+    # Отправляем информацию о тикете
     message_text = (
         f"🔄 <b>Тикет #{ticket.id}</b>\n\n"
         f"👤 Пользователь: {ticket.user.full_name}\n"
         f"📝 Тема: {ticket.subject or 'Не указана'}\n"
         f"📅 Создан: {ticket.created_at.strftime('%d.%m.%Y %H:%M')}\n\n"
-        f"<b>История переписки:</b>\n\n"
-    )
-
-    # Максимальное количество сообщений для отображения
-    max_messages = 10
-    start_idx = max(0, len(ticket.messages) - max_messages)
-
-    for i, msg in enumerate(ticket.messages[start_idx:], start=start_idx + 1):
-        if msg.sender_id == ticket.user_id:
-            sender = "Пользователь"
-        elif msg.sender_id == moderator.id:
-            sender = "Вы"
-        else:
-            sender = "Система"
-
-        time = msg.sent_at.strftime("%d.%m.%Y %H:%M")
-
-        if msg.message_type == MessageType.SYSTEM:
-            message_text += f"🔔 <i>{msg.text}</i>\n\n"
-        else:
-            message_text += f"<b>{sender}</b> [{time}]:\n{msg.text}\n\n"
-
-    # Если в тикете много сообщений, добавляем информацию об ограничении
-    if len(ticket.messages) > max_messages:
-        message_text += f"<i>Показаны последние {max_messages} из {len(ticket.messages)} сообщений.</i>\n\n"
-
-    message_text += (
-        "<i>Чтобы ответить пользователю, просто отправьте сообщение в этот чат.</i>"
     )
 
     # Отправляем сообщение модератору
@@ -952,6 +949,61 @@ async def back_to_ticket(callback_query: CallbackQuery, session: AsyncSession, s
         message_text,
         reply_markup=kb.as_markup()
     )
+
+    # Отправляем историю сообщений отдельными сообщениями
+    if ticket.messages:
+        await callback_query.message.answer("📜 <b>История сообщений:</b>")
+
+        # Ограничиваем количество сообщений
+        max_messages = 20
+        start_idx = max(0, len(ticket.messages) - max_messages)
+
+        # Если в тикете много сообщений, добавляем информацию об ограничении
+        if len(ticket.messages) > max_messages:
+            await callback_query.message.answer(
+                f"<i>Показаны последние {max_messages} из {len(ticket.messages)} сообщений.</i>"
+            )
+
+        for msg in ticket.messages[start_idx:]:
+            if msg.sender_id == ticket.user_id:
+                sender = "Пользователь"
+            elif msg.sender_id == moderator.id:
+                sender = "Вы"
+            else:
+                sender = "Система"
+
+            time = msg.sent_at.strftime("%d.%m.%Y %H:%M")
+
+            if msg.message_type == MessageType.SYSTEM:
+                await callback_query.message.answer(f"🔔 <i>{msg.text}</i>")
+            elif msg.message_type == MessageType.TEXT:
+                await callback_query.message.answer(f"<b>{sender}</b> [{time}]:\n{msg.text}")
+            elif msg.message_type == MessageType.PHOTO:
+                caption = f"<b>{sender}</b> [{time}]:" + (f"\n{msg.text.replace('[ФОТО] ', '')}" if msg.text else "")
+                await bot.send_photo(
+                    chat_id=callback_query.from_user.id,
+                    photo=msg.file_id,
+                    caption=caption
+                )
+            elif msg.message_type == MessageType.VIDEO:
+                caption = f"<b>{sender}</b> [{time}]:" + (f"\n{msg.text.replace('[ВИДЕО] ', '')}" if msg.text else "")
+                await bot.send_video(
+                    chat_id=callback_query.from_user.id,
+                    video=msg.file_id,
+                    caption=caption
+                )
+            elif msg.message_type == MessageType.DOCUMENT:
+                caption = f"<b>{sender}</b> [{time}]:" + (
+                    f"\n{msg.text.replace('[ДОКУМЕНТ: ', '').split(']')[1] if ']' in msg.text else ""}" if msg.text else "")
+                await bot.send_document(
+                    chat_id=callback_query.from_user.id,
+                    document=msg.file_id,
+                    caption=caption
+                )
+
+        await callback_query.message.answer(
+            "<i>Чтобы ответить пользователю, просто отправьте сообщение в этот чат.</i>"
+        )
 
     await state.set_state(ModeratorStates.WORKING_WITH_TICKET)
     await callback_query.answer()

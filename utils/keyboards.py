@@ -1,7 +1,7 @@
 from typing import List
 
 from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
-from aiogram.utils.i18n import gettext as _
+from i18n_setup import gettext as _
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from models import TicketStatus, UserRole

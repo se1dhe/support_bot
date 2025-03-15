@@ -9,7 +9,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 
 from bot import setup_bot, setup_dispatcher
 from config import load_config
-from database import create_tables
+from database import create_tables, config
 from handlers import register_all_handlers
 from middlewares import setup_middlewares
 
@@ -22,6 +22,12 @@ logging.basicConfig(
         logging.StreamHandler()
     ]
 )
+
+# В начале функции main после загрузки config добавьте:
+from i18n_setup import setup_i18n
+setup_i18n(config.localization.locales_dir,
+           config.localization.default_language,
+           config.localization.domain)
 
 logger = logging.getLogger(__name__)
 

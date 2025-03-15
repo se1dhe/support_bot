@@ -2,7 +2,7 @@
 # -------
 
 import enum
-from sqlalchemy import Column, Integer, String, Boolean, Enum, DateTime, func
+from sqlalchemy import Column, Integer, BigInteger, String, Boolean, Enum, DateTime, func
 from sqlalchemy.orm import relationship
 
 from database import Base
@@ -18,7 +18,7 @@ class User(Base):
     __tablename__ = "users"
 
     id = Column(Integer, primary_key=True)
-    telegram_id = Column(Integer, unique=True, nullable=False)
+    telegram_id = Column(BigInteger, unique=True, nullable=False)  # Изменено на BigInteger
     username = Column(String(255), nullable=True)
     first_name = Column(String(255), nullable=True)
     last_name = Column(String(255), nullable=True)
@@ -28,10 +28,9 @@ class User(Base):
     created_at = Column(DateTime, default=func.now())
 
     # Отношения
-    tickets = relationship("Ticket", back_populates="user", cascade="all, delete-orphan")
-    assigned_tickets = relationship("Ticket",
-                                    foreign_keys="[Ticket.moderator_id]",
-                                    back_populates="moderator")
+    tickets = relationship("Ticket", back_populates="user", foreign_keys="[Ticket.user_id]",
+                           cascade="all, delete-orphan")
+    assigned_tickets = relationship("Ticket", back_populates="moderator", foreign_keys="[Ticket.moderator_id]")
 
     def __repr__(self):
         return f"<User {self.telegram_id}: {self.username or self.first_name or 'Unknown'}>"
