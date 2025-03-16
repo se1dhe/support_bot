@@ -1,6 +1,6 @@
 from typing import List
 
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup
 from i18n_setup import gettext as _
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
@@ -88,6 +88,34 @@ def build_ticket_actions_keyboard(ticket_status: TicketStatus) -> InlineKeyboard
     kb.add(InlineKeyboardButton(text=_("🔙 Назад"), callback_data="ticket:back"))
 
     return kb.as_markup()
+
+
+def build_main_reply_keyboard(role: UserRole = UserRole.USER) -> ReplyKeyboardMarkup:
+    """
+    Создает основную клавиатуру для быстрого доступа к меню.
+
+    Args:
+        role: Роль пользователя (USER, MODERATOR, ADMIN)
+
+    Returns:
+        ReplyKeyboardMarkup: Клавиатура с кнопками быстрого доступа
+    """
+    # Базовая кнопка меню для всех ролей
+    buttons = [[KeyboardButton(text="📋 Меню")]]
+
+    # Добавляем кнопки в зависимости от роли
+    if role == UserRole.USER:
+        buttons[0].append(KeyboardButton(text="📝 Активный тикет"))
+        buttons.append([KeyboardButton(text="✏️ Новый тикет"), KeyboardButton(text="📋 История тикетов")])
+    elif role == UserRole.MODERATOR:
+        buttons[0].append(KeyboardButton(text="📝 Активный тикет"))
+        buttons.append([KeyboardButton(text="📨 Неназначенные тикеты"), KeyboardButton(text="📊 Моя статистика")])
+    elif role == UserRole.ADMIN:
+        buttons[0].append(KeyboardButton(text="📈 Статистика"))
+        buttons.append([KeyboardButton(text="👨‍💼 Управление модераторами"), KeyboardButton(text="🔍 Поиск тикета")])
+
+    # Создаем клавиатуру с resize_keyboard=True, чтобы она не занимала много места
+    return ReplyKeyboardMarkup(keyboard=buttons, resize_keyboard=True)
 
 
 def build_rating_keyboard() -> InlineKeyboardMarkup:
