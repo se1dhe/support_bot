@@ -151,7 +151,7 @@ async def _process_unassigned_tickets(callback_query: CallbackQuery, session: As
     logger.info(f"Moderator {user_id} viewed unassigned tickets")
 
 
-@router.callback_query(F.data.startswith("mod:take:"))
+@router.callback_query(F.data.startswith("mod:take_ticket:"))
 async def take_ticket_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
     Обертка для обработчика принятия тикета в работу
@@ -918,7 +918,7 @@ async def mod_active_ticket_button_wrapper(message: Message, state: FSMContext, 
     await state.update_data(active_ticket_id=ticket.id)
 
     # Получаем бота из kwargs для отправки истории сообщений
-    bot = kwargs.get("bot")
+    bot = message.bot
     if not bot:
         await message.answer("Произошла ошибка при получении истории сообщений.")
         return

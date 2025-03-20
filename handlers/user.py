@@ -950,7 +950,7 @@ async def active_ticket_button_wrapper(message: Message, state: FSMContext, **kw
         return await _process_active_ticket_button(message, session, state)
 
 
-async def _process_active_ticket_button(message: Message, session: AsyncSession, state: FSMContext, **kwargs):
+async def _process_active_ticket_button(message: Message, session: AsyncSession, state: FSMContext):
     """
     Реализация обработчика кнопки "Активный тикет" на Reply Keyboard
     """
@@ -963,13 +963,6 @@ async def _process_active_ticket_button(message: Message, session: AsyncSession,
 
     if not user:
         await message.answer("Произошла ошибка. Пожалуйста, перезапустите бота: /start")
-        return
-
-    # Получаем бота из kwargs (добавляется middleware)
-    bot = kwargs.get("bot")
-    if not bot:
-        logger.error("Бот не передан в kwargs!")
-        await message.answer("Произошла системная ошибка. Пожалуйста, попробуйте позже.")
         return
 
     # Симулируем нажатие на Inline кнопку для активного тикета
@@ -987,6 +980,9 @@ async def _process_active_ticket_button(message: Message, session: AsyncSession,
     # Создаем новое сообщение для вывода результата
     result_message = await message.answer("Загрузка...")
     fake_callback.message = result_message
+
+    # Получаем bot из контекста сообщения
+    bot = message.bot
 
     # Вызываем обработчик для Inline кнопки "Активный тикет"
     await active_ticket_wrapper(fake_callback, state, session=session, bot=bot)
