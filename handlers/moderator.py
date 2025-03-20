@@ -625,6 +625,20 @@ async def process_moderator_message_wrapper(message: Message, state: FSMContext,
     """
     Обертка для обработчика сообщения модератора в активном тикете
     """
+    # Проверяем, является ли сообщение командой из reply-клавиатуры
+    if message.text in ["📋 Меню", "📝 Активный тикет модератора", "📨 Неназначенные тикеты", "📊 Моя статистика"]:
+        # Перенаправляем на соответствующий обработчик
+        if message.text == "📋 Меню":
+            from handlers.common import reply_menu_button_wrapper
+            return await reply_menu_button_wrapper(message, state, **kwargs)
+        elif message.text == "📝 Активный тикет модератора":
+            return await mod_active_ticket_button_wrapper(message, state, **kwargs)
+        elif message.text == "📨 Неназначенные тикеты":
+            return await unassigned_tickets_button_wrapper(message, state, **kwargs)
+        elif message.text == "📊 Моя статистика":
+            return await my_stats_button_wrapper(message, state, **kwargs)
+
+    # Если это не специальная команда, обрабатываем как обычное сообщение тикета
     session = kwargs.get("session")
     if not session:
         logger.error("Сессия не передана в обработчик process_moderator_message!")
@@ -852,6 +866,423 @@ async def _process_switch_to_user_menu(callback_query: CallbackQuery, session: A
     await callback_query.answer()
 
     logger.info(f"Moderator {user_id} switched to user menu")
+
+
+@router.callback_query(F.data.startswith("mod:reassign_ticket:"))
+async def reassign_ticket_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
+    """
+    Обертка для обработчика переназначения тикета другому модератору
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик reassign_ticket!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_reassign_ticket(callback_query, session, state)
+
+
+async def _process_reassign_ticket(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика переназначения тикета другому модератору
+    """
+    user_id = callback_query.from_user.id
+    ticket_id = int(callback_query.data.split(":")[2])
+
+    # Получаем текущего модератора из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    current_moderator = result.scalar_one_or_none()
+
+    if not current_moderator or current_moderator.role != UserRole.MODERATOR:
+        await callback_query.message.edit_text(
+            _("error_access_denied", current_moderator.language if current_moderator else None)
+        )
+        await callback_query.answer()
+        return
+
+    # Получаем тикет из БД
+    ticket_query = select(Ticket).where(
+        (Ticket.id == ticket_id) &
+        (Ticket.moderator_id == current_moderator.id) &
+        (Ticket.status == TicketStatus.IN_PROGRESS)
+    ).options(selectinload(Ticket.user))
+    ticket_result = await session.execute(ticket_query)
+    ticket = ticket_result.scalar_one_or_none()
+
+    if not ticket:
+        await callback_query.message.edit_text(
+            _("error_ticket_not_found", current_moderator.language, ticket_id=ticket_id) + " " +
+            "или он не находится в работе у вас.",
+            reply_markup=KeyboardFactory.back_button("mod:back_to_menu", current_moderator.language)
+        )
+        await callback_query.answer()
+        return
+
+    # Получаем список других модераторов
+    moderators_query = select(User).where(
+        (User.role == UserRole.MODERATOR) &
+        (User.id != current_moderator.id)
+    )
+    moderators_result = await session.execute(moderators_query)
+    moderators = moderators_result.scalars().all()
+
+    if not moderators:
+        await callback_query.message.edit_text(
+            "В системе нет других модераторов, которым можно переназначить тикет.",
+            reply_markup=KeyboardFactory.back_button("mod:back_to_menu", current_moderator.language)
+        )
+        await callback_query.answer()
+        return
+
+    # Сохраняем ID тикета в состоянии
+    await state.update_data(reassigning_ticket_id=ticket_id)
+    await state.set_state(ModeratorStates.REASSIGNING_TICKET)
+
+    # Формируем сообщение и клавиатуру для выбора модератора
+    message_text = (
+        f"🔄 <b>Переназначение тикета #{ticket_id}</b>\n\n"
+        f"Выберите модератора, которому хотите переназначить тикет:\n"
+    )
+
+    # Создаем список модераторов для клавиатуры
+    kb_items = []
+    for mod in moderators:
+        kb_items.append({
+            "id": f"reassign:{mod.id}",
+            "text": f"{mod.full_name}"
+        })
+
+    # Добавляем кнопку "Назад"
+    kb_items.append({
+        "id": "cancel_reassign",
+        "text": "🔙 Отмена"
+    })
+
+    # Отправляем сообщение с клавиатурой
+    await callback_query.message.edit_text(
+        message_text,
+        reply_markup=KeyboardFactory.paginated_list(
+            kb_items,
+            0,
+            action_prefix="mod",
+            back_callback=f"mod:take_ticket:{ticket_id}",
+            language=current_moderator.language
+        )
+    )
+
+    await callback_query.answer()
+    logger.info(f"Moderator {user_id} started reassigning ticket #{ticket_id}")
+
+
+@router.callback_query(F.data.startswith("mod:reassign:"), ModeratorStates.REASSIGNING_TICKET)
+async def confirm_reassign_ticket_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
+    """
+    Обертка для обработчика подтверждения переназначения тикета
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик confirm_reassign_ticket!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    bot = kwargs.get("bot")
+    if not bot:
+        logger.error("Bot не передан в обработчик confirm_reassign_ticket!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_confirm_reassign_ticket(callback_query, bot, session, state)
+
+
+async def _process_confirm_reassign_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSession,
+                                           state: FSMContext):
+    """
+    Реализация обработчика подтверждения переназначения тикета
+    """
+    user_id = callback_query.from_user.id
+    new_moderator_id = int(callback_query.data.split(":")[2])
+
+    # Получаем ID тикета из состояния
+    state_data = await state.get_data()
+    ticket_id = state_data.get("reassigning_ticket_id")
+
+    if not ticket_id:
+        await callback_query.message.edit_text(
+            "Произошла ошибка: не найден ID тикета для переназначения.",
+            reply_markup=KeyboardFactory.back_button("mod:back_to_menu", None)
+        )
+        await callback_query.answer()
+        return
+
+    # Получаем текущего модератора из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    current_moderator = result.scalar_one_or_none()
+
+    if not current_moderator or current_moderator.role != UserRole.MODERATOR:
+        await callback_query.message.edit_text(
+            _("error_access_denied", current_moderator.language if current_moderator else None)
+        )
+        await callback_query.answer()
+        return
+
+    # Получаем тикет из БД
+    ticket_query = select(Ticket).where(
+        (Ticket.id == ticket_id) &
+        (Ticket.moderator_id == current_moderator.id) &
+        (Ticket.status == TicketStatus.IN_PROGRESS)
+    ).options(selectinload(Ticket.user))
+    ticket_result = await session.execute(ticket_query)
+    ticket = ticket_result.scalar_one_or_none()
+
+    if not ticket:
+        await callback_query.message.edit_text(
+            _("error_ticket_not_found", current_moderator.language, ticket_id=ticket_id) + " " +
+            "или он не находится в работе у вас.",
+            reply_markup=KeyboardFactory.back_button("mod:back_to_menu", current_moderator.language)
+        )
+        await callback_query.answer()
+        return
+
+    # Получаем нового модератора из БД
+    new_mod_query = select(User).where(User.id == new_moderator_id)
+    new_mod_result = await session.execute(new_mod_query)
+    new_moderator = new_mod_result.scalar_one_or_none()
+
+    if not new_moderator or new_moderator.role != UserRole.MODERATOR:
+        await callback_query.message.edit_text(
+            "Выбранный модератор не найден или не имеет соответствующих прав.",
+            reply_markup=KeyboardFactory.back_button("mod:back_to_menu", current_moderator.language)
+        )
+        await callback_query.answer()
+        return
+
+    # Подтверждение действия
+    await callback_query.message.edit_text(
+        f"⚠️ <b>Подтверждение</b>\n\n"
+        f"Вы действительно хотите переназначить тикет #{ticket_id} модератору {new_moderator.full_name}?",
+        reply_markup=KeyboardFactory.confirmation_keyboard(f"do_reassign:{ticket_id}:{new_moderator_id}",
+                                                           current_moderator.language)
+    )
+
+    await callback_query.answer()
+
+
+@router.callback_query(F.data.startswith("confirm:do_reassign:"))
+async def do_reassign_ticket_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
+    """
+    Обертка для обработчика выполнения переназначения тикета
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик do_reassign_ticket!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    bot = kwargs.get("bot")
+    if not bot:
+        logger.error("Bot не передан в обработчик do_reassign_ticket!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_do_reassign_ticket(callback_query, bot, session, state)
+
+
+async def _process_do_reassign_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSession,
+                                      state: FSMContext):
+    """
+    Реализация обработчика выполнения переназначения тикета
+    """
+    user_id = callback_query.from_user.id
+    data_parts = callback_query.data.split(":")
+    ticket_id = int(data_parts[2])
+    new_moderator_id = int(data_parts[3])
+
+    # Получаем текущего модератора из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    current_moderator = result.scalar_one_or_none()
+
+    if not current_moderator or current_moderator.role != UserRole.MODERATOR:
+        await callback_query.message.edit_text(
+            _("error_access_denied", current_moderator.language if current_moderator else None)
+        )
+        await callback_query.answer()
+        return
+
+    # Получаем тикет из БД
+    ticket_query = select(Ticket).where(
+        (Ticket.id == ticket_id) &
+        (Ticket.moderator_id == current_moderator.id) &
+        (Ticket.status == TicketStatus.IN_PROGRESS)
+    ).options(selectinload(Ticket.user))
+    ticket_result = await session.execute(ticket_query)
+    ticket = ticket_result.scalar_one_or_none()
+
+    if not ticket:
+        await callback_query.message.edit_text(
+            _("error_ticket_not_found", current_moderator.language, ticket_id=ticket_id) + " " +
+            "или он не находится в работе у вас.",
+            reply_markup=KeyboardFactory.back_button("mod:back_to_menu", current_moderator.language)
+        )
+        await callback_query.answer()
+        return
+
+    # Получаем нового модератора из БД
+    new_mod_query = select(User).where(User.id == new_moderator_id)
+    new_mod_result = await session.execute(new_mod_query)
+    new_moderator = new_mod_result.scalar_one_or_none()
+
+    if not new_moderator or new_moderator.role != UserRole.MODERATOR:
+        await callback_query.message.edit_text(
+            "Выбранный модератор не найден или не имеет соответствующих прав.",
+            reply_markup=KeyboardFactory.back_button("mod:back_to_menu", current_moderator.language)
+        )
+        await callback_query.answer()
+        return
+
+    # Проверяем, есть ли у нового модератора активный тикет
+    active_mod_ticket_query = select(Ticket).where(
+        (Ticket.moderator_id == new_moderator.id) &
+        (Ticket.status == TicketStatus.IN_PROGRESS)
+    )
+    active_mod_ticket_result = await session.execute(active_mod_ticket_query)
+    active_mod_ticket = active_mod_ticket_result.scalar_one_or_none()
+
+    if active_mod_ticket:
+        await callback_query.message.edit_text(
+            f"⚠️ Модератор {new_moderator.full_name} уже имеет активный тикет #{active_mod_ticket.id}.\n\n"
+            f"Модератор может работать только с одним тикетом одновременно. "
+            f"Пожалуйста, выберите другого модератора.",
+            reply_markup=KeyboardFactory.back_button(f"mod:reassign_ticket:{ticket_id}", current_moderator.language)
+        )
+        await callback_query.answer()
+        return
+
+    # Переназначаем тикет новому модератору
+    old_moderator_name = current_moderator.full_name
+    ticket.moderator_id = new_moderator.id
+    ticket.updated_at = datetime.now()
+
+    # Добавляем системное сообщение о переназначении
+    system_message = TicketMessage(
+        ticket_id=ticket.id,
+        sender_id=current_moderator.id,
+        message_type=MessageType.SYSTEM,
+        text=f"Тикет переназначен с модератора {old_moderator_name} на модератора {new_moderator.full_name}"
+    )
+    session.add(system_message)
+
+    await session.commit()
+
+    # Уведомляем текущего модератора о переназначении
+    await callback_query.message.edit_text(
+        f"✅ Тикет #{ticket_id} успешно переназначен модератору {new_moderator.full_name}.",
+        reply_markup=KeyboardFactory.back_button("mod:back_to_menu", current_moderator.language)
+    )
+
+    # Сбрасываем состояние
+    await state.set_state(ModeratorStates.MAIN_MENU)
+    await state.clear()
+
+    # Уведомляем нового модератора о назначении тикета
+    try:
+        # Создаем клавиатуру с кнопкой "Принять тикет"
+        keyboard = KeyboardFactory.ticket_actions(TicketStatus.IN_PROGRESS, ticket_id, new_moderator.language)
+
+        await bot.send_message(
+            chat_id=new_moderator.telegram_id,
+            text=f"📩 <b>Вам переназначен тикет #{ticket_id}</b>\n\n"
+                 f"От: {ticket.user.full_name}\n"
+                 f"Тема: {ticket.subject or 'Не указана'}\n\n"
+                 f"Модератор {old_moderator_name} переназначил вам этот тикет.",
+            reply_markup=keyboard
+        )
+    except Exception as e:
+        logger.error(f"Failed to send notification to new moderator {new_moderator.telegram_id}: {e}")
+
+    # Уведомляем пользователя о смене модератора
+    try:
+        await bot.send_message(
+            chat_id=ticket.user.telegram_id,
+            text=f"🔄 <b>Уведомление по тикету #{ticket_id}</b>\n\n"
+                 f"Ваш тикет переназначен новому модератору: {new_moderator.full_name}.\n"
+                 f"Он продолжит работать с вашим запросом."
+        )
+    except Exception as e:
+        logger.error(f"Failed to send notification to user {ticket.user.telegram_id}: {e}")
+
+    await callback_query.answer()
+
+    logger.info(f"Moderator {user_id} reassigned ticket #{ticket_id} to moderator {new_moderator_id}")
+
+
+@router.callback_query(F.data == "mod:cancel_reassign", ModeratorStates.REASSIGNING_TICKET)
+async def cancel_reassign_ticket_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
+    """
+    Обертка для обработчика отмены переназначения тикета
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик cancel_reassign_ticket!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_cancel_reassign_ticket(callback_query, session, state)
+
+
+async def _process_cancel_reassign_ticket(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика отмены переназначения тикета
+    """
+    user_id = callback_query.from_user.id
+
+    # Получаем модератора из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    moderator = result.scalar_one_or_none()
+
+    if not moderator or moderator.role != UserRole.MODERATOR:
+        await callback_query.message.edit_text(
+            _("error_access_denied", moderator.language if moderator else None)
+        )
+        await callback_query.answer()
+        return
+
+    # Получаем ID тикета из состояния
+    state_data = await state.get_data()
+    ticket_id = state_data.get("reassigning_ticket_id")
+
+    await callback_query.message.edit_text(
+        "🔄 Переназначение тикета отменено.",
+        reply_markup=KeyboardFactory.back_button("mod:back_to_menu", moderator.language)
+    )
+
+    # Сбрасываем состояние
+    await state.set_state(ModeratorStates.MAIN_MENU)
+    await state.clear()
+
+    await callback_query.answer()
+    logger.info(f"Moderator {user_id} canceled reassigning ticket #{ticket_id}")
 
 
 def register_handlers(dp: Dispatcher):

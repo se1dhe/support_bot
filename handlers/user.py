@@ -504,11 +504,26 @@ async def _process_active_ticket(callback_query: CallbackQuery, bot: Bot, sessio
     logger.info(f"User {user_id} viewed active ticket #{ticket.id}")
 
 
+# Модифицируем обработчик сообщений в активном тикете в handlers/user.py
 @router.message(UserStates.SENDING_MESSAGE, F.text | F.photo | F.document | F.video)
 async def process_ticket_message_wrapper(message: Message, state: FSMContext, **kwargs):
     """
     Обертка для обработчика сообщения в активном тикете
     """
+    # Проверяем, является ли сообщение командой из reply-клавиатуры
+    if message.text in ["📋 Меню", "📝 Мой активный тикет", "✏️ Создать тикет", "📋 История тикетов"]:
+        # Перенаправляем на соответствующий обработчик
+        if message.text == "📋 Меню":
+            from handlers.common import reply_menu_button_wrapper
+            return await reply_menu_button_wrapper(message, state, **kwargs)
+        elif message.text == "📝 Мой активный тикет":
+            return await active_ticket_button_wrapper(message, state, **kwargs)
+        elif message.text == "✏️ Создать тикет":
+            return await create_ticket_button_wrapper(message, state, **kwargs)
+        elif message.text == "📋 История тикетов":
+            return await ticket_history_button_wrapper(message, state, **kwargs)
+
+    # Если это не специальная команда, обрабатываем как обычное сообщение тикета
     session = kwargs.get("session")
     if not session:
         logger.error("Сессия не передана в обработчик process_ticket_message!")
