@@ -4,7 +4,7 @@ from datetime import datetime, timedelta
 
 from aiogram import Router, F, Bot, Dispatcher
 from aiogram.filters import Command
-from aiogram.types import Message, CallbackQuery
+from aiogram.types import Message, CallbackQuery, InlineKeyboardMarkup, InlineKeyboardButton
 from aiogram.fsm.context import FSMContext
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, desc, update
@@ -639,7 +639,6 @@ async def _process_confirm_remove_moderator(callback_query: CallbackQuery, sessi
     logger.info(f"Admin {admin_id} removed moderator {moderator_id}")
 
 
-@router.callback_query(F.data.startswith("confirm:force_remove_mod:"))
 async def force_remove_moderator_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
     Обертка для обработчика принудительного удаления модератора с активными тикетами
@@ -898,6 +897,362 @@ async def _process_switch_to_user_menu(callback_query: CallbackQuery, session: A
     await callback_query.answer()
 
     logger.info(f"Admin {user_id} switched to user menu")
+
+
+@router.message(F.text == "📈 Общая статистика")
+async def admin_stats_button_wrapper(message: Message, state: FSMContext, **kwargs):
+    """
+    Обертка для обработчика кнопки "Общая статистика" на Reply Keyboard
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик admin_stats_button!")
+
+        # Пытаемся создать сессию вручную
+        from database import async_session_factory
+        if async_session_factory:
+            async with async_session_factory() as temp_session:
+                return await _process_admin_stats_button(message, temp_session, state)
+        else:
+            # Если не можем создать сессию, отправляем сообщение об ошибке
+            await message.answer("Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже.")
+            return
+    else:
+        return await _process_admin_stats_button(message, session, state)
+
+
+async def _process_admin_stats_button(message: Message, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика кнопки "Общая статистика" на Reply Keyboard
+    """
+    user_id = message.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if not user or user.role != UserRole.ADMIN:
+        await message.answer(
+            _("error_access_denied", user.language if user else None)
+        )
+        return
+
+    # Симулируем нажатие на Inline кнопку для общей статистики
+    class FakeCallbackQuery:
+        def __init__(self, user_id, message_obj):
+            self.from_user = type('obj', (object,), {'id': user_id})
+            self.message = message_obj
+            self.data = "admin:stats"
+
+        async def answer(self, *args, **kwargs):
+            pass
+
+    fake_callback = FakeCallbackQuery(user_id, message)
+
+    # Здесь создаем новое сообщение для вывода результата
+    result_message = await message.answer("Загрузка...")
+    fake_callback.message = result_message
+
+    # Вызываем обработчик для Inline кнопки "Общая статистика"
+    await admin_stats_wrapper(fake_callback, state, session=session)
+
+    logger.info(f"Admin {user_id} used Reply button 'General Statistics'")
+
+
+@router.message(F.text == "👨‍💼 Управление модераторами")
+async def manage_mods_button_wrapper(message: Message, state: FSMContext, **kwargs):
+    """
+    Обертка для обработчика кнопки "Управление модераторами" на Reply Keyboard
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик manage_mods_button!")
+
+        # Пытаемся создать сессию вручную
+        from database import async_session_factory
+        if async_session_factory:
+            async with async_session_factory() as temp_session:
+                return await _process_manage_mods_button(message, temp_session, state)
+        else:
+            # Если не можем создать сессию, отправляем сообщение об ошибке
+            await message.answer("Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже.")
+            return
+    else:
+        return await _process_manage_mods_button(message, session, state)
+
+
+async def _process_manage_mods_button(message: Message, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика кнопки "Управление модераторами" на Reply Keyboard
+    """
+    user_id = message.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if not user or user.role != UserRole.ADMIN:
+        await message.answer(
+            _("error_access_denied", user.language if user else None)
+        )
+        return
+
+    # Симулируем нажатие на Inline кнопку для управления модераторами
+    class FakeCallbackQuery:
+        def __init__(self, user_id, message_obj):
+            self.from_user = type('obj', (object,), {'id': user_id})
+            self.message = message_obj
+            self.data = "admin:manage_mods"
+
+        async def answer(self, *args, **kwargs):
+            pass
+
+    fake_callback = FakeCallbackQuery(user_id, message)
+
+    # Здесь создаем новое сообщение для вывода результата
+    result_message = await message.answer("Загрузка...")
+    fake_callback.message = result_message
+
+    # Вызываем обработчик для Inline кнопки "Управление модераторами"
+    await manage_moderators_wrapper(fake_callback, state, session=session)
+
+    logger.info(f"Admin {user_id} used Reply button 'Manage Moderators'")
+
+
+@router.message(F.text == "🔍 Поиск тикета")
+async def search_ticket_cmd_wrapper(message: Message, state: FSMContext, **kwargs):
+    """
+    Обертка для обработчика команды поиска тикета
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик search_ticket_cmd!")
+
+        # Пытаемся создать сессию вручную
+        from database import async_session_factory
+        if async_session_factory:
+            async with async_session_factory() as temp_session:
+                return await _process_search_ticket(message, temp_session, state)
+        else:
+            # Если не можем создать сессию, отправляем сообщение об ошибке
+            await message.answer("Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже.")
+            return
+    else:
+        return await _process_search_ticket(message, session, state)
+
+
+async def _process_search_ticket(message: Message, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика команды поиска тикета
+    """
+    user_id = message.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if not user or user.role != UserRole.ADMIN:
+        await message.answer(
+            _("error_access_denied", user.language if user else None)
+        )
+        return
+
+    await message.answer(
+        _("search_ticket_prompt", user.language),
+        reply_markup=KeyboardFactory.back_button("admin:back_to_menu", user.language)
+    )
+
+    await state.set_state(AdminStates.SEARCHING_TICKET)
+
+    logger.info(f"Admin {user_id} started ticket search")
+
+
+@router.message(AdminStates.SEARCHING_TICKET, F.text)
+async def process_ticket_search_wrapper(message: Message, state: FSMContext, **kwargs):
+    """
+    Обертка для обработчика поиска тикета по ID
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик process_ticket_search!")
+        await message.answer(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        return
+
+    bot = kwargs.get("bot")
+    if not bot:
+        logger.error("Bot не передан в обработчик process_ticket_search!")
+        await message.answer(
+            "Произошла ошибка. Пожалуйста, попробуйте позже."
+        )
+        return
+
+    return await _process_ticket_search(message, bot, session, state)
+
+
+async def _process_ticket_search(message: Message, bot: Bot, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика поиска тикета по ID
+    """
+    user_id = message.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    admin = result.scalar_one_or_none()
+
+    if not admin or admin.role != UserRole.ADMIN:
+        await message.answer(_("error_access_denied", admin.language if admin else None))
+        return
+
+    # Проверяем, что введенный текст - число
+    try:
+        ticket_id = int(message.text.strip())
+    except ValueError:
+        await message.answer(
+            "❌ Некорректный ввод. Пожалуйста, введите числовой ID тикета.",
+            reply_markup=KeyboardFactory.back_button("admin:back_to_menu", admin.language)
+        )
+        return
+
+    # Получаем тикет из БД
+    ticket_query = select(Ticket).where(Ticket.id == ticket_id).options(
+        selectinload(Ticket.user),
+        selectinload(Ticket.moderator),
+        selectinload(Ticket.messages)
+    )
+    ticket_result = await session.execute(ticket_query)
+    ticket = ticket_result.scalar_one_or_none()
+
+    if not ticket:
+        await message.answer(
+            _("search_ticket_not_found", admin.language, ticket_id=ticket_id),
+            reply_markup=KeyboardFactory.back_button("admin:back_to_menu", admin.language)
+        )
+        return
+
+    # Отображаем информацию о тикете
+    status_texts = {
+        TicketStatus.OPEN: "🆕 " + _("status_open", admin.language),
+        TicketStatus.IN_PROGRESS: "🔄 " + _("status_in_progress", admin.language),
+        TicketStatus.RESOLVED: "✅ " + _("status_resolved", admin.language),
+        TicketStatus.CLOSED: "🔒 " + _("status_closed", admin.language)
+    }
+
+    message_text = (
+        f"🔍 <b>Тикет #{ticket.id}</b>\n\n"
+        f"<b>Статус:</b> {status_texts.get(ticket.status, 'Неизвестный статус')}\n"
+        f"<b>Создан:</b> {ticket.created_at.strftime('%d.%m.%Y %H:%M')}\n"
+        f"<b>Обновлен:</b> {ticket.updated_at.strftime('%d.%m.%Y %H:%M')}\n"
+        f"<b>Тема:</b> {ticket.subject or 'Не указана'}\n\n"
+        f"<b>Пользователь:</b> {ticket.user.full_name} (ID: {ticket.user.telegram_id})\n"
+    )
+
+    if ticket.moderator:
+        message_text += f"<b>Модератор:</b> {ticket.moderator.full_name} (ID: {ticket.moderator.telegram_id})\n"
+
+    if ticket.closed_at:
+        message_text += f"<b>Закрыт:</b> {ticket.closed_at.strftime('%d.%m.%Y %H:%M')}\n"
+
+    if ticket.rating:
+        rating_stars = "⭐" * int(ticket.rating)
+        message_text += f"<b>Оценка:</b> {rating_stars} ({ticket.rating}/5)\n"
+
+    await message.answer(message_text)
+
+    # Отправляем историю сообщений
+    if ticket.messages:
+        await message.answer("<b>История сообщений:</b>")
+
+        # Ограничиваем количество сообщений
+        max_messages = 20
+        start_idx = max(0, len(ticket.messages) - max_messages)
+
+        # Если в тикете много сообщений, добавляем информацию об ограничении
+        if len(ticket.messages) > max_messages:
+            await message.answer(
+                f"<i>Показаны последние {max_messages} из {len(ticket.messages)} сообщений.</i>"
+            )
+
+        for msg in ticket.messages[start_idx:]:
+            if msg.sender_id == ticket.user_id:
+                sender = "Пользователь"
+            elif msg.sender_id == ticket.moderator_id:
+                sender = "Модератор"
+            else:
+                sender = "Система"
+
+            time = msg.sent_at.strftime("%d.%m.%Y %H:%M")
+
+            if msg.message_type == MessageType.SYSTEM:
+                await message.answer(f"🔔 <i>{msg.text}</i>")
+            elif msg.message_type == MessageType.TEXT:
+                await message.answer(f"<b>{sender}</b> [{time}]:\n{msg.text}")
+            elif msg.message_type == MessageType.PHOTO:
+                caption = f"<b>{sender}</b> [{time}]:" + (f"\n{msg.text.replace('[ФОТО] ', '')}" if msg.text else "")
+                await bot.send_photo(
+                    chat_id=message.from_user.id,
+                    photo=msg.file_id,
+                    caption=caption
+                )
+            elif msg.message_type == MessageType.VIDEO:
+                caption = f"<b>{sender}</b> [{time}]:" + (f"\n{msg.text.replace('[ВИДЕО] ', '')}" if msg.text else "")
+                await bot.send_video(
+                    chat_id=message.from_user.id,
+                    video=msg.file_id,
+                    caption=caption
+                )
+            elif msg.message_type == MessageType.DOCUMENT:
+                caption = f"<b>{sender}</b> [{time}]:" + (
+                    f"\n{msg.text.replace('[ДОКУМЕНТ: ', '').split(']')[1] if ']' in msg.text else ''}" if msg.text else "")
+                await bot.send_document(
+                    chat_id=message.from_user.id,
+                    document=msg.file_id,
+                    caption=caption
+                )
+
+    # Показываем админу меню с действиями для тикета
+    admin_actions = []
+
+    if ticket.status == TicketStatus.OPEN:
+        admin_actions.append(InlineKeyboardButton(
+            text="👑 Взять тикет себе",
+            callback_data=f"admin:take_ticket:{ticket.id}"
+        ))
+    elif ticket.status == TicketStatus.IN_PROGRESS:
+        admin_actions.append(InlineKeyboardButton(
+            text="🔄 Переназначить тикет",
+            callback_data=f"admin:reassign_ticket:{ticket.id}"
+        ))
+        admin_actions.append(InlineKeyboardButton(
+            text="✅ Отметить как решенный",
+            callback_data=f"admin:resolve_ticket:{ticket.id}"
+        ))
+
+    # Добавляем кнопку для перехода в меню администратора
+    admin_actions.append(InlineKeyboardButton(
+        text=_("action_back", admin.language),
+        callback_data="admin:back_to_menu"
+    ))
+
+    # Создаем клавиатуру
+    keyboard = InlineKeyboardMarkup(inline_keyboard=[
+        [action] for action in admin_actions
+    ])
+
+    await message.answer(
+        "Выберите действие для этого тикета:",
+        reply_markup=keyboard
+    )
+
+    # Устанавливаем состояние
+    await state.set_state(AdminStates.MAIN_MENU)
+
+    logger.info(f"Admin {user_id} viewed ticket #{ticket.id} details")
 
 
 def register_handlers(dp: Dispatcher):

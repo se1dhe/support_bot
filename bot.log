@@ -1698,3 +1698,1458 @@ FROM tickets]
 2025-03-20 18:31:27,647 - middlewares.database - INFO - DatabaseMiddleware вызван
 2025-03-20 18:31:27,647 - middlewares.database - INFO - Сессия создана и добавлена в data
 2025-03-20 18:31:27,649 - aiogram.event - INFO - Update id=495295297 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 18:57:50,829 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 18:57:50,829 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 18:57:51,009 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 18:57:51,011 - aiogram.event - INFO - Update id=495295298 is handled. Duration 187 ms by bot id=5951537041
+2025-03-20 18:59:51,710 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 18:59:51,986 - __main__ - INFO - Бот остановлен
+2025-03-20 18:59:51,986 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 18:59:51,987 - __main__ - INFO - Бот остановлен
+2025-03-20 18:59:55,674 - __main__ - INFO - Запуск бота...
+2025-03-20 18:59:55,676 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 18:59:55,754 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 18:59:55,768 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 18:59:55,773 - database - INFO - Таблицы успешно созданы
+2025-03-20 18:59:55,774 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 18:59:55,775 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 18:59:55,775 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 18:59:56,061 - __main__ - INFO - Бот запущен
+2025-03-20 18:59:56,247 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 18:59:56,300 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:00:01,993 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:00:01,993 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:00:02,297 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 19:00:02,298 - aiogram.event - INFO - Update id=495295299 is handled. Duration 297 ms by bot id=5951537041
+2025-03-20 19:00:08,432 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:00:08,432 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:00:08,588 - handlers.admin - INFO - Admin 1259547081 switched to user menu
+2025-03-20 19:00:08,589 - aiogram.event - INFO - Update id=495295300 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 19:00:12,089 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:00:12,089 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:00:12,091 - aiogram.event - INFO - Update id=495295301 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:00:12,785 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:00:12,785 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:00:12,788 - aiogram.event - INFO - Update id=495295302 is not handled. Duration 14 ms by bot id=5951537041
+2025-03-20 19:00:13,492 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:00:13,493 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:00:13,686 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 19:00:13,686 - aiogram.event - INFO - Update id=495295303 is handled. Duration 188 ms by bot id=5951537041
+2025-03-20 19:00:14,186 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:00:14,187 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:00:14,188 - aiogram.event - INFO - Update id=495295304 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:00:20,326 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:00:20,326 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:00:20,383 - middlewares.database - ERROR - Ошибка в DatabaseMiddleware: Telegram server says - Bad Request: message can't be edited
+Traceback (most recent call last):
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 45, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 53, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 52, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 64, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\common.py", line 329, in reply_active_ticket_button_wrapper
+    return await _process_active_ticket(fake_callback, bot, session, state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 381, in _process_active_ticket
+    await callback_query.message.edit_text(
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\methods\base.py", line 84, in emit
+    return await bot(self)
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\client\bot.py", line 498, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\client\session\base.py", line 254, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\client\session\aiohttp.py", line 185, in make_request
+    response = self.check_response(
+               ^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\client\session\base.py", line 120, in check_response
+    raise TelegramBadRequest(method=method, message=description)
+aiogram.exceptions.TelegramBadRequest: Telegram server says - Bad Request: message can't be edited
+2025-03-20 19:00:20,400 - aiogram.event - INFO - Update id=495295305 is handled. Duration 78 ms by bot id=5951537041
+2025-03-20 19:00:25,875 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:00:26,137 - __main__ - INFO - Бот остановлен
+2025-03-20 19:00:26,137 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:00:26,138 - __main__ - INFO - Бот остановлен
+2025-03-20 19:00:29,747 - __main__ - INFO - Запуск бота...
+2025-03-20 19:00:29,750 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:00:29,834 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:00:29,848 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:00:29,853 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:00:29,855 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:00:29,855 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:00:29,855 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:00:30,150 - __main__ - INFO - Бот запущен
+2025-03-20 19:00:30,300 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:00:30,348 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:00:33,463 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:00:33,464 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:00:33,640 - middlewares.database - ERROR - Ошибка в DatabaseMiddleware: Telegram server says - Bad Request: message can't be edited
+Traceback (most recent call last):
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 45, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 53, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 52, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 64, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\common.py", line 329, in reply_active_ticket_button_wrapper
+    return await _process_active_ticket(fake_callback, bot, session, state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 381, in _process_active_ticket
+    await callback_query.message.edit_text(
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\methods\base.py", line 84, in emit
+    return await bot(self)
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\client\bot.py", line 498, in __call__
+    return await self.session(self, method, timeout=request_timeout)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\client\session\base.py", line 254, in __call__
+    return cast(TelegramType, await middleware(bot, method))
+                              ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\client\session\aiohttp.py", line 185, in make_request
+    response = self.check_response(
+               ^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\client\session\base.py", line 120, in check_response
+    raise TelegramBadRequest(method=method, message=description)
+aiogram.exceptions.TelegramBadRequest: Telegram server says - Bad Request: message can't be edited
+2025-03-20 19:00:33,655 - aiogram.event - INFO - Update id=495295306 is handled. Duration 187 ms by bot id=5951537041
+2025-03-20 19:08:03,199 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:08:03,453 - __main__ - INFO - Бот остановлен
+2025-03-20 19:08:03,453 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:08:03,454 - __main__ - INFO - Бот остановлен
+2025-03-20 19:08:07,031 - __main__ - INFO - Запуск бота...
+2025-03-20 19:08:07,033 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:08:07,111 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:08:07,123 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:08:07,129 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:08:07,130 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:08:07,131 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:08:07,131 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:08:07,421 - __main__ - INFO - Бот запущен
+2025-03-20 19:08:07,606 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:08:07,659 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:08:16,482 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:08:16,482 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:08:16,486 - aiogram.event - INFO - Update id=495295307 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:08:21,316 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:08:21,316 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:08:21,319 - aiogram.event - INFO - Update id=495295308 is not handled. Duration 14 ms by bot id=5951537041
+2025-03-20 19:08:22,026 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:08:22,026 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:08:22,028 - aiogram.event - INFO - Update id=495295309 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:08:23,271 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:08:23,272 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:08:23,274 - aiogram.event - INFO - Update id=495295310 is not handled. Duration 16 ms by bot id=5951537041
+2025-03-20 19:08:23,918 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:08:23,918 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:08:23,938 - utils.i18n - WARNING - Перевод для ключа 'search_ticket_prompt' не найден
+2025-03-20 19:08:24,233 - handlers.common - INFO - Admin 1259547081 started ticket search
+2025-03-20 19:08:24,234 - aiogram.event - INFO - Update id=495295311 is handled. Duration 312 ms by bot id=5951537041
+2025-03-20 19:08:24,280 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:08:24,280 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:08:24,283 - aiogram.event - INFO - Update id=495295312 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:08:25,457 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:08:25,457 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:08:25,728 - handlers.admin - INFO - Admin 1259547081 returned to main menu
+2025-03-20 19:08:25,729 - aiogram.event - INFO - Update id=495295313 is handled. Duration 281 ms by bot id=5951537041
+2025-03-20 19:08:26,274 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:08:26,274 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:08:26,277 - aiogram.event - INFO - Update id=495295314 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:08:26,670 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:08:26,670 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:08:26,672 - aiogram.event - INFO - Update id=495295315 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:09:26,338 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:09:26,608 - __main__ - INFO - Бот остановлен
+2025-03-20 19:09:26,608 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:09:26,609 - __main__ - INFO - Бот остановлен
+2025-03-20 19:09:30,213 - __main__ - INFO - Запуск бота...
+2025-03-20 19:09:30,215 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:09:30,294 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:09:30,307 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:09:30,311 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:09:30,313 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:09:30,313 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:09:30,313 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:09:30,603 - __main__ - INFO - Бот запущен
+2025-03-20 19:09:30,776 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:09:30,833 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:09:35,244 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:09:35,244 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:09:35,619 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 19:09:35,620 - aiogram.event - INFO - Update id=495295316 is handled. Duration 375 ms by bot id=5951537041
+2025-03-20 19:09:37,206 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:09:37,206 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:09:37,208 - aiogram.event - INFO - Update id=495295317 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:18:06,048 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:18:06,291 - __main__ - INFO - Бот остановлен
+2025-03-20 19:18:06,291 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:18:06,292 - __main__ - INFO - Бот остановлен
+2025-03-20 19:18:10,200 - __main__ - INFO - Запуск бота...
+2025-03-20 19:18:10,202 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:18:10,283 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:18:10,296 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:18:10,301 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:18:10,303 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:18:10,304 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:18:10,304 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:18:10,620 - __main__ - INFO - Бот запущен
+2025-03-20 19:18:10,805 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:18:10,859 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:18:20,953 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:20,954 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:21,451 - handlers.common - INFO - User 1259547081 (se1dhe) started the bot
+2025-03-20 19:18:21,452 - aiogram.event - INFO - Update id=495295318 is handled. Duration 500 ms by bot id=5951537041
+2025-03-20 19:18:25,487 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:25,487 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:25,573 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 19:18:25,574 - aiogram.event - INFO - Update id=495295319 is handled. Duration 93 ms by bot id=5951537041
+2025-03-20 19:18:26,721 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:26,721 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:26,723 - aiogram.event - INFO - Update id=495295320 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:18:28,050 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:28,051 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:28,052 - aiogram.event - INFO - Update id=495295321 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:18:29,201 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:29,201 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:29,277 - handlers.admin - INFO - Admin 1259547081 started ticket search
+2025-03-20 19:18:29,278 - aiogram.event - INFO - Update id=495295322 is handled. Duration 78 ms by bot id=5951537041
+2025-03-20 19:18:34,122 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:34,122 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:34,331 - aiogram.event - INFO - Update id=495295323 is handled. Duration 203 ms by bot id=5951537041
+2025-03-20 19:18:35,455 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:35,455 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:35,658 - handlers.admin - INFO - Admin 1259547081 returned to main menu
+2025-03-20 19:18:35,659 - aiogram.event - INFO - Update id=495295324 is handled. Duration 203 ms by bot id=5951537041
+2025-03-20 19:18:37,745 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:37,745 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:37,747 - aiogram.event - INFO - Update id=495295325 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:18:39,061 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:39,061 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:39,063 - aiogram.event - INFO - Update id=495295326 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:18:46,756 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:46,756 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:46,758 - aiogram.event - INFO - Update id=495295327 is not handled. Duration 16 ms by bot id=5951537041
+2025-03-20 19:18:48,497 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:48,497 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:48,680 - handlers.common - INFO - User 1259547081 (se1dhe) started the bot
+2025-03-20 19:18:48,681 - aiogram.event - INFO - Update id=495295328 is handled. Duration 188 ms by bot id=5951537041
+2025-03-20 19:18:49,816 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:49,816 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:49,947 - handlers.admin - INFO - Admin 1259547081 switched to user menu
+2025-03-20 19:18:49,948 - aiogram.event - INFO - Update id=495295329 is handled. Duration 139 ms by bot id=5951537041
+2025-03-20 19:18:50,788 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:50,788 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:50,921 - handlers.user - INFO - User 1259547081 accessed language selection
+2025-03-20 19:18:50,921 - aiogram.event - INFO - Update id=495295330 is handled. Duration 125 ms by bot id=5951537041
+2025-03-20 19:18:51,900 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:51,900 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:52,050 - handlers.user - INFO - User 1259547081 changed language to ru
+2025-03-20 19:18:52,050 - aiogram.event - INFO - Update id=495295331 is handled. Duration 139 ms by bot id=5951537041
+2025-03-20 19:18:54,986 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:54,986 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:55,146 - aiogram.event - INFO - Update id=495295332 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 19:18:55,724 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:55,724 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:55,863 - handlers.user - INFO - User 1259547081 returned to main menu
+2025-03-20 19:18:55,864 - aiogram.event - INFO - Update id=495295333 is handled. Duration 140 ms by bot id=5951537041
+2025-03-20 19:18:58,034 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:58,035 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:58,197 - handlers.common - INFO - User 1259547081 (se1dhe) started the bot
+2025-03-20 19:18:58,198 - aiogram.event - INFO - Update id=495295334 is handled. Duration 171 ms by bot id=5951537041
+2025-03-20 19:18:59,770 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:18:59,770 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:18:59,869 - handlers.admin - INFO - Admin 1259547081 started ticket search
+2025-03-20 19:18:59,870 - aiogram.event - INFO - Update id=495295335 is handled. Duration 108 ms by bot id=5951537041
+2025-03-20 19:19:00,805 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:19:00,805 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:19:01,054 - handlers.admin - INFO - Admin 1259547081 accessed moderator management
+2025-03-20 19:19:01,055 - handlers.admin - INFO - Admin 1259547081 used Reply button 'Manage Moderators'
+2025-03-20 19:19:01,055 - aiogram.event - INFO - Update id=495295336 is handled. Duration 250 ms by bot id=5951537041
+2025-03-20 19:19:04,045 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:19:04,045 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:19:04,284 - handlers.admin - INFO - Admin 1259547081 viewed general statistics
+2025-03-20 19:19:04,284 - handlers.admin - INFO - Admin 1259547081 used Reply button 'General Statistics'
+2025-03-20 19:19:04,284 - aiogram.event - INFO - Update id=495295337 is handled. Duration 235 ms by bot id=5951537041
+2025-03-20 19:19:05,526 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:19:05,526 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:19:05,609 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 19:19:05,609 - aiogram.event - INFO - Update id=495295338 is handled. Duration 77 ms by bot id=5951537041
+2025-03-20 19:21:38,286 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:21:38,547 - __main__ - INFO - Бот остановлен
+2025-03-20 19:21:38,547 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:21:38,548 - __main__ - INFO - Бот остановлен
+2025-03-20 19:21:42,355 - __main__ - INFO - Запуск бота...
+2025-03-20 19:21:42,357 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:21:42,438 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:21:42,450 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:21:42,456 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:21:42,457 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:21:42,458 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:21:42,458 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:21:42,769 - __main__ - INFO - Бот запущен
+2025-03-20 19:21:42,957 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:21:43,011 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:21:49,834 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:21:49,834 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:21:50,050 - handlers.common - INFO - User 7838299933 (staff_development) started the bot
+2025-03-20 19:21:50,050 - aiogram.event - INFO - Update id=495295339 is handled. Duration 202 ms by bot id=5951537041
+2025-03-20 19:21:51,754 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:21:51,754 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:21:52,036 - handlers.user - INFO - User 7838299933 changed language to ru
+2025-03-20 19:21:52,036 - aiogram.event - INFO - Update id=495295340 is handled. Duration 282 ms by bot id=5951537041
+2025-03-20 19:21:52,758 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:21:52,758 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:21:53,057 - aiogram.event - INFO - Update id=495295341 is handled. Duration 297 ms by bot id=5951537041
+2025-03-20 19:21:53,882 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:21:53,882 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:21:54,094 - handlers.user - INFO - User 7838299933 returned to main menu
+2025-03-20 19:21:54,096 - aiogram.event - INFO - Update id=495295342 is handled. Duration 219 ms by bot id=5951537041
+2025-03-20 19:21:54,769 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:21:54,769 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:21:54,933 - handlers.user - INFO - User 7838299933 accessed language selection
+2025-03-20 19:21:54,935 - aiogram.event - INFO - Update id=495295343 is handled. Duration 172 ms by bot id=5951537041
+2025-03-20 19:21:55,579 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:21:55,579 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:21:55,923 - handlers.user - INFO - User 7838299933 changed language to ru
+2025-03-20 19:21:55,924 - aiogram.event - INFO - Update id=495295344 is handled. Duration 343 ms by bot id=5951537041
+2025-03-20 19:21:58,277 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:21:58,277 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:21:58,468 - handlers.common - INFO - User 7838299933 opened the menu using reply button
+2025-03-20 19:21:58,469 - aiogram.event - INFO - Update id=495295345 is handled. Duration 187 ms by bot id=5951537041
+2025-03-20 19:21:59,725 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:21:59,725 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:21:59,903 - handlers.user - INFO - User 7838299933 started ticket creation
+2025-03-20 19:21:59,903 - handlers.user - INFO - User 7838299933 used Reply button 'Create Ticket'
+2025-03-20 19:21:59,903 - aiogram.event - INFO - Update id=495295346 is handled. Duration 187 ms by bot id=5951537041
+2025-03-20 19:22:00,935 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:22:00,935 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:22:01,089 - handlers.user - INFO - User 7838299933 returned to main menu
+2025-03-20 19:22:01,090 - aiogram.event - INFO - Update id=495295347 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 19:22:02,209 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:22:02,210 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:22:02,217 - middlewares.database - ERROR - Ошибка в DatabaseMiddleware: name 'kwargs' is not defined
+Traceback (most recent call last):
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 45, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 53, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 52, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 64, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 950, in active_ticket_button_wrapper
+    return await _process_active_ticket_button(message, session, state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 982, in _process_active_ticket_button
+    bot = kwargs.get("bot")
+          ^^^^^^
+NameError: name 'kwargs' is not defined
+2025-03-20 19:22:02,226 - aiogram.event - INFO - Update id=495295348 is handled. Duration 15 ms by bot id=5951537041
+2025-03-20 19:22:03,836 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:22:03,836 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:22:04,002 - handlers.user - INFO - User 7838299933 used Reply button 'Ticket History'
+2025-03-20 19:22:04,003 - aiogram.event - INFO - Update id=495295349 is handled. Duration 155 ms by bot id=5951537041
+2025-03-20 19:22:05,014 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:22:05,014 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:22:05,161 - handlers.user - INFO - User 7838299933 returned to main menu
+2025-03-20 19:22:05,162 - aiogram.event - INFO - Update id=495295350 is handled. Duration 141 ms by bot id=5951537041
+2025-03-20 19:22:05,822 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:22:05,822 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:22:05,831 - middlewares.database - ERROR - Ошибка в DatabaseMiddleware: name 'kwargs' is not defined
+Traceback (most recent call last):
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 45, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 53, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 52, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 64, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 950, in active_ticket_button_wrapper
+    return await _process_active_ticket_button(message, session, state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 982, in _process_active_ticket_button
+    bot = kwargs.get("bot")
+          ^^^^^^
+NameError: name 'kwargs' is not defined
+2025-03-20 19:22:05,840 - aiogram.event - INFO - Update id=495295351 is handled. Duration 16 ms by bot id=5951537041
+2025-03-20 19:23:34,357 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:23:34,615 - __main__ - INFO - Бот остановлен
+2025-03-20 19:23:34,615 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:23:34,616 - __main__ - INFO - Бот остановлен
+2025-03-20 19:23:39,108 - __main__ - INFO - Запуск бота...
+2025-03-20 19:23:39,111 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:23:39,195 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:23:39,208 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:23:39,212 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:23:39,214 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:23:39,214 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:23:39,215 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:23:39,514 - __main__ - INFO - Бот запущен
+2025-03-20 19:23:39,695 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:23:39,751 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:23:48,227 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:23:48,228 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:23:48,537 - handlers.common - INFO - User 7838299933 (staff_development) started the bot
+2025-03-20 19:23:48,538 - aiogram.event - INFO - Update id=495295352 is handled. Duration 312 ms by bot id=5951537041
+2025-03-20 19:23:49,526 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:23:49,526 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:23:49,735 - handlers.user - INFO - User 7838299933 started ticket creation
+2025-03-20 19:23:49,735 - handlers.user - INFO - User 7838299933 used Reply button 'Create Ticket'
+2025-03-20 19:23:49,736 - aiogram.event - INFO - Update id=495295353 is handled. Duration 202 ms by bot id=5951537041
+2025-03-20 19:23:50,670 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:23:50,670 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:23:50,850 - handlers.user - INFO - User 7838299933 returned to main menu
+2025-03-20 19:23:50,851 - aiogram.event - INFO - Update id=495295354 is handled. Duration 187 ms by bot id=5951537041
+2025-03-20 19:23:51,257 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:23:51,257 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:23:51,357 - handlers.common - INFO - User 7838299933 opened the menu using reply button
+2025-03-20 19:23:51,358 - aiogram.event - INFO - Update id=495295355 is handled. Duration 93 ms by bot id=5951537041
+2025-03-20 19:23:53,121 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:23:53,121 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:23:53,249 - aiogram.event - INFO - Update id=495295356 is handled. Duration 125 ms by bot id=5951537041
+2025-03-20 19:23:56,391 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:23:56,391 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:23:56,516 - aiogram.event - INFO - Update id=495295357 is handled. Duration 125 ms by bot id=5951537041
+2025-03-20 19:23:57,027 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:23:57,027 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:23:57,211 - handlers.user - INFO - User 7838299933 used Reply button 'Ticket History'
+2025-03-20 19:23:57,212 - aiogram.event - INFO - Update id=495295358 is handled. Duration 187 ms by bot id=5951537041
+2025-03-20 19:23:58,216 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:23:58,216 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:23:58,376 - handlers.user - INFO - User 7838299933 returned to main menu
+2025-03-20 19:23:58,376 - aiogram.event - INFO - Update id=495295359 is handled. Duration 155 ms by bot id=5951537041
+2025-03-20 19:23:58,913 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:23:58,913 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:23:58,994 - aiogram.event - INFO - Update id=495295360 is handled. Duration 77 ms by bot id=5951537041
+2025-03-20 19:24:58,800 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:24:59,060 - __main__ - INFO - Бот остановлен
+2025-03-20 19:24:59,060 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:24:59,061 - __main__ - INFO - Бот остановлен
+2025-03-20 19:25:04,030 - __main__ - INFO - Запуск бота...
+2025-03-20 19:25:04,033 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:25:04,117 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:25:04,130 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:25:04,135 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:25:04,137 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:25:04,137 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:25:04,138 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:25:04,443 - __main__ - INFO - Бот запущен
+2025-03-20 19:25:04,624 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:25:04,678 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:25:06,843 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:25:06,843 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:25:07,380 - handlers.user - INFO - User 7838299933 used Reply button 'Ticket History'
+2025-03-20 19:25:07,381 - aiogram.event - INFO - Update id=495295361 is handled. Duration 546 ms by bot id=5951537041
+2025-03-20 19:25:09,141 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:25:09,141 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:25:09,150 - middlewares.database - ERROR - Ошибка в DatabaseMiddleware: name 'kwargs' is not defined
+Traceback (most recent call last):
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 45, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 53, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 52, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 64, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 950, in active_ticket_button_wrapper
+    return await _process_active_ticket_button(message, session, state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 982, in _process_active_ticket_button
+    bot = kwargs.get("bot")
+          ^^^^^^
+NameError: name 'kwargs' is not defined
+2025-03-20 19:25:09,160 - aiogram.event - INFO - Update id=495295362 is handled. Duration 16 ms by bot id=5951537041
+2025-03-20 19:25:44,469 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:25:44,727 - __main__ - INFO - Бот остановлен
+2025-03-20 19:25:44,727 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:25:44,728 - __main__ - INFO - Бот остановлен
+2025-03-20 19:25:49,218 - __main__ - INFO - Запуск бота...
+2025-03-20 19:25:49,221 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:25:49,301 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:25:49,314 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:25:49,318 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:25:49,320 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:25:49,320 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:25:49,321 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:25:49,617 - __main__ - INFO - Бот запущен
+2025-03-20 19:25:49,782 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:25:49,835 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:25:55,002 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:25:55,002 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:25:55,291 - handlers.common - INFO - User 7838299933 (staff_development) started the bot
+2025-03-20 19:25:55,292 - aiogram.event - INFO - Update id=495295363 is handled. Duration 297 ms by bot id=5951537041
+2025-03-20 19:25:56,585 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:25:56,585 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:25:56,763 - handlers.user - INFO - User 7838299933 used Reply button 'Ticket History'
+2025-03-20 19:25:56,764 - aiogram.event - INFO - Update id=495295364 is handled. Duration 171 ms by bot id=5951537041
+2025-03-20 19:25:57,750 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:25:57,750 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:25:57,757 - middlewares.database - ERROR - Ошибка в DatabaseMiddleware: _process_active_ticket_button() missing 1 required positional argument: 'bot'
+Traceback (most recent call last):
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 45, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 53, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 52, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 64, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 950, in active_ticket_button_wrapper
+    return await _process_active_ticket_button(message, session, state)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: _process_active_ticket_button() missing 1 required positional argument: 'bot'
+2025-03-20 19:25:57,765 - aiogram.event - INFO - Update id=495295365 is handled. Duration 16 ms by bot id=5951537041
+2025-03-20 19:27:01,272 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:27:01,534 - __main__ - INFO - Бот остановлен
+2025-03-20 19:27:01,534 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:27:01,535 - __main__ - INFO - Бот остановлен
+2025-03-20 19:27:06,084 - __main__ - INFO - Запуск бота...
+2025-03-20 19:27:06,086 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:27:06,164 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:27:06,177 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:27:06,182 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:27:06,183 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:27:06,184 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:27:06,184 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:27:06,476 - __main__ - INFO - Бот запущен
+2025-03-20 19:27:06,673 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:27:06,729 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:27:09,775 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:27:09,775 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:27:09,795 - middlewares.database - ERROR - Ошибка в DatabaseMiddleware: _process_active_ticket_button() missing 1 required positional argument: 'bot'
+Traceback (most recent call last):
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 45, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 53, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 52, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 64, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 950, in active_ticket_button_wrapper
+    return await _process_active_ticket_button(message, session, state)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: _process_active_ticket_button() missing 1 required positional argument: 'bot'
+2025-03-20 19:27:09,803 - aiogram.event - INFO - Update id=495295366 is handled. Duration 31 ms by bot id=5951537041
+2025-03-20 19:27:11,161 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:27:11,161 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:27:11,580 - handlers.user - INFO - User 7838299933 started ticket creation
+2025-03-20 19:27:11,580 - handlers.user - INFO - User 7838299933 used Reply button 'Create Ticket'
+2025-03-20 19:27:11,582 - aiogram.event - INFO - Update id=495295367 is handled. Duration 421 ms by bot id=5951537041
+2025-03-20 19:27:12,521 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:27:12,522 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:27:12,701 - handlers.user - INFO - User 7838299933 returned to main menu
+2025-03-20 19:27:12,701 - aiogram.event - INFO - Update id=495295368 is handled. Duration 187 ms by bot id=5951537041
+2025-03-20 19:27:13,369 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:27:13,369 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:27:13,374 - middlewares.database - ERROR - Ошибка в DatabaseMiddleware: _process_active_ticket_button() missing 1 required positional argument: 'bot'
+Traceback (most recent call last):
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 45, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 53, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 52, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 64, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 950, in active_ticket_button_wrapper
+    return await _process_active_ticket_button(message, session, state)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: _process_active_ticket_button() missing 1 required positional argument: 'bot'
+2025-03-20 19:27:13,380 - aiogram.event - INFO - Update id=495295369 is handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:27:14,582 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:27:14,582 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:27:14,673 - handlers.common - INFO - User 7838299933 opened the menu using reply button
+2025-03-20 19:27:14,675 - aiogram.event - INFO - Update id=495295370 is handled. Duration 93 ms by bot id=5951537041
+2025-03-20 19:27:15,197 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:27:15,197 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:27:15,203 - middlewares.database - ERROR - Ошибка в DatabaseMiddleware: _process_active_ticket_button() missing 1 required positional argument: 'bot'
+Traceback (most recent call last):
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 45, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 53, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 52, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 64, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 950, in active_ticket_button_wrapper
+    return await _process_active_ticket_button(message, session, state)
+                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: _process_active_ticket_button() missing 1 required positional argument: 'bot'
+2025-03-20 19:27:15,208 - aiogram.event - INFO - Update id=495295371 is handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:27:36,877 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:27:37,141 - __main__ - INFO - Бот остановлен
+2025-03-20 19:27:37,141 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:27:37,142 - __main__ - INFO - Бот остановлен
+2025-03-20 19:27:41,762 - __main__ - INFO - Запуск бота...
+2025-03-20 19:27:41,766 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:27:41,846 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:27:41,858 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:27:41,863 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:27:41,864 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:27:41,864 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:27:41,866 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:27:42,148 - __main__ - INFO - Бот запущен
+2025-03-20 19:27:42,336 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:27:42,391 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:27:44,389 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:27:44,389 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:27:44,615 - aiogram.event - INFO - Update id=495295372 is handled. Duration 218 ms by bot id=5951537041
+2025-03-20 19:29:08,828 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:29:09,085 - __main__ - INFO - Бот остановлен
+2025-03-20 19:29:09,085 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:29:09,086 - __main__ - INFO - Бот остановлен
+2025-03-20 19:29:13,760 - __main__ - INFO - Запуск бота...
+2025-03-20 19:29:13,763 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:29:13,843 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:29:13,857 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:29:13,862 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:29:13,864 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:29:13,864 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:29:13,865 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:29:14,157 - __main__ - INFO - Бот запущен
+2025-03-20 19:29:14,317 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:29:14,370 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:29:18,808 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:29:18,808 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:29:19,206 - handlers.common - INFO - User 7838299933 (staff_development) started the bot
+2025-03-20 19:29:19,207 - aiogram.event - INFO - Update id=495295373 is handled. Duration 389 ms by bot id=5951537041
+2025-03-20 19:29:20,730 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:29:20,730 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:29:20,736 - middlewares.database - ERROR - Ошибка в DatabaseMiddleware: 'FSMContext' object has no attribute 'dispatcher'
+Traceback (most recent call last):
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 45, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 53, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 52, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 64, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 950, in active_ticket_button_wrapper
+    return await _process_active_ticket_button(message, session, state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 1051, in _process_active_ticket_button
+    bot = state.dispatcher.bot  # Получаем бота из state
+          ^^^^^^^^^^^^^^^^
+AttributeError: 'FSMContext' object has no attribute 'dispatcher'
+2025-03-20 19:29:20,747 - aiogram.event - INFO - Update id=495295374 is handled. Duration 14 ms by bot id=5951537041
+2025-03-20 19:31:24,308 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:31:24,575 - __main__ - INFO - Бот остановлен
+2025-03-20 19:31:24,575 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:31:24,576 - __main__ - INFO - Бот остановлен
+2025-03-20 19:31:29,014 - __main__ - INFO - Запуск бота...
+2025-03-20 19:31:29,017 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:31:29,099 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:31:29,112 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:31:29,117 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:31:29,119 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:31:29,119 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:31:29,119 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:31:29,400 - __main__ - INFO - Бот запущен
+2025-03-20 19:31:29,549 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:31:29,597 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:31:31,311 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:31:31,312 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:31:31,642 - handlers.user - INFO - User 7838299933 used Reply button 'Ticket History'
+2025-03-20 19:31:31,643 - aiogram.event - INFO - Update id=495295375 is handled. Duration 327 ms by bot id=5951537041
+2025-03-20 19:31:32,630 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:31:32,630 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:31:32,740 - aiogram.event - INFO - Update id=495295376 is handled. Duration 110 ms by bot id=5951537041
+2025-03-20 19:31:33,786 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:31:33,786 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:31:33,864 - aiogram.event - INFO - Update id=495295377 is handled. Duration 77 ms by bot id=5951537041
+2025-03-20 19:32:40,467 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:32:40,728 - __main__ - INFO - Бот остановлен
+2025-03-20 19:32:40,728 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:32:40,729 - __main__ - INFO - Бот остановлен
+2025-03-20 19:32:45,284 - __main__ - INFO - Запуск бота...
+2025-03-20 19:32:45,286 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:32:45,374 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:32:45,388 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:32:45,393 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:32:45,395 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:32:45,395 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:32:45,396 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:32:45,679 - __main__ - INFO - Бот запущен
+2025-03-20 19:32:45,868 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:32:45,921 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:32:50,777 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:32:50,778 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:32:51,156 - handlers.common - INFO - User 7838299933 (staff_development) started the bot
+2025-03-20 19:32:51,156 - aiogram.event - INFO - Update id=495295378 is handled. Duration 375 ms by bot id=5951537041
+2025-03-20 19:32:52,468 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:32:52,469 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:32:52,477 - middlewares.database - ERROR - Ошибка в DatabaseMiddleware: 'FSMContext' object has no attribute 'dispatcher'
+Traceback (most recent call last):
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 45, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 53, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 52, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 64, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 950, in active_ticket_button_wrapper
+    return await _process_active_ticket_button(message, session, state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 970, in _process_active_ticket_button
+    bot = state.dispatcher.bot  # Получаем бота из state
+          ^^^^^^^^^^^^^^^^
+AttributeError: 'FSMContext' object has no attribute 'dispatcher'
+2025-03-20 19:32:52,487 - aiogram.event - INFO - Update id=495295379 is handled. Duration 15 ms by bot id=5951537041
+2025-03-20 19:32:53,659 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:32:53,659 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:32:53,981 - handlers.user - INFO - User 7838299933 used Reply button 'Ticket History'
+2025-03-20 19:32:53,982 - aiogram.event - INFO - Update id=495295380 is handled. Duration 327 ms by bot id=5951537041
+2025-03-20 19:32:55,367 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:32:55,367 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:32:55,376 - middlewares.database - ERROR - Ошибка в DatabaseMiddleware: 'FSMContext' object has no attribute 'dispatcher'
+Traceback (most recent call last):
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 45, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 53, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 52, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 64, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 950, in active_ticket_button_wrapper
+    return await _process_active_ticket_button(message, session, state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\user.py", line 970, in _process_active_ticket_button
+    bot = state.dispatcher.bot  # Получаем бота из state
+          ^^^^^^^^^^^^^^^^
+AttributeError: 'FSMContext' object has no attribute 'dispatcher'
+2025-03-20 19:32:55,382 - aiogram.event - INFO - Update id=495295381 is handled. Duration 16 ms by bot id=5951537041
+2025-03-20 19:34:05,768 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:34:06,023 - __main__ - INFO - Бот остановлен
+2025-03-20 19:34:06,023 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:34:06,025 - __main__ - INFO - Бот остановлен
+2025-03-20 19:34:11,015 - __main__ - INFO - Запуск бота...
+2025-03-20 19:34:11,018 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:34:11,097 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:34:11,109 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:34:11,115 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:34:11,117 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:34:11,117 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:34:11,118 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:34:11,399 - __main__ - INFO - Бот запущен
+2025-03-20 19:34:11,571 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:34:11,653 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:34:14,629 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:34:14,629 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:34:15,042 - handlers.common - INFO - User 7838299933 (staff_development) started the bot
+2025-03-20 19:34:15,043 - aiogram.event - INFO - Update id=495295382 is handled. Duration 422 ms by bot id=5951537041
+2025-03-20 19:34:15,765 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:34:15,765 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:34:16,105 - handlers.user - INFO - User 7838299933 started ticket creation
+2025-03-20 19:34:16,105 - handlers.user - INFO - User 7838299933 used Reply button 'Create Ticket'
+2025-03-20 19:34:16,106 - aiogram.event - INFO - Update id=495295383 is handled. Duration 343 ms by bot id=5951537041
+2025-03-20 19:34:16,804 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:34:16,804 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:34:16,989 - handlers.common - INFO - User 7838299933 opened the menu using reply button
+2025-03-20 19:34:16,990 - aiogram.event - INFO - Update id=495295384 is handled. Duration 171 ms by bot id=5951537041
+2025-03-20 19:34:17,748 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:34:17,748 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:34:17,755 - handlers.user - ERROR - Бот не передан в kwargs!
+2025-03-20 19:34:17,860 - aiogram.event - INFO - Update id=495295385 is handled. Duration 110 ms by bot id=5951537041
+2025-03-20 19:34:18,750 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:34:18,750 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:34:18,902 - handlers.user - INFO - User 7838299933 used Reply button 'Ticket History'
+2025-03-20 19:34:18,904 - aiogram.event - INFO - Update id=495295386 is handled. Duration 157 ms by bot id=5951537041
+2025-03-20 19:34:20,077 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:34:20,077 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:34:20,084 - handlers.user - ERROR - Бот не передан в kwargs!
+2025-03-20 19:34:20,236 - aiogram.event - INFO - Update id=495295387 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 19:35:04,434 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:35:04,705 - __main__ - INFO - Бот остановлен
+2025-03-20 19:35:04,705 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:35:04,706 - __main__ - INFO - Бот остановлен
+2025-03-20 19:35:08,227 - __main__ - INFO - Запуск бота...
+2025-03-20 19:35:08,229 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:35:08,307 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:35:08,320 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:35:08,324 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:35:08,326 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:35:08,327 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:35:08,327 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:35:08,595 - __main__ - INFO - Бот запущен
+2025-03-20 19:35:08,753 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:35:08,804 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:35:15,969 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:35:15,970 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:35:16,287 - handlers.user - INFO - User 7838299933 used Reply button 'Ticket History'
+2025-03-20 19:35:16,288 - aiogram.event - INFO - Update id=495295388 is handled. Duration 327 ms by bot id=5951537041
+2025-03-20 19:35:17,203 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:35:17,204 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:35:17,209 - handlers.user - ERROR - Бот не передан в kwargs!
+2025-03-20 19:35:17,295 - aiogram.event - INFO - Update id=495295389 is handled. Duration 93 ms by bot id=5951537041
+2025-03-20 19:35:45,552 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 19:35:45,797 - __main__ - INFO - Бот остановлен
+2025-03-20 19:35:45,797 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:35:45,798 - __main__ - INFO - Бот остановлен
+2025-03-20 19:35:50,360 - __main__ - INFO - Запуск бота...
+2025-03-20 19:35:50,362 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 19:35:50,443 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 19:35:50,456 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 19:35:50,461 - database - INFO - Таблицы успешно созданы
+2025-03-20 19:35:50,462 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 19:35:50,463 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 19:35:50,463 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 19:35:50,732 - __main__ - INFO - Бот запущен
+2025-03-20 19:35:50,886 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 19:35:50,943 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 19:35:52,642 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:35:52,643 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:35:52,663 - handlers.user - ERROR - Бот не передан в kwargs!
+2025-03-20 19:35:52,868 - aiogram.event - INFO - Update id=495295390 is handled. Duration 233 ms by bot id=5951537041
+2025-03-20 19:35:53,398 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:35:53,399 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:35:53,481 - handlers.common - INFO - User 7838299933 opened the menu using reply button
+2025-03-20 19:35:53,482 - aiogram.event - INFO - Update id=495295391 is handled. Duration 77 ms by bot id=5951537041
+2025-03-20 19:35:54,088 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:35:54,088 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:35:54,297 - handlers.user - INFO - User 7838299933 started ticket creation
+2025-03-20 19:35:54,298 - handlers.user - INFO - User 7838299933 used Reply button 'Create Ticket'
+2025-03-20 19:35:54,298 - aiogram.event - INFO - Update id=495295392 is handled. Duration 202 ms by bot id=5951537041
+2025-03-20 19:35:54,947 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:35:54,947 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:35:55,077 - handlers.user - INFO - User 7838299933 created ticket #1
+2025-03-20 19:35:55,077 - aiogram.event - INFO - Update id=495295393 is handled. Duration 125 ms by bot id=5951537041
+2025-03-20 19:36:32,562 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:32,562 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:32,704 - handlers.admin - INFO - Admin 1259547081 switched to user menu
+2025-03-20 19:36:32,705 - aiogram.event - INFO - Update id=495295394 is handled. Duration 139 ms by bot id=5951537041
+2025-03-20 19:36:34,252 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:34,252 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:34,394 - aiogram.event - INFO - Update id=495295395 is handled. Duration 141 ms by bot id=5951537041
+2025-03-20 19:36:36,246 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:36,246 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:36,391 - handlers.user - INFO - User 1259547081 returned to main menu
+2025-03-20 19:36:36,392 - aiogram.event - INFO - Update id=495295396 is handled. Duration 141 ms by bot id=5951537041
+2025-03-20 19:36:37,457 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:37,458 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:37,613 - aiogram.event - INFO - Update id=495295397 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 19:36:38,152 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:38,152 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:38,297 - handlers.user - INFO - User 1259547081 returned to main menu
+2025-03-20 19:36:38,298 - aiogram.event - INFO - Update id=495295398 is handled. Duration 139 ms by bot id=5951537041
+2025-03-20 19:36:38,624 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:38,624 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:38,731 - aiogram.event - INFO - Update id=495295399 is handled. Duration 110 ms by bot id=5951537041
+2025-03-20 19:36:40,811 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:40,811 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:41,186 - handlers.user - INFO - User 1259547081 accessed language selection
+2025-03-20 19:36:41,187 - aiogram.event - INFO - Update id=495295400 is handled. Duration 375 ms by bot id=5951537041
+2025-03-20 19:36:42,486 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:42,486 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:42,622 - handlers.user - INFO - User 1259547081 changed language to uk
+2025-03-20 19:36:42,622 - aiogram.event - INFO - Update id=495295401 is handled. Duration 139 ms by bot id=5951537041
+2025-03-20 19:36:43,257 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:43,257 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:43,388 - aiogram.event - INFO - Update id=495295402 is handled. Duration 125 ms by bot id=5951537041
+2025-03-20 19:36:44,410 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:44,410 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:44,515 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 19:36:44,516 - aiogram.event - INFO - Update id=495295403 is handled. Duration 108 ms by bot id=5951537041
+2025-03-20 19:36:45,938 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:45,939 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:46,101 - handlers.admin - INFO - Admin 1259547081 accessed moderator management
+2025-03-20 19:36:46,101 - handlers.admin - INFO - Admin 1259547081 used Reply button 'Manage Moderators'
+2025-03-20 19:36:46,102 - aiogram.event - INFO - Update id=495295404 is handled. Duration 171 ms by bot id=5951537041
+2025-03-20 19:36:49,760 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:49,760 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:49,766 - handlers.user - ERROR - Бот не передан в kwargs!
+2025-03-20 19:36:49,858 - aiogram.event - INFO - Update id=495295405 is handled. Duration 93 ms by bot id=5951537041
+2025-03-20 19:36:50,399 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:50,399 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:50,555 - handlers.user - INFO - User 7838299933 used Reply button 'Ticket History'
+2025-03-20 19:36:50,556 - aiogram.event - INFO - Update id=495295406 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 19:36:51,166 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:51,166 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:51,253 - handlers.common - INFO - User 7838299933 opened the menu using reply button
+2025-03-20 19:36:51,254 - aiogram.event - INFO - Update id=495295407 is handled. Duration 77 ms by bot id=5951537041
+2025-03-20 19:36:51,688 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:51,689 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:51,839 - handlers.user - INFO - User 7838299933 used Reply button 'Create Ticket'
+2025-03-20 19:36:51,840 - aiogram.event - INFO - Update id=495295408 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 19:36:53,587 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:53,587 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:53,971 - handlers.user - INFO - User 7838299933 used Reply button 'Create Ticket'
+2025-03-20 19:36:53,972 - aiogram.event - INFO - Update id=495295409 is handled. Duration 375 ms by bot id=5951537041
+2025-03-20 19:36:56,418 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:36:56,418 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:36:56,571 - handlers.user - INFO - User 7838299933 returned to main menu
+2025-03-20 19:36:56,572 - aiogram.event - INFO - Update id=495295410 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 19:37:15,669 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:37:15,669 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:37:15,895 - handlers.common - INFO - User 7838299933 (staff_development) started the bot
+2025-03-20 19:37:15,895 - aiogram.event - INFO - Update id=495295411 is handled. Duration 218 ms by bot id=5951537041
+2025-03-20 19:37:16,818 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:37:16,818 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:37:16,825 - handlers.user - ERROR - Бот не передан в kwargs!
+2025-03-20 19:37:16,928 - aiogram.event - INFO - Update id=495295412 is handled. Duration 108 ms by bot id=5951537041
+2025-03-20 19:37:19,099 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:37:19,099 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:37:19,267 - handlers.common - INFO - User 7838299933 opened the menu using reply button
+2025-03-20 19:37:19,267 - aiogram.event - INFO - Update id=495295413 is handled. Duration 171 ms by bot id=5951537041
+2025-03-20 19:37:20,198 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:37:20,198 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:37:20,408 - handlers.user - INFO - User 7838299933 started ticket creation
+2025-03-20 19:37:20,408 - handlers.user - INFO - User 7838299933 used Reply button 'Create Ticket'
+2025-03-20 19:37:20,409 - aiogram.event - INFO - Update id=495295414 is handled. Duration 203 ms by bot id=5951537041
+2025-03-20 19:37:22,217 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:37:22,217 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:37:22,406 - handlers.user - INFO - User 7838299933 created ticket #2
+2025-03-20 19:37:22,406 - aiogram.event - INFO - Update id=495295415 is handled. Duration 187 ms by bot id=5951537041
+2025-03-20 19:37:44,977 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:37:44,977 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:37:45,139 - handlers.common - INFO - User 1259547081 (se1dhe) started the bot
+2025-03-20 19:37:45,140 - aiogram.event - INFO - Update id=495295416 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 19:37:46,267 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:37:46,267 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:37:46,426 - handlers.moderator - INFO - Moderator 1259547081 viewed unassigned tickets
+2025-03-20 19:37:46,426 - aiogram.event - INFO - Update id=495295417 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 19:37:47,171 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:37:47,171 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:37:47,697 - handlers.moderator - INFO - Moderator 1259547081 took ticket #2
+2025-03-20 19:37:47,697 - aiogram.event - INFO - Update id=495295418 is handled. Duration 531 ms by bot id=5951537041
+2025-03-20 19:37:49,248 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:37:49,248 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:37:49,443 - handlers.moderator - INFO - Moderator 1259547081 sent message to ticket #2
+2025-03-20 19:37:49,443 - aiogram.event - INFO - Update id=495295419 is handled. Duration 188 ms by bot id=5951537041
+2025-03-20 19:37:52,235 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:37:52,235 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:37:52,469 - handlers.moderator - INFO - Moderator 1259547081 sent message to ticket #2
+2025-03-20 19:37:52,469 - aiogram.event - INFO - Update id=495295420 is handled. Duration 234 ms by bot id=5951537041
+2025-03-20 19:37:55,158 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:37:55,158 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:37:55,447 - handlers.moderator - INFO - Moderator 1259547081 sent message to ticket #2
+2025-03-20 19:37:55,448 - aiogram.event - INFO - Update id=495295421 is handled. Duration 296 ms by bot id=5951537041
+2025-03-20 19:37:57,638 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:37:57,638 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:37:57,813 - handlers.common - INFO - User 1259547081 (se1dhe) started the bot
+2025-03-20 19:37:57,814 - aiogram.event - INFO - Update id=495295422 is handled. Duration 172 ms by bot id=5951537041
+2025-03-20 19:37:58,969 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:37:58,969 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:37:58,972 - aiogram.event - INFO - Update id=495295423 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:38:02,225 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:02,225 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:02,228 - aiogram.event - INFO - Update id=495295424 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:38:02,917 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:02,917 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:03,092 - handlers.moderator - INFO - Moderator 1259547081 viewed their stats
+2025-03-20 19:38:03,092 - handlers.moderator - INFO - Moderator 1259547081 used Reply button 'My Statistics'
+2025-03-20 19:38:03,093 - aiogram.event - INFO - Update id=495295425 is handled. Duration 172 ms by bot id=5951537041
+2025-03-20 19:38:03,983 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:03,984 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:04,176 - handlers.moderator - INFO - Moderator 1259547081 returned to main menu
+2025-03-20 19:38:04,177 - aiogram.event - INFO - Update id=495295426 is handled. Duration 187 ms by bot id=5951537041
+2025-03-20 19:38:04,813 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:04,813 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:04,816 - aiogram.event - INFO - Update id=495295427 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:38:08,146 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:08,146 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:08,292 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 19:38:08,293 - aiogram.event - INFO - Update id=495295428 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 19:38:09,020 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:09,020 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:09,152 - handlers.moderator - INFO - Moderator 1259547081 switched to user menu
+2025-03-20 19:38:09,153 - aiogram.event - INFO - Update id=495295429 is handled. Duration 141 ms by bot id=5951537041
+2025-03-20 19:38:10,304 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:10,305 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:10,472 - handlers.user - INFO - User 1259547081 accessed language selection
+2025-03-20 19:38:10,473 - aiogram.event - INFO - Update id=495295430 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 19:38:11,230 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:11,230 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:11,404 - handlers.user - INFO - User 1259547081 changed language to ru
+2025-03-20 19:38:11,404 - aiogram.event - INFO - Update id=495295431 is handled. Duration 172 ms by bot id=5951537041
+2025-03-20 19:38:12,445 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:12,446 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:12,548 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 19:38:12,548 - aiogram.event - INFO - Update id=495295432 is handled. Duration 93 ms by bot id=5951537041
+2025-03-20 19:38:14,271 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:14,272 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:14,634 - handlers.moderator - INFO - Moderator 1259547081 viewed their stats
+2025-03-20 19:38:14,635 - aiogram.event - INFO - Update id=495295433 is handled. Duration 375 ms by bot id=5951537041
+2025-03-20 19:38:15,016 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:15,017 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:15,271 - handlers.moderator - INFO - Moderator 1259547081 returned to main menu
+2025-03-20 19:38:15,272 - aiogram.event - INFO - Update id=495295434 is handled. Duration 266 ms by bot id=5951537041
+2025-03-20 19:38:16,129 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:16,129 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:16,337 - aiogram.event - INFO - Update id=495295435 is handled. Duration 219 ms by bot id=5951537041
+2025-03-20 19:38:16,962 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:16,962 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:17,127 - handlers.moderator - INFO - Moderator 1259547081 returned to main menu
+2025-03-20 19:38:17,128 - aiogram.event - INFO - Update id=495295436 is handled. Duration 155 ms by bot id=5951537041
+2025-03-20 19:38:17,727 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:17,727 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:17,730 - aiogram.event - INFO - Update id=495295437 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 19:38:19,901 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:19,901 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:20,070 - handlers.common - INFO - User 1259547081 (se1dhe) started the bot
+2025-03-20 19:38:20,071 - aiogram.event - INFO - Update id=495295438 is handled. Duration 171 ms by bot id=5951537041
+2025-03-20 19:38:21,036 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:21,036 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:21,044 - handlers.user - ERROR - Бот не передан в kwargs!
+2025-03-20 19:38:21,131 - aiogram.event - INFO - Update id=495295439 is handled. Duration 92 ms by bot id=5951537041
+2025-03-20 19:38:22,387 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:22,387 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:22,394 - handlers.user - ERROR - Бот не передан в kwargs!
+2025-03-20 19:38:22,469 - aiogram.event - INFO - Update id=495295440 is handled. Duration 78 ms by bot id=5951537041
+2025-03-20 19:38:23,035 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:23,035 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:23,190 - handlers.moderator - INFO - Moderator 1259547081 viewed their stats
+2025-03-20 19:38:23,190 - handlers.moderator - INFO - Moderator 1259547081 used Reply button 'My Statistics'
+2025-03-20 19:38:23,191 - aiogram.event - INFO - Update id=495295441 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 19:38:24,446 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:24,446 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:24,532 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 19:38:24,532 - aiogram.event - INFO - Update id=495295442 is handled. Duration 78 ms by bot id=5951537041
+2025-03-20 19:38:25,209 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:25,209 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:25,373 - handlers.moderator - INFO - Moderator 1259547081 used Reply button 'Unassigned Tickets'
+2025-03-20 19:38:25,374 - aiogram.event - INFO - Update id=495295443 is handled. Duration 171 ms by bot id=5951537041
+2025-03-20 19:38:27,715 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:27,715 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:27,877 - handlers.moderator - INFO - Moderator 1259547081 returned to main menu
+2025-03-20 19:38:27,877 - aiogram.event - INFO - Update id=495295444 is handled. Duration 155 ms by bot id=5951537041
+2025-03-20 19:38:30,849 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:30,849 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:30,856 - handlers.user - ERROR - Бот не передан в kwargs!
+2025-03-20 19:38:31,098 - aiogram.event - INFO - Update id=495295445 is handled. Duration 250 ms by bot id=5951537041
+2025-03-20 19:38:32,111 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:32,111 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:32,216 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 19:38:32,217 - aiogram.event - INFO - Update id=495295446 is handled. Duration 109 ms by bot id=5951537041
+2025-03-20 19:38:34,019 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:34,019 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:34,152 - handlers.moderator - INFO - Moderator 1259547081 viewed their stats
+2025-03-20 19:38:34,153 - aiogram.event - INFO - Update id=495295447 is handled. Duration 141 ms by bot id=5951537041
+2025-03-20 19:38:34,757 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:34,757 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:34,905 - handlers.moderator - INFO - Moderator 1259547081 returned to main menu
+2025-03-20 19:38:34,906 - aiogram.event - INFO - Update id=495295448 is handled. Duration 157 ms by bot id=5951537041
+2025-03-20 19:38:37,473 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 19:38:37,473 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 19:38:37,479 - handlers.user - ERROR - Бот не передан в kwargs!
+2025-03-20 19:38:37,553 - aiogram.event - INFO - Update id=495295449 is handled. Duration 93 ms by bot id=5951537041

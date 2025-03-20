@@ -267,3 +267,53 @@ def register_handlers(dp: Dispatcher):
     """
     dp.include_router(router)
 
+
+# Добавляем в существующий файл handlers/common.py
+
+@router.message(F.text == "🔍 Поиск тикета")
+async def search_ticket_cmd_wrapper(message: Message, state: FSMContext, **kwargs):
+    """
+    Обертка для обработчика команды поиска тикета
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик search_ticket_cmd!")
+
+        # Пытаемся создать сессию вручную
+        from database import async_session_factory
+        if async_session_factory:
+            async with async_session_factory() as temp_session:
+                return await _process_search_ticket(message, temp_session, state)
+        else:
+            # Если не можем создать сессию, отправляем сообщение об ошибке
+            await message.answer("Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже.")
+            return
+    else:
+        return await _process_search_ticket(message, session, state)
+
+
+async def _process_search_ticket(message: Message, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика команды поиска тикета
+    """
+    user_id = message.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if not user or user.role != UserRole.ADMIN:
+        await message.answer(
+            _("error_access_denied", user.language if user else None)
+        )
+        return
+
+    await message.answer(
+        _("search_ticket_prompt", user.language),
+        reply_markup=KeyboardFactory.back_button("admin:back_to_menu", user.language)
+    )
+
+    await state.set_state(AdminStates.SEARCHING_TICKET)
+
+    logger.info(f"Admin {user_id} started ticket search")

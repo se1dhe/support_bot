@@ -862,3 +862,242 @@ def register_handlers(dp: Dispatcher):
         dp: Диспетчер
     """
     dp.include_router(router)
+
+
+@router.message(F.text == "📝 Активный тикет")
+async def mod_active_ticket_button_wrapper(message: Message, state: FSMContext, **kwargs):
+    """
+    Обертка для обработчика кнопки "Активный тикет" для модератора
+    """
+    # Получаем сессию и проверяем, что пользователь - модератор
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик mod_active_ticket_button!")
+        await message.answer("Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже.")
+        return
+
+    user_id = message.from_user.id
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if not user or user.role != UserRole.MODERATOR:
+        await message.answer(_("error_access_denied", user.language if user else None))
+        return
+
+    # Здесь обработка текущего активного тикета модератора
+    active_ticket_query = select(Ticket).where(
+        (Ticket.moderator_id == user.id) &
+        (Ticket.status == TicketStatus.IN_PROGRESS)
+    ).options(selectinload(Ticket.user), selectinload(Ticket.messages))
+    active_ticket_result = await session.execute(active_ticket_query)
+    ticket = active_ticket_result.scalar_one_or_none()
+
+    if not ticket:
+        await message.answer(
+            "У вас нет активных тикетов в работе. Вы можете взять тикет из списка неназначенных.",
+            reply_markup=KeyboardFactory.main_reply_keyboard(UserRole.MODERATOR, user.language)
+        )
+        return
+
+    # Если есть активный тикет, показываем информацию о нем
+    message_text = (
+        f"🔄 <b>Тикет #{ticket.id} в работе</b>\n\n"
+        f"👤 Пользователь: {ticket.user.full_name}\n"
+        f"📝 Тема: {ticket.subject or 'Не указана'}\n"
+        f"📅 Создан: {ticket.created_at.strftime('%d.%m.%Y %H:%M')}\n\n"
+    )
+
+    # Создаем клавиатуру с действиями для тикета
+    keyboard = KeyboardFactory.ticket_actions(TicketStatus.IN_PROGRESS, ticket.id, user.language)
+
+    await message.answer(message_text, reply_markup=keyboard)
+
+    # Устанавливаем состояние работы с тикетом
+    await state.set_state(ModeratorStates.WORKING_WITH_TICKET)
+    await state.update_data(active_ticket_id=ticket.id)
+
+    # Получаем бота из kwargs для отправки истории сообщений
+    bot = kwargs.get("bot")
+    if not bot:
+        await message.answer("Произошла ошибка при получении истории сообщений.")
+        return
+
+    # Отправляем историю сообщений отдельными сообщениями
+    if ticket.messages:
+        await message.answer(_("message_history", user.language))
+
+        # Ограничиваем количество сообщений
+        max_messages = 20
+        start_idx = max(0, len(ticket.messages) - max_messages)
+
+        # Если в тикете много сообщений, добавляем информацию об ограничении
+        if len(ticket.messages) > max_messages:
+            await message.answer(
+                f"<i>Показаны последние {max_messages} из {len(ticket.messages)} сообщений.</i>"
+            )
+
+        for msg in ticket.messages[start_idx:]:
+            if msg.sender_id == ticket.user_id:
+                sender = "Пользователь"
+            elif msg.sender_id == user.id:
+                sender = "Вы"
+            else:
+                sender = "Система"
+
+            time = msg.sent_at.strftime("%d.%m.%Y %H:%M")
+
+            if msg.message_type == MessageType.SYSTEM:
+                await message.answer(f"🔔 <i>{msg.text}</i>")
+            elif msg.message_type == MessageType.TEXT:
+                await message.answer(f"<b>{sender}</b> [{time}]:\n{msg.text}")
+            elif msg.message_type == MessageType.PHOTO:
+                caption = f"<b>{sender}</b> [{time}]:" + (f"\n{msg.text.replace('[ФОТО] ', '')}" if msg.text else "")
+                await bot.send_photo(
+                    chat_id=message.from_user.id,
+                    photo=msg.file_id,
+                    caption=caption
+                )
+            elif msg.message_type == MessageType.VIDEO:
+                caption = f"<b>{sender}</b> [{time}]:" + (f"\n{msg.text.replace('[ВИДЕО] ', '')}" if msg.text else "")
+                await bot.send_video(
+                    chat_id=message.from_user.id,
+                    video=msg.file_id,
+                    caption=caption
+                )
+            elif msg.message_type == MessageType.DOCUMENT:
+                caption = f"<b>{sender}</b> [{time}]:" + (
+                    f"\n{msg.text.replace('[ДОКУМЕНТ: ', '').split(']')[1] if ']' in msg.text else ''}" if msg.text else "")
+                await bot.send_document(
+                    chat_id=message.from_user.id,
+                    document=msg.file_id,
+                    caption=caption
+                )
+
+        await message.answer(
+            "<i>Чтобы ответить пользователю, просто отправьте сообщение в этот чат.</i>"
+        )
+
+    logger.info(f"Moderator {user_id} viewed active ticket #{ticket.id}")
+
+
+@router.message(F.text == "📨 Неназначенные тикеты")
+async def unassigned_tickets_button_wrapper(message: Message, state: FSMContext, **kwargs):
+    """
+    Обертка для обработчика кнопки "Неназначенные тикеты" на Reply Keyboard
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик unassigned_tickets_button!")
+
+        # Пытаемся создать сессию вручную
+        from database import async_session_factory
+        if async_session_factory:
+            async with async_session_factory() as temp_session:
+                return await _process_unassigned_tickets_button(message, temp_session, state)
+        else:
+            # Если не можем создать сессию, отправляем сообщение об ошибке
+            await message.answer("Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже.")
+            return
+    else:
+        return await _process_unassigned_tickets_button(message, session, state)
+
+
+async def _process_unassigned_tickets_button(message: Message, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика кнопки "Неназначенные тикеты" на Reply Keyboard
+    """
+    user_id = message.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if not user or user.role != UserRole.MODERATOR:
+        await message.answer(
+            _("error_access_denied", user.language if user else None)
+        )
+        return
+
+    # Симулируем нажатие на Inline кнопку для неназначенных тикетов
+    class FakeCallbackQuery:
+        def __init__(self, user_id, message_obj):
+            self.from_user = type('obj', (object,), {'id': user_id})
+            self.message = message_obj
+            self.data = "mod:unassigned_tickets"
+
+        async def answer(self, *args, **kwargs):
+            pass
+
+    fake_callback = FakeCallbackQuery(user_id, message)
+
+    # Здесь создаем новое сообщение для вывода результата
+    result_message = await message.answer("Загрузка...")
+    fake_callback.message = result_message
+
+    # Вызываем обработчик для Inline кнопки "Неназначенные тикеты"
+    await unassigned_tickets_wrapper(fake_callback, state, session=session)
+
+    logger.info(f"Moderator {user_id} used Reply button 'Unassigned Tickets'")
+
+
+@router.message(F.text == "📊 Моя статистика")
+async def my_stats_button_wrapper(message: Message, state: FSMContext, **kwargs):
+    """
+    Обертка для обработчика кнопки "Моя статистика" на Reply Keyboard
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик my_stats_button!")
+
+        # Пытаемся создать сессию вручную
+        from database import async_session_factory
+        if async_session_factory:
+            async with async_session_factory() as temp_session:
+                return await _process_my_stats_button(message, temp_session, state)
+        else:
+            # Если не можем создать сессию, отправляем сообщение об ошибке
+            await message.answer("Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже.")
+            return
+    else:
+        return await _process_my_stats_button(message, session, state)
+
+
+async def _process_my_stats_button(message: Message, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика кнопки "Моя статистика" на Reply Keyboard
+    """
+    user_id = message.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if not user or user.role != UserRole.MODERATOR:
+        await message.answer(
+            _("error_access_denied", user.language if user else None)
+        )
+        return
+
+    # Симулируем нажатие на Inline кнопку для статистики модератора
+    class FakeCallbackQuery:
+        def __init__(self, user_id, message_obj):
+            self.from_user = type('obj', (object,), {'id': user_id})
+            self.message = message_obj
+            self.data = "mod:my_stats"
+
+        async def answer(self, *args, **kwargs):
+            pass
+
+    fake_callback = FakeCallbackQuery(user_id, message)
+
+    # Здесь создаем новое сообщение для вывода результата
+    result_message = await message.answer("Загрузка...")
+    fake_callback.message = result_message
+
+    # Вызываем обработчик для Inline кнопки "Моя статистика"
+    await my_stats_wrapper(fake_callback, state, session=session)
+
+    logger.info(f"Moderator {user_id} used Reply button 'My Statistics'")

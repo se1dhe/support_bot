@@ -40,6 +40,7 @@ async def create_ticket_cmd_wrapper(callback_query: CallbackQuery, state: FSMCon
     return await _process_create_ticket(callback_query, session, state)
 
 
+
 async def _process_create_ticket(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
     """
     Реализация обработчика команды создания нового тикета
@@ -925,3 +926,224 @@ def register_handlers(dp: Dispatcher):
         dp: Диспетчер
     """
     dp.include_router(router)
+
+
+@router.message(F.text == "📝 Активный тикет")
+async def active_ticket_button_wrapper(message: Message, state: FSMContext, **kwargs):
+    """
+    Обертка для обработчика кнопки "Активный тикет" на Reply Keyboard
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик active_ticket_button!")
+
+        # Пытаемся создать сессию вручную
+        from database import async_session_factory
+        if async_session_factory:
+            async with async_session_factory() as temp_session:
+                return await _process_active_ticket_button(message, temp_session, state)
+        else:
+            # Если не можем создать сессию, отправляем сообщение об ошибке
+            await message.answer("Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже.")
+            return
+    else:
+        return await _process_active_ticket_button(message, session, state)
+
+
+async def _process_active_ticket_button(message: Message, session: AsyncSession, state: FSMContext, **kwargs):
+    """
+    Реализация обработчика кнопки "Активный тикет" на Reply Keyboard
+    """
+    user_id = message.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if not user:
+        await message.answer("Произошла ошибка. Пожалуйста, перезапустите бота: /start")
+        return
+
+    # Получаем бота из kwargs (добавляется middleware)
+    bot = kwargs.get("bot")
+    if not bot:
+        logger.error("Бот не передан в kwargs!")
+        await message.answer("Произошла системная ошибка. Пожалуйста, попробуйте позже.")
+        return
+
+    # Симулируем нажатие на Inline кнопку для активного тикета
+    class FakeCallbackQuery:
+        def __init__(self, user_id, message_obj):
+            self.from_user = type('obj', (object,), {'id': user_id})
+            self.message = message_obj
+            self.data = "user:active_ticket"
+
+        async def answer(self, *args, **kwargs):
+            pass
+
+    fake_callback = FakeCallbackQuery(user_id, message)
+
+    # Создаем новое сообщение для вывода результата
+    result_message = await message.answer("Загрузка...")
+    fake_callback.message = result_message
+
+    # Вызываем обработчик для Inline кнопки "Активный тикет"
+    await active_ticket_wrapper(fake_callback, state, session=session, bot=bot)
+
+    logger.info(f"User {user_id} used Reply button 'Active Ticket'")
+
+
+async def _process_create_ticket_button(message: Message, session: AsyncSession, state: FSMContext, **kwargs):
+    """
+    Реализация обработчика кнопки "Создать тикет" на Reply Keyboard
+    """
+    user_id = message.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if not user:
+        await message.answer("Произошла ошибка. Пожалуйста, перезапустите бота: /start")
+        return
+
+    # Симулируем нажатие на Inline кнопку для создания тикета
+    class FakeCallbackQuery:
+        def __init__(self, user_id, message_obj):
+            self.from_user = type('obj', (object,), {'id': user_id})
+            self.message = message_obj
+            self.data = "user:create_ticket"
+
+        async def answer(self, *args, **kwargs):
+            pass
+
+    fake_callback = FakeCallbackQuery(user_id, message)
+
+    # Создаем новое сообщение для вывода результата
+    result_message = await message.answer("Загрузка...")
+    fake_callback.message = result_message
+
+    # Вызываем обработчик для Inline кнопки "Создать тикет"
+    await create_ticket_cmd_wrapper(fake_callback, state, session=session)
+
+    logger.info(f"User {user_id} used Reply button 'Create Ticket'")
+
+
+@router.message(F.text == "✏️ Создать тикет")
+async def create_ticket_button_wrapper(message: Message, state: FSMContext, **kwargs):
+    """
+    Обертка для обработчика кнопки "Создать тикет" на Reply Keyboard
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик create_ticket_button!")
+
+        # Пытаемся создать сессию вручную
+        from database import async_session_factory
+        if async_session_factory:
+            async with async_session_factory() as temp_session:
+                return await _process_create_ticket_button(message, temp_session, state)
+        else:
+            # Если не можем создать сессию, отправляем сообщение об ошибке
+            await message.answer("Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже.")
+            return
+    else:
+        return await _process_create_ticket_button(message, session, state)
+
+
+async def _process_create_ticket_button(message: Message, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика кнопки "Создать тикет" на Reply Keyboard
+    """
+    user_id = message.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if not user:
+        await message.answer("Произошла ошибка. Пожалуйста, перезапустите бота: /start")
+        return
+
+    # Симулируем нажатие на Inline кнопку для создания тикета
+    class FakeCallbackQuery:
+        def __init__(self, user_id, message_obj):
+            self.from_user = type('obj', (object,), {'id': user_id})
+            self.message = message_obj
+            self.data = "user:create_ticket"
+
+        async def answer(self, *args, **kwargs):
+            pass
+
+    fake_callback = FakeCallbackQuery(user_id, message)
+
+    # Создаем новое сообщение для вывода результата
+    result_message = await message.answer("Загрузка...")
+    fake_callback.message = result_message
+
+    # Вызываем обработчик для Inline кнопки "Создать тикет"
+    await create_ticket_cmd_wrapper(fake_callback, state, session=session)
+
+    logger.info(f"User {user_id} used Reply button 'Create Ticket'")
+
+
+@router.message(F.text == "📋 История тикетов")
+async def ticket_history_button_wrapper(message: Message, state: FSMContext, **kwargs):
+    """
+    Обертка для обработчика кнопки "История тикетов" на Reply Keyboard
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик ticket_history_button!")
+
+        # Пытаемся создать сессию вручную
+        from database import async_session_factory
+        if async_session_factory:
+            async with async_session_factory() as temp_session:
+                return await _process_ticket_history_button(message, temp_session, state)
+        else:
+            # Если не можем создать сессию, отправляем сообщение об ошибке
+            await message.answer("Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже.")
+            return
+    else:
+        return await _process_ticket_history_button(message, session, state)
+
+
+async def _process_ticket_history_button(message: Message, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика кнопки "История тикетов" на Reply Keyboard
+    """
+    user_id = message.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if not user:
+        await message.answer("Произошла ошибка. Пожалуйста, перезапустите бота: /start")
+        return
+
+    # Симулируем нажатие на Inline кнопку для истории тикетов
+    class FakeCallbackQuery:
+        def __init__(self, user_id, message_obj):
+            self.from_user = type('obj', (object,), {'id': user_id})
+            self.message = message_obj
+            self.data = "user:ticket_history"
+
+        async def answer(self, *args, **kwargs):
+            pass
+
+    fake_callback = FakeCallbackQuery(user_id, message)
+
+    # Создаем новое сообщение для вывода результата
+    result_message = await message.answer("Загрузка...")
+    fake_callback.message = result_message
+
+    # Вызываем обработчик для Inline кнопки "История тикетов"
+    await ticket_history_wrapper(fake_callback, state, session=session)
+
+    logger.info(f"User {user_id} used Reply button 'Ticket History'")
