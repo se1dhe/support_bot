@@ -106,3 +106,392 @@ Traceback (most recent call last):
     return await wrapped()
                  ^^^^^^^^^
 TypeError: command_start() missing 1 required positional argument: 'session'
+2025-03-20 13:19:51,924 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 13:19:52,187 - __main__ - INFO - Бот остановлен
+2025-03-20 13:19:52,187 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 13:19:52,188 - __main__ - INFO - Бот остановлен
+2025-03-20 13:19:55,742 - __main__ - INFO - Запуск бота...
+2025-03-20 13:19:55,745 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 13:19:55,822 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 13:19:55,832 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 13:19:55,839 - database - INFO - Таблицы успешно созданы
+2025-03-20 13:19:55,840 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 13:19:55,841 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 13:19:55,841 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 13:19:56,097 - __main__ - INFO - Бот запущен
+2025-03-20 13:19:56,268 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 13:19:56,325 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 13:20:01,720 - aiogram.event - INFO - Update id=495295143 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 13:20:01,720 - aiogram.event - ERROR - Cause exception while process update id=495295143 by bot id=5951537041
+TypeError: command_start() missing 1 required positional argument: 'session'
+Traceback (most recent call last):
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 309, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 158, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 56, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\fsm\middleware.py", line 42, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 24, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 30, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 30, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 39, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+                 ^^^^^^^^^
+TypeError: command_start() missing 1 required positional argument: 'session'
+2025-03-20 13:31:46,067 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 13:31:46,325 - __main__ - INFO - Бот остановлен
+2025-03-20 13:31:46,325 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 13:31:46,326 - __main__ - INFO - Бот остановлен
+2025-03-20 13:31:50,035 - __main__ - INFO - Запуск бота...
+2025-03-20 13:31:50,038 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 13:31:50,119 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 13:31:50,131 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 13:31:50,137 - database - INFO - Таблицы успешно созданы
+2025-03-20 13:31:50,138 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 13:31:50,139 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 13:31:50,139 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 13:31:50,397 - __main__ - INFO - Бот запущен
+2025-03-20 13:31:50,590 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 13:31:50,647 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 13:33:08,471 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 13:33:08,726 - __main__ - INFO - Бот остановлен
+2025-03-20 13:33:08,726 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 13:33:08,727 - __main__ - INFO - Бот остановлен
+2025-03-20 13:33:12,344 - __main__ - INFO - Запуск бота...
+2025-03-20 13:33:12,347 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 13:33:12,428 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 13:33:12,440 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 13:33:12,446 - database - INFO - Таблицы успешно созданы
+2025-03-20 13:33:12,447 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 13:33:12,448 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 13:33:12,448 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 13:33:12,704 - __main__ - INFO - Бот запущен
+2025-03-20 13:33:12,855 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 13:33:12,904 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 13:59:45,370 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 13:59:45,372 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 13:59:45,372 - aiogram.event - INFO - Update id=495295144 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 13:59:45,372 - aiogram.event - ERROR - Cause exception while process update id=495295144 by bot id=5951537041
+TypeError: 'NoneType' object is not callable
+Traceback (most recent call last):
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 309, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 158, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 56, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\fsm\middleware.py", line 42, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 22, in __call__
+    async with async_session_factory() as session:
+               ^^^^^^^^^^^^^^^^^^^^^^^
+TypeError: 'NoneType' object is not callable
+2025-03-20 14:06:04,051 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 14:06:04,317 - __main__ - INFO - Бот остановлен
+2025-03-20 14:06:04,317 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 14:06:04,318 - __main__ - INFO - Бот остановлен
+2025-03-20 14:06:07,919 - __main__ - INFO - Запуск бота...
+2025-03-20 14:06:07,922 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 14:06:08,007 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 14:06:08,019 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 14:06:08,025 - database - INFO - Таблицы успешно созданы
+2025-03-20 14:06:08,026 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 14:06:08,027 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 14:06:08,027 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 14:06:08,299 - __main__ - INFO - Бот запущен
+2025-03-20 14:06:08,491 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 14:06:08,551 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 14:06:12,634 - aiogram.event - INFO - Update id=495295145 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 14:06:12,635 - aiogram.event - ERROR - Cause exception while process update id=495295145 by bot id=5951537041
+TypeError: command_start() missing 1 required positional argument: 'session'
+Traceback (most recent call last):
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 309, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 158, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 56, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\fsm\middleware.py", line 42, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 24, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 30, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 30, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 39, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+                 ^^^^^^^^^
+TypeError: command_start() missing 1 required positional argument: 'session'
+2025-03-20 14:08:53,190 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 14:08:53,453 - __main__ - INFO - Бот остановлен
+2025-03-20 14:08:53,453 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 14:08:53,454 - __main__ - INFO - Бот остановлен
+2025-03-20 14:08:57,227 - __main__ - INFO - Запуск бота...
+2025-03-20 14:08:57,230 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 14:08:57,309 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 14:08:57,320 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 14:08:57,326 - database - INFO - Таблицы успешно созданы
+2025-03-20 14:08:57,327 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 14:08:57,327 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 14:08:57,329 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 14:08:57,601 - __main__ - INFO - Бот запущен
+2025-03-20 14:08:57,782 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 14:08:57,831 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 14:09:13,153 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 14:09:13,411 - __main__ - INFO - Бот остановлен
+2025-03-20 14:09:13,411 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 14:09:13,412 - __main__ - INFO - Бот остановлен
+2025-03-20 14:09:17,133 - __main__ - INFO - Запуск бота...
+2025-03-20 14:09:17,136 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 14:09:17,212 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 14:09:17,225 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 14:09:17,230 - database - INFO - Таблицы успешно созданы
+2025-03-20 14:09:17,231 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 14:09:17,232 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 14:09:17,232 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 14:09:17,507 - __main__ - INFO - Бот запущен
+2025-03-20 14:09:17,661 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 14:09:17,712 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 14:09:32,658 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 14:09:32,910 - __main__ - INFO - Бот остановлен
+2025-03-20 14:09:32,910 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 14:09:32,911 - __main__ - INFO - Бот остановлен
+2025-03-20 14:09:36,422 - __main__ - INFO - Запуск бота...
+2025-03-20 14:09:36,425 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 14:09:36,503 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 14:09:36,514 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 14:09:36,519 - database - INFO - Таблицы успешно созданы
+2025-03-20 14:09:36,520 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 14:09:36,521 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 14:09:36,521 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 14:09:36,790 - __main__ - INFO - Бот запущен
+2025-03-20 14:09:36,955 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 14:09:37,009 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 14:10:26,387 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 14:10:26,387 - middlewares.database - WARNING - async_session_factory is None! Инициализируем...
+2025-03-20 14:10:26,389 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 14:10:26,389 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 14:10:26,389 - middlewares.database - ERROR - Не удалось инициализировать async_session_factory!
+2025-03-20 14:10:26,390 - aiogram.event - INFO - Update id=495295146 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 14:10:26,390 - aiogram.event - ERROR - Cause exception while process update id=495295146 by bot id=5951537041
+TypeError: command_start() missing 1 required positional argument: 'session'
+Traceback (most recent call last):
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 309, in _process_update
+    response = await self.feed_update(bot, update, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 158, in feed_update
+    response = await self.update.wrap_outer_middleware(
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\middlewares\error.py", line 25, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\middlewares\user_context.py", line 56, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\fsm\middleware.py", line 42, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 35, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 30, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 30, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 39, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+                 ^^^^^^^^^
+TypeError: command_start() missing 1 required positional argument: 'session'
+2025-03-20 15:10:17,607 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 15:10:17,872 - __main__ - INFO - Бот остановлен
+2025-03-20 15:10:17,872 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 15:10:17,873 - __main__ - INFO - Бот остановлен
+2025-03-20 15:17:26,953 - __main__ - INFO - Запуск бота...
+2025-03-20 15:17:26,956 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 15:17:27,037 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 15:17:27,051 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 15:17:27,056 - database - INFO - Таблицы успешно созданы
+2025-03-20 15:17:27,058 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 15:17:27,059 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 15:17:27,059 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 15:17:37,404 - __main__ - INFO - Запуск бота...
+2025-03-20 15:17:37,407 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 15:17:37,485 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 15:17:37,497 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 15:17:37,503 - database - INFO - Таблицы успешно созданы
+2025-03-20 15:17:37,504 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 15:17:37,505 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 15:17:37,505 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 15:21:47,267 - __main__ - INFO - Запуск бота...
+2025-03-20 15:21:47,269 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 15:21:47,348 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 15:21:47,360 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 15:21:47,366 - database - INFO - Таблицы успешно созданы
+2025-03-20 15:21:47,367 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 15:21:47,368 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 15:21:47,368 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 15:24:00,883 - __main__ - INFO - Запуск бота...
+2025-03-20 15:24:00,886 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 15:24:00,965 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 15:24:00,977 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 15:24:00,982 - database - INFO - Таблицы успешно созданы
+2025-03-20 15:24:00,983 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 15:24:00,984 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 15:24:00,984 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 15:24:01,263 - __main__ - INFO - Бот запущен
+2025-03-20 15:24:01,437 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 15:24:01,495 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 15:24:13,095 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 15:24:13,095 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 15:24:13,326 - handlers - INFO - User 1259547081 (se1dhe) started the bot
+2025-03-20 15:24:13,326 - aiogram.event - INFO - Update id=495295147 is handled. Duration 233 ms by bot id=5951537041
+2025-03-20 15:24:20,881 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 15:24:20,881 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 15:24:20,959 - handlers - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 15:24:20,960 - aiogram.event - INFO - Update id=495295148 is handled. Duration 94 ms by bot id=5951537041
+2025-03-20 15:24:21,933 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 15:24:21,933 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 15:24:21,933 - aiogram.event - INFO - Update id=495295149 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 15:24:22,932 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 15:24:22,932 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 15:24:22,933 - aiogram.event - INFO - Update id=495295150 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 15:24:23,753 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 15:24:23,753 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 15:24:23,753 - aiogram.event - INFO - Update id=495295151 is not handled. Duration 0 ms by bot id=5951537041

@@ -21,9 +21,30 @@ router = Router()
 
 
 @router.message(CommandStart())
-async def command_start(message: Message, session: AsyncSession, state: FSMContext):
+async def command_start_wrapper(message: Message, state: FSMContext, **kwargs):
     """
-    Обработчик команды /start
+    Обертка для обработчика команды /start
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик command_start!")
+
+        # Пытаемся создать сессию вручную
+        from database import async_session_factory
+        if async_session_factory:
+            async with async_session_factory() as temp_session:
+                return await _process_start_command(message, temp_session, state)
+        else:
+            # Если не можем создать сессию, отправляем сообщение об ошибке
+            await message.answer("Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже.")
+            return
+    else:
+        return await _process_start_command(message, session, state)
+
+
+async def _process_start_command(message: Message, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика команды /start
     """
     user_id = message.from_user.id
     username = message.from_user.username
@@ -103,9 +124,30 @@ async def command_start(message: Message, session: AsyncSession, state: FSMConte
 
 
 @router.message(F.text == "📋 Меню")
-async def reply_menu_button(message: Message, session: AsyncSession, state: FSMContext):
+async def reply_menu_button_wrapper(message: Message, state: FSMContext, **kwargs):
     """
-    Обработчик кнопки "Меню" на Reply Keyboard
+    Обертка для обработчика кнопки "Меню" на Reply Keyboard
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик reply_menu_button!")
+
+        # Пытаемся создать сессию вручную
+        from database import async_session_factory
+        if async_session_factory:
+            async with async_session_factory() as temp_session:
+                return await _process_menu_button(message, temp_session, state)
+        else:
+            # Если не можем создать сессию, отправляем сообщение об ошибке
+            await message.answer("Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже.")
+            return
+    else:
+        return await _process_menu_button(message, session, state)
+
+
+async def _process_menu_button(message: Message, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика кнопки "Меню" на Reply Keyboard
     """
     user_id = message.from_user.id
 
@@ -116,7 +158,7 @@ async def reply_menu_button(message: Message, session: AsyncSession, state: FSMC
 
     if not user:
         # Если пользователя нет в БД, запускаем команду /start
-        return await command_start(message, session, state)
+        return await _process_start_command(message, session, state)
 
     # Показываем соответствующее меню в зависимости от роли
     if user.role == UserRole.ADMIN:
@@ -142,9 +184,30 @@ async def reply_menu_button(message: Message, session: AsyncSession, state: FSMC
 
 
 @router.message(Command("help"))
-async def command_help(message: Message, session: AsyncSession):
+async def command_help_wrapper(message: Message, **kwargs):
     """
-    Обработчик команды /help
+    Обертка для обработчика команды /help
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик command_help!")
+
+        # Пытаемся создать сессию вручную
+        from database import async_session_factory
+        if async_session_factory:
+            async with async_session_factory() as temp_session:
+                return await _process_help_command(message, temp_session)
+        else:
+            # Если не можем создать сессию, отправляем сообщение об ошибке
+            await message.answer("Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже.")
+            return
+    else:
+        return await _process_help_command(message, session)
+
+
+async def _process_help_command(message: Message, session: AsyncSession):
+    """
+    Реализация обработчика команды /help
     """
     user_id = message.from_user.id
 
@@ -187,12 +250,12 @@ async def command_help(message: Message, session: AsyncSession):
 
 
 @router.message(Command("menu"))
-async def command_menu(message: Message, session: AsyncSession, state: FSMContext):
+async def command_menu_wrapper(message: Message, state: FSMContext, **kwargs):
     """
-    Обработчик команды /menu
+    Обертка для обработчика команды /menu
     """
     # Используем тот же обработчик, что и для кнопки "Меню"
-    await reply_menu_button(message, session, state)
+    return await reply_menu_button_wrapper(message, state, **kwargs)
 
 
 def register_handlers(dp: Dispatcher):

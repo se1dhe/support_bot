@@ -24,9 +24,25 @@ router = Router()
 
 
 @router.callback_query(F.data == "mod:unassigned_tickets")
-async def unassigned_tickets(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def unassigned_tickets_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик просмотра неназначенных тикетов
+    Обертка для обработчика просмотра неназначенных тикетов
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик unassigned_tickets!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_unassigned_tickets(callback_query, session, state)
+
+
+async def _process_unassigned_tickets(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика просмотра неназначенных тикетов
     """
     user_id = callback_query.from_user.id
 
@@ -136,9 +152,34 @@ async def unassigned_tickets(callback_query: CallbackQuery, session: AsyncSessio
 
 
 @router.callback_query(F.data.startswith("mod:take:"))
-async def take_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
+async def take_ticket_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик принятия тикета в работу
+    Обертка для обработчика принятия тикета в работу
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик take_ticket!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    bot = kwargs.get("bot")
+    if not bot:
+        logger.error("Bot не передан в обработчик take_ticket!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_take_ticket(callback_query, bot, session, state)
+
+
+async def _process_take_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика принятия тикета в работу
     """
     user_id = callback_query.from_user.id
     ticket_id = int(callback_query.data.split(":")[2])
@@ -298,9 +339,25 @@ async def take_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSes
 
 
 @router.callback_query(F.data.startswith("mod:resolve_ticket:"))
-async def resolve_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
+async def resolve_ticket_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик отметки тикета как решенного
+    Обертка для обработчика отметки тикета как решенного
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик resolve_ticket!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_resolve_ticket(callback_query, session, state)
+
+
+async def _process_resolve_ticket(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика отметки тикета как решенного
     """
     user_id = callback_query.from_user.id
     ticket_id = int(callback_query.data.split(":")[2])
@@ -346,9 +403,35 @@ async def resolve_ticket(callback_query: CallbackQuery, bot: Bot, session: Async
 
 
 @router.callback_query(F.data.startswith("confirm:resolve:"))
-async def confirm_resolve_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
+async def confirm_resolve_ticket_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик подтверждения отметки тикета как решенного
+    Обертка для обработчика подтверждения отметки тикета как решенного
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик confirm_resolve_ticket!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    bot = kwargs.get("bot")
+    if not bot:
+        logger.error("Bot не передан в обработчик confirm_resolve_ticket!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_confirm_resolve_ticket(callback_query, bot, session, state)
+
+
+async def _process_confirm_resolve_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSession,
+                                          state: FSMContext):
+    """
+    Реализация обработчика подтверждения отметки тикета как решенного
     """
     user_id = callback_query.from_user.id
     ticket_id = int(callback_query.data.split(":")[2])
@@ -429,9 +512,25 @@ async def confirm_resolve_ticket(callback_query: CallbackQuery, bot: Bot, sessio
 
 
 @router.callback_query(F.data == "mod:my_stats")
-async def my_stats(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def my_stats_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик просмотра статистики модератора
+    Обертка для обработчика просмотра статистики модератора
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик my_stats!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_my_stats(callback_query, session, state)
+
+
+async def _process_my_stats(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика просмотра статистики модератора
     """
     user_id = callback_query.from_user.id
 
@@ -522,9 +621,32 @@ async def my_stats(callback_query: CallbackQuery, session: AsyncSession, state: 
 
 
 @router.message(ModeratorStates.WORKING_WITH_TICKET, F.text | F.photo | F.document | F.video)
-async def process_moderator_message(message: Message, bot: Bot, session: AsyncSession, state: FSMContext):
+async def process_moderator_message_wrapper(message: Message, state: FSMContext, **kwargs):
     """
-    Обработчик сообщения модератора в активном тикете
+    Обертка для обработчика сообщения модератора в активном тикете
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик process_moderator_message!")
+        await message.answer(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        return
+
+    bot = kwargs.get("bot")
+    if not bot:
+        logger.error("Bot не передан в обработчик process_moderator_message!")
+        await message.answer(
+            "Произошла ошибка. Пожалуйста, попробуйте позже."
+        )
+        return
+
+    return await _process_moderator_message(message, bot, session, state)
+
+
+async def _process_moderator_message(message: Message, bot: Bot, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика сообщения модератора в активном тикете
     """
     # Получаем данные из состояния
     state_data = await state.get_data()
@@ -650,9 +772,25 @@ async def process_moderator_message(message: Message, bot: Bot, session: AsyncSe
 
 
 @router.callback_query(F.data == "mod:back_to_menu")
-async def back_to_menu(callback_query: CallbackQuery, state: FSMContext):
+async def back_to_menu_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик возврата в главное меню модератора
+    Обертка для обработчика возврата в главное меню модератора
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик back_to_menu!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_back_to_menu(callback_query, session, state)
+
+
+async def _process_back_to_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика возврата в главное меню модератора
     """
     user_id = callback_query.from_user.id
 
@@ -676,9 +814,25 @@ async def back_to_menu(callback_query: CallbackQuery, state: FSMContext):
 
 
 @router.callback_query(F.data == "mod:user_menu")
-async def switch_to_user_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def switch_to_user_menu_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик переключения на меню пользователя
+    Обертка для обработчика переключения на меню пользователя
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик switch_to_user_menu!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_switch_to_user_menu(callback_query, session, state)
+
+
+async def _process_switch_to_user_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика переключения на меню пользователя
     """
     user_id = callback_query.from_user.id
 

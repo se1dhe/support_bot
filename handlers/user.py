@@ -24,9 +24,25 @@ router = Router()
 
 
 @router.callback_query(F.data == "user:create_ticket")
-async def create_ticket_cmd(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def create_ticket_cmd_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик команды создания нового тикета
+    Обертка для обработчика команды создания нового тикета
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик create_ticket_cmd!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_create_ticket(callback_query, session, state)
+
+
+async def _process_create_ticket(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика команды создания нового тикета
     """
     user_id = callback_query.from_user.id
 
@@ -76,9 +92,30 @@ async def create_ticket_cmd(callback_query: CallbackQuery, session: AsyncSession
 
 
 @router.message(UserStates.CREATING_TICKET, F.text | F.photo | F.document | F.video)
-async def process_ticket_creation(message: Message, bot: Bot, session: AsyncSession, state: FSMContext):
+async def process_ticket_creation_wrapper(message: Message, bot: Bot, state: FSMContext, **kwargs):
     """
-    Обработчик сообщения для создания тикета
+    Обертка для обработчика сообщения для создания тикета
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик process_ticket_creation!")
+
+        # Пытаемся создать сессию вручную
+        from database import async_session_factory
+        if async_session_factory:
+            async with async_session_factory() as temp_session:
+                return await _process_ticket_creation(message, bot, temp_session, state)
+        else:
+            # Если не можем создать сессию, отправляем сообщение об ошибке
+            await message.answer("Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже.")
+            return
+    else:
+        return await _process_ticket_creation(message, bot, session, state)
+
+
+async def _process_ticket_creation(message: Message, bot: Bot, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика сообщения для создания тикета
     """
     user_id = message.from_user.id
 
@@ -201,9 +238,25 @@ async def process_ticket_creation(message: Message, bot: Bot, session: AsyncSess
 
 
 @router.callback_query(F.data == "user:ticket_history")
-async def ticket_history(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def ticket_history_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик просмотра истории тикетов
+    Обертка для обработчика просмотра истории тикетов
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик ticket_history!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_ticket_history(callback_query, session, state)
+
+
+async def _process_ticket_history(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика просмотра истории тикетов
     """
     user_id = callback_query.from_user.id
 
@@ -288,9 +341,34 @@ async def ticket_history(callback_query: CallbackQuery, session: AsyncSession, s
 
 
 @router.callback_query(F.data == "user:active_ticket")
-async def active_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
+async def active_ticket_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик просмотра активного тикета
+    Обертка для обработчика просмотра активного тикета
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик active_ticket!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    bot = kwargs.get("bot")
+    if not bot:
+        logger.error("Bot не передан в обработчик active_ticket!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_active_ticket(callback_query, bot, session, state)
+
+
+async def _process_active_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика просмотра активного тикета
     """
     user_id = callback_query.from_user.id
 
@@ -347,7 +425,7 @@ async def active_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncS
     else:
         keyboard = KeyboardFactory.back_button("user:back_to_menu", user.language)
 
-    # Отправляем сообщение с информацией о тикете
+        # Отправляем сообщение с информацией о тикете
     await callback_query.message.edit_text(
         message_text,
         reply_markup=keyboard
@@ -426,9 +504,32 @@ async def active_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncS
 
 
 @router.message(UserStates.SENDING_MESSAGE, F.text | F.photo | F.document | F.video)
-async def process_ticket_message(message: Message, bot: Bot, session: AsyncSession, state: FSMContext):
+async def process_ticket_message_wrapper(message: Message, state: FSMContext, **kwargs):
     """
-    Обработчик сообщения в активном тикете
+    Обертка для обработчика сообщения в активном тикете
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик process_ticket_message!")
+        await message.answer(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        return
+
+    bot = kwargs.get("bot")
+    if not bot:
+        logger.error("Bot не передан в обработчик process_ticket_message!")
+        await message.answer(
+            "Произошла ошибка. Пожалуйста, попробуйте позже."
+        )
+        return
+
+    return await _process_ticket_message(message, bot, session, state)
+
+
+async def _process_ticket_message(message: Message, bot: Bot, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика сообщения в активном тикете
     """
     # Получаем данные из состояния
     state_data = await state.get_data()
@@ -553,9 +654,34 @@ async def process_ticket_message(message: Message, bot: Bot, session: AsyncSessi
 
 
 @router.callback_query(F.data.startswith("rating:"))
-async def process_rating(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
+async def process_rating_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик выставления оценки модератору
+    Обертка для обработчика выставления оценки модератору
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик process_rating!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    bot = kwargs.get("bot")
+    if not bot:
+        logger.error("Bot не передан в обработчик process_rating!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_rating(callback_query, bot, session, state)
+
+
+async def _process_rating(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика выставления оценки модератору
     """
     user_id = callback_query.from_user.id
     rating = int(callback_query.data.split(":")[1])
@@ -641,9 +767,25 @@ async def process_rating(callback_query: CallbackQuery, bot: Bot, session: Async
 
 
 @router.callback_query(F.data == "user:change_language")
-async def change_language(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def change_language_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик изменения языка
+    Обертка для обработчика изменения языка
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик change_language!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_change_language(callback_query, session, state)
+
+
+async def _process_change_language(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика изменения языка
     """
     user_id = callback_query.from_user.id
 
@@ -669,9 +811,25 @@ async def change_language(callback_query: CallbackQuery, session: AsyncSession, 
 
 
 @router.callback_query(F.data == "user:back_to_menu")
-async def back_to_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def back_to_menu_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик возврата в главное меню
+    Обертка для обработчика возврата в главное меню
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик back_to_menu!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_back_to_menu(callback_query, session, state)
+
+
+async def _process_back_to_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика возврата в главное меню
     """
     user_id = callback_query.from_user.id
 
@@ -698,9 +856,25 @@ async def back_to_menu(callback_query: CallbackQuery, session: AsyncSession, sta
 
 
 @router.callback_query(F.data.startswith("language:"))
-async def process_language_selection(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def process_language_selection_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик выбора языка
+    Обертка для обработчика выбора языка
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик process_language_selection!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_language_selection(callback_query, session, state)
+
+
+async def _process_language_selection(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика выбора языка
     """
     user_id = callback_query.from_user.id
     selected_language = callback_query.data.split(":")[1]
@@ -741,6 +915,7 @@ async def process_language_selection(callback_query: CallbackQuery, session: Asy
     await callback_query.answer()
 
     logger.info(f"User {user_id} changed language to {selected_language}")
+
 
 def register_handlers(dp: Dispatcher):
     """

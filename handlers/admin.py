@@ -8,7 +8,7 @@ from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
 from sqlalchemy.ext.asyncio import AsyncSession
 from sqlalchemy import select, func, desc, update
-from sqlalchemy.orm import selectinload, session
+from sqlalchemy.orm import selectinload
 
 from models import User, Ticket, Message as TicketMessage, TicketStatus, MessageType, UserRole
 from utils.i18n import _
@@ -23,9 +23,25 @@ router = Router()
 
 
 @router.callback_query(F.data == "admin:stats")
-async def admin_stats(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def admin_stats_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик просмотра общей статистики
+    Обертка для обработчика просмотра общей статистики
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик admin_stats!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_admin_stats(callback_query, session, state)
+
+
+async def _process_admin_stats(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика просмотра общей статистики
     """
     user_id = callback_query.from_user.id
 
@@ -126,9 +142,25 @@ async def admin_stats(callback_query: CallbackQuery, session: AsyncSession, stat
 
 
 @router.callback_query(F.data == "admin:manage_mods")
-async def manage_moderators(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def manage_moderators_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик управления модераторами
+    Обертка для обработчика управления модераторами
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик manage_moderators!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_manage_moderators(callback_query, session, state)
+
+
+async def _process_manage_moderators(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика управления модераторами
     """
     user_id = callback_query.from_user.id
 
@@ -188,9 +220,25 @@ async def manage_moderators(callback_query: CallbackQuery, session: AsyncSession
 
 
 @router.callback_query(F.data == "admin:add_moderator")
-async def add_moderator_start(callback_query: CallbackQuery, state: FSMContext):
+async def add_moderator_start_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик начала процесса добавления модератора
+    Обертка для обработчика начала процесса добавления модератора
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик add_moderator_start!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_add_moderator_start(callback_query, session, state)
+
+
+async def _process_add_moderator_start(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика начала процесса добавления модератора
     """
     user_id = callback_query.from_user.id
 
@@ -221,9 +269,24 @@ async def add_moderator_start(callback_query: CallbackQuery, state: FSMContext):
 
 
 @router.message(AdminStates.ADDING_MODERATOR, F.text)
-async def process_add_moderator(message: Message, session: AsyncSession, state: FSMContext):
+async def process_add_moderator_wrapper(message: Message, state: FSMContext, **kwargs):
     """
-    Обработчик добавления модератора
+    Обертка для обработчика добавления модератора
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик process_add_moderator!")
+        await message.answer(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        return
+
+    return await _process_add_moderator(message, session, state)
+
+
+async def _process_add_moderator(message: Message, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика добавления модератора
     """
     admin_id = message.from_user.id
 
@@ -283,9 +346,35 @@ async def process_add_moderator(message: Message, session: AsyncSession, state: 
 
 
 @router.callback_query(F.data.startswith("confirm:add_mod:"))
-async def confirm_add_moderator(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
+async def confirm_add_moderator_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик подтверждения добавления модератора
+    Обертка для обработчика подтверждения добавления модератора
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик confirm_add_moderator!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    bot = kwargs.get("bot")
+    if not bot:
+        logger.error("Bot не передан в обработчик confirm_add_moderator!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_confirm_add_moderator(callback_query, bot, session, state)
+
+
+async def _process_confirm_add_moderator(callback_query: CallbackQuery, bot: Bot, session: AsyncSession,
+                                         state: FSMContext):
+    """
+    Реализация обработчика подтверждения добавления модератора
     """
     admin_id = callback_query.from_user.id
     new_moderator_id = int(callback_query.data.split(":")[2])
@@ -343,9 +432,25 @@ async def confirm_add_moderator(callback_query: CallbackQuery, bot: Bot, session
 
 
 @router.callback_query(F.data == "admin:remove_moderator")
-async def remove_moderator_start(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def remove_moderator_start_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик начала процесса удаления модератора
+    Обертка для обработчика начала процесса удаления модератора
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик remove_moderator_start!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_remove_moderator_start(callback_query, session, state)
+
+
+async def _process_remove_moderator_start(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика начала процесса удаления модератора
     """
     user_id = callback_query.from_user.id
 
@@ -411,9 +516,25 @@ async def remove_moderator_start(callback_query: CallbackQuery, session: AsyncSe
 
 
 @router.callback_query(F.data.startswith("admin:confirm_remove_mod:"))
-async def confirm_remove_moderator(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
+async def confirm_remove_moderator_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик подтверждения удаления модератора
+    Обертка для обработчика подтверждения удаления модератора
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик confirm_remove_moderator!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_confirm_remove_moderator(callback_query, session, state)
+
+
+async def _process_confirm_remove_moderator(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика подтверждения удаления модератора
     """
     admin_id = callback_query.from_user.id
     moderator_id = int(callback_query.data.split(":")[3])
@@ -490,9 +611,35 @@ async def confirm_remove_moderator(callback_query: CallbackQuery, bot: Bot, sess
 
 
 @router.callback_query(F.data.startswith("confirm:force_remove_mod:"))
-async def force_remove_moderator(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
+async def force_remove_moderator_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик принудительного удаления модератора с активными тикетами
+    Обертка для обработчика принудительного удаления модератора с активными тикетами
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик force_remove_moderator!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    bot = kwargs.get("bot")
+    if not bot:
+        logger.error("Bot не передан в обработчик force_remove_moderator!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_force_remove_moderator(callback_query, bot, session, state)
+
+
+async def _process_force_remove_moderator(callback_query: CallbackQuery, bot: Bot, session: AsyncSession,
+                                          state: FSMContext):
+    """
+    Реализация обработчика принудительного удаления модератора с активными тикетами
     """
     admin_id = callback_query.from_user.id
     moderator_id = int(callback_query.data.split(":")[2])
@@ -585,9 +732,25 @@ async def force_remove_moderator(callback_query: CallbackQuery, bot: Bot, sessio
 
 
 @router.callback_query(F.data == "admin:back_to_menu")
-async def back_to_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def back_to_menu_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик возврата в главное меню администратора
+    Обертка для обработчика возврата в главное меню администратора
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик back_to_menu!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_back_to_menu(callback_query, session, state)
+
+
+async def _process_back_to_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика возврата в главное меню администратора
     """
     user_id = callback_query.from_user.id
 
@@ -610,18 +773,42 @@ async def back_to_menu(callback_query: CallbackQuery, session: AsyncSession, sta
 
 
 @router.callback_query(F.data == "admin:back_to_manage_mods")
-async def back_to_manage_mods(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def back_to_manage_mods_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик возврата в меню управления модераторами
+    Обертка для обработчика возврата в меню управления модераторами
     """
-    await state.set_state(AdminStates.MANAGING_MODERATORS)
-    await manage_moderators(callback_query, session, state)
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик back_to_manage_mods!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_manage_moderators(callback_query, session, state)
 
 
 @router.callback_query(F.data == "admin:mod_menu")
-async def switch_to_mod_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def switch_to_mod_menu_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик переключения на меню модератора
+    Обертка для обработчика переключения на меню модератора
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик switch_to_mod_menu!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_switch_to_mod_menu(callback_query, session, state)
+
+
+async def _process_switch_to_mod_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика переключения на меню модератора
     """
     user_id = callback_query.from_user.id
 
@@ -644,9 +831,25 @@ async def switch_to_mod_menu(callback_query: CallbackQuery, session: AsyncSessio
 
 
 @router.callback_query(F.data == "admin:user_menu")
-async def switch_to_user_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+async def switch_to_user_menu_wrapper(callback_query: CallbackQuery, state: FSMContext, **kwargs):
     """
-    Обработчик переключения на меню пользователя
+    Обертка для обработчика переключения на меню пользователя
+    """
+    session = kwargs.get("session")
+    if not session:
+        logger.error("Сессия не передана в обработчик switch_to_user_menu!")
+        await callback_query.message.edit_text(
+            "Произошла ошибка при подключении к базе данных. Пожалуйста, попробуйте позже."
+        )
+        await callback_query.answer()
+        return
+
+    return await _process_switch_to_user_menu(callback_query, session, state)
+
+
+async def _process_switch_to_user_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Реализация обработчика переключения на меню пользователя
     """
     user_id = callback_query.from_user.id
 

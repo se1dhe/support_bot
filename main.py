@@ -9,7 +9,7 @@ from aiogram.fsm.storage.memory import MemoryStorage
 
 from config import load_config
 from database import init_db, create_tables
-from handlers import register_all_handlers
+from handlers import register_handlers
 from middlewares import setup_middlewares
 from utils.i18n import setup_i18n
 
@@ -35,12 +35,8 @@ async def main():
     # Загрузка конфигурации
     config = load_config()
 
-    # Инициализация базы данных
-    await init_db(config)
-
-    # Создание таблиц (если они не существуют)
+    await init_db(config)  # Сначала инициализируем БД
     await create_tables()
-
     # Инициализация i18n
     setup_i18n(
         locales_dir=str(Path(__file__).parent / 'locales'),
@@ -61,7 +57,7 @@ async def main():
     await setup_middlewares(dp, bot, config)
 
     # Регистрация всех обработчиков
-    register_all_handlers(dp)
+    register_handlers(dp)
 
     try:
         logger.info("Бот запущен")

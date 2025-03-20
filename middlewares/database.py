@@ -2,8 +2,13 @@ from typing import Dict, Any, Callable, Awaitable
 from aiogram import BaseMiddleware
 from aiogram.types import TelegramObject
 from sqlalchemy.ext.asyncio import AsyncSession
+import logging
 
-from database import async_session_factory
+# Импортируем модуль database полностью
+import database
+from database import init_db
+
+logger = logging.getLogger(__name__)
 
 
 class DatabaseMiddleware(BaseMiddleware):
@@ -18,14 +23,27 @@ class DatabaseMiddleware(BaseMiddleware):
             event: TelegramObject,
             data: Dict[str, Any]
     ) -> Any:
-        # Создаем сессию
-        if async_session_factory is None:
-            # Если фабрика сессий не инициализирована, просто передаем управление дальше
-            return await handler(event, data)
+        logger.info("DatabaseMiddleware вызван")
 
-        # Создаем сессию и добавляем ее в data
-        async with async_session_factory() as session:
-            data["session"] = session
+        # Проверяем, инициализирована ли фабрика сессий
+        if database.async_session_factory is None:
+            logger.warning("async_session_factory is None! Инициализируем...")
+            await init_db()
 
-            # Выполняем обработчик
+            if database.async_session_factory is None:
+                logger.error("Не удалось инициализировать async_session_factory!")
+                return await handler(event, data)
+
+        try:
+            # Создаем сессию и добавляем ее в data
+            async with database.async_session_factory() as session:
+                # Добавляем сессию в data для доступа в обработчиках
+                data["session"] = session
+                logger.info("Сессия создана и добавлена в data")
+
+                # Выполняем обработчик
+                return await handler(event, data)
+        except Exception as e:
+            logger.error(f"Ошибка в DatabaseMiddleware: {e}", exc_info=True)
+            # В случае ошибки всё равно вызываем обработчик
             return await handler(event, data)
