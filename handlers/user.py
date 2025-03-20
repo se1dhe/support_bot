@@ -687,84 +687,195 @@ async def _process_rating(callback_query: CallbackQuery, bot: Bot, session: Asyn
     user_id = callback_query.from_user.id
     rating = int(callback_query.data.split(":")[1])
 
+    logger.info(f"Пользователь {user_id} выставил оценку {rating}")
+
+    # Получаем текущее состояние FSM для логирования
+    current_state = await state.get_state()
+    logger.info(f"Текущее состояние пользователя {user_id}: {current_state}")
+
     # Получаем данные из состояния
     state_data = await state.get_data()
     ticket_id = state_data.get("active_ticket_id")
+    logger.info(f"Данные состояния для пользователя {user_id}: active_ticket_id={ticket_id}")
 
-    if not ticket_id:
-        await callback_query.message.edit_text(
-            "Произошла ошибка. Пожалуйста, вернитесь в главное меню: /menu"
-        )
-        return
-
-    # Получаем пользователя из БД
-    query = select(User).where(User.telegram_id == user_id)
-    result = await session.execute(query)
-    user = result.scalar_one_or_none()
-
-    if not user:
-        await callback_query.message.edit_text(
-            "Произошла ошибка. Пожалуйста, перезапустите бота: /start"
-        )
-        return
-
-    # Получаем тикет из БД
-    ticket_query = select(Ticket).where(
-        (Ticket.id == ticket_id) &
-        (Ticket.user_id == user.id) &
-        (Ticket.status == TicketStatus.RESOLVED)
-    ).options(selectinload(Ticket.moderator))
-    ticket_result = await session.execute(ticket_query)
-    ticket = ticket_result.scalar_one_or_none()
-
-    if not ticket or not ticket.moderator:
-        await callback_query.message.edit_text(
-            "Невозможно оценить тикет. Возможно, он уже был закрыт.",
-            reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language)
-        )
-        await state.set_state(UserStates.MAIN_MENU)
-        return
-
-    # Обновляем тикет: ставим оценку, меняем статус и добавляем время закрытия
-    ticket.rating = rating
-    ticket.status = TicketStatus.CLOSED
-    ticket.closed_at = datetime.now()
-
-    # Добавляем системное сообщение об оценке
-    system_message = TicketMessage(
-        ticket_id=ticket.id,
-        sender_id=user.id,
-        message_type=MessageType.SYSTEM,
-        text=f"Пользователь оценил работу модератора на {'⭐' * rating} ({rating}/5)"
-    )
-    session.add(system_message)
-
-    await session.commit()
-
-    # Отправляем подтверждение пользователю
-    await callback_query.message.edit_text(
-        _("thank_you_for_rating", user.language) + "\n\n" +
-        _("ticket_closed", user.language, ticket_id=ticket.id) + "\n\n" +
-        _("create_new_ticket_info", user.language),
-        reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language)
-    )
-
-    # Уведомляем модератора об оценке
     try:
-        await bot.send_message(
-            chat_id=ticket.moderator.telegram_id,
-            text=f"⭐ <b>Тикет #{ticket.id} закрыт</b>\n\n"
-                 f"Пользователь {user.full_name} оценил вашу работу на "
-                 f"{'⭐' * rating} ({rating}/5).\n\n"
-                 f"Спасибо за вашу работу!"
+        # Получаем пользователя из БД
+        query = select(User).where(User.telegram_id == user_id)
+        result = await session.execute(query)
+        user = result.scalar_one_or_none()
+
+        if not user:
+            logger.error(f"Пользователь с ID {user_id} не найден в базе данных")
+            await callback_query.message.edit_text(
+                "Ошибка идентификации пользователя. Пожалуйста, перезапустите бота, отправив команду /start"
+            )
+            await callback_query.answer()
+            return
+
+        # Если ID тикета не найден в состоянии, ищем активный решенный тикет пользователя
+        if not ticket_id:
+            logger.warning(
+                f"active_ticket_id не найден в состоянии для пользователя {user_id}, ищем активный решенный тикет")
+            # Ищем решенный тикет пользователя
+            ticket_query = select(Ticket).where(
+                (Ticket.user_id == user.id) &
+                (Ticket.status == TicketStatus.RESOLVED)
+            ).order_by(Ticket.updated_at.desc())
+            ticket_result = await session.execute(ticket_query)
+            resolved_tickets = ticket_result.scalars().all()
+
+            if resolved_tickets:
+                ticket_id = resolved_tickets[0].id
+                logger.info(f"Найден активный решенный тикет #{ticket_id} для пользователя {user_id}")
+
+                # Обновляем состояние с найденным ID тикета
+                await state.update_data(active_ticket_id=ticket_id)
+                logger.info(f"Обновлены данные состояния пользователя {user_id}: active_ticket_id={ticket_id}")
+            else:
+                logger.warning(f"Не найдено активных решенных тикетов для пользователя {user_id}")
+                await callback_query.message.edit_text(
+                    "У вас нет активных тикетов, ожидающих оценки. Возможно, тикет уже был закрыт или произошла ошибка синхронизации.",
+                    reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language)
+                )
+                await state.set_state(UserStates.MAIN_MENU)
+                logger.info(f"Пользователь {user_id} переведен в состояние MAIN_MENU")
+                await callback_query.answer()
+                return
+
+        # Получаем тикет из БД
+        logger.info(f"Поиск тикета #{ticket_id} для пользователя {user_id}")
+        ticket_query = select(Ticket).where(
+            (Ticket.id == ticket_id) &
+            (Ticket.user_id == user.id) &
+            (Ticket.status == TicketStatus.RESOLVED)
+        ).options(selectinload(Ticket.moderator))
+        ticket_result = await session.execute(ticket_query)
+        ticket = ticket_result.scalar_one_or_none()
+
+        if not ticket:
+            logger.warning(f"Тикет #{ticket_id} не найден или не принадлежит пользователю {user_id}")
+            await callback_query.message.edit_text(
+                f"Тикет #{ticket_id} не найден или не доступен для оценки. Пожалуйста, вернитесь в главное меню.",
+                reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language)
+            )
+            await state.set_state(UserStates.MAIN_MENU)
+            await callback_query.answer()
+            return
+
+        if not ticket.moderator:
+            logger.warning(f"Тикет #{ticket_id} не имеет назначенного модератора")
+            await callback_query.message.edit_text(
+                f"Невозможно оценить тикет #{ticket_id}, так как он не был обработан модератором.",
+                reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language)
+            )
+            await state.set_state(UserStates.MAIN_MENU)
+            await callback_query.answer()
+            return
+
+        if ticket.status != TicketStatus.RESOLVED:
+            logger.warning(
+                f"Тикет #{ticket_id} имеет неверный статус: {ticket.status} (ожидается {TicketStatus.RESOLVED})")
+            await callback_query.message.edit_text(
+                f"Тикет #{ticket_id} имеет статус '{ticket.status.value}', оценка доступна только для статуса 'resolved'.",
+                reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language)
+            )
+            await state.set_state(UserStates.MAIN_MENU)
+            await callback_query.answer()
+            return
+
+        # Обновляем тикет: ставим оценку, меняем статус и добавляем время закрытия
+        logger.info(f"Обновление тикета #{ticket_id}: оценка {rating}, статус -> CLOSED")
+        ticket.rating = rating
+        ticket.status = TicketStatus.CLOSED
+        ticket.closed_at = datetime.now()
+
+        # Добавляем системное сообщение об оценке
+        rating_stars = "⭐" * rating
+        system_message = TicketMessage(
+            ticket_id=ticket.id,
+            sender_id=user.id,
+            message_type=MessageType.SYSTEM,
+            text=f"Пользователь оценил работу модератора на {rating_stars} ({rating}/5)"
         )
+        session.add(system_message)
+        logger.info(f"Добавлено системное сообщение об оценке для тикета #{ticket_id}")
+
+        try:
+            await session.commit()
+            logger.info(f"Изменения успешно сохранены в базе данных для тикета #{ticket_id}")
+        except Exception as db_error:
+            logger.error(f"Ошибка при сохранении изменений в базе данных: {db_error}", exc_info=True)
+            await session.rollback()
+            await callback_query.message.edit_text(
+                "Произошла ошибка при сохранении вашей оценки. Пожалуйста, попробуйте еще раз позже.",
+                reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language)
+            )
+            await state.set_state(UserStates.MAIN_MENU)
+            await callback_query.answer()
+            return
+
+        # Отправляем подтверждение пользователю
+        logger.info(f"Отправка подтверждения пользователю {user_id} о закрытии тикета #{ticket_id}")
+        try:
+            await callback_query.message.edit_text(
+                _("thank_you_for_rating", user.language) + "\n\n" +
+                _("ticket_closed", user.language, ticket_id=ticket.id) + "\n\n" +
+                _("create_new_ticket_info", user.language),
+                reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language)
+            )
+        except Exception as msg_error:
+            logger.error(f"Ошибка при отправке сообщения пользователю: {msg_error}", exc_info=True)
+            # Пробуем отправить новое сообщение
+            try:
+                await callback_query.message.answer(
+                    _("thank_you_for_rating", user.language) + "\n\n" +
+                    _("ticket_closed", user.language, ticket_id=ticket.id) + "\n\n" +
+                    _("create_new_ticket_info", user.language),
+                    reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language)
+                )
+            except Exception as retry_error:
+                logger.error(f"Повторная ошибка при отправке сообщения: {retry_error}", exc_info=True)
+
+        # Уведомляем модератора об оценке
+        logger.info(f"Отправка уведомления модератору {ticket.moderator.telegram_id} об оценке тикета #{ticket.id}")
+        try:
+            await bot.send_message(
+                chat_id=ticket.moderator.telegram_id,
+                text=f"⭐ <b>Тикет #{ticket.id} закрыт</b>\n\n"
+                     f"Пользователь {user.full_name} оценил вашу работу на "
+                     f"{rating_stars} ({rating}/5).\n\n"
+                     f"Спасибо за вашу работу!"
+            )
+            logger.info(f"Уведомление успешно отправлено модератору {ticket.moderator.telegram_id}")
+        except Exception as e:
+            logger.error(f"Ошибка при отправке уведомления модератору {ticket.moderator.telegram_id}: {e}",
+                         exc_info=True)
+
+        # Очищаем состояние и переводим пользователя в главное меню
+        await state.clear()
+        logger.info(f"Состояние пользователя {user_id} очищено")
+        await state.set_state(UserStates.MAIN_MENU)
+        logger.info(f"Пользователь {user_id} переведен в состояние MAIN_MENU")
+        await callback_query.answer()
+
+        logger.info(f"Пользователь {user_id} успешно оценил тикет #{ticket.id} с оценкой {rating}/5")
+
     except Exception as e:
-        logger.error(f"Failed to send rating notification to moderator {ticket.moderator.telegram_id}: {e}")
+        logger.error(f"Непредвиденная ошибка при обработке оценки от пользователя {user_id}: {e}", exc_info=True)
+        try:
+            await callback_query.message.edit_text(
+                "Произошла неожиданная ошибка при обработке вашей оценки. Пожалуйста, попробуйте еще раз или обратитесь к администратору.",
+                reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language if user else None)
+            )
+        except Exception:
+            # В случае ошибки с изменением сообщения, пробуем отправить новое
+            await callback_query.message.answer(
+                "Произошла неожиданная ошибка при обработке вашей оценки. Пожалуйста, попробуйте еще раз или обратитесь к администратору.",
+                reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language if user else None)
+            )
 
-    await state.set_state(UserStates.MAIN_MENU)
-    await callback_query.answer()
-
-    logger.info(f"User {user_id} rated ticket #{ticket.id} with {rating}/5")
+        await state.set_state(UserStates.MAIN_MENU)
+        await callback_query.answer()
 
 
 @router.callback_query(F.data == "user:change_language")
