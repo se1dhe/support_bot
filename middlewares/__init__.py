@@ -10,10 +10,10 @@ from middlewares.throttling import ThrottlingMiddleware
 
 # middlewares/__init__.py
 async def setup_middlewares(dp: Dispatcher, bot: Bot, config: Optional[Config] = None):
-    # Сначала регистрируем middleware для работы с базой данных
+    # Регистрируем middleware для базы данных
     dp.update.middleware.register(DatabaseMiddleware())
 
-    # Затем регистрируем остальные middleware
+    # Регистрируем остальные middleware для конкретных типов событий
     dp.message.middleware.register(I18nMiddleware())
     dp.callback_query.middleware.register(I18nMiddleware())
 

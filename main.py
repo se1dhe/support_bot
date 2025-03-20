@@ -27,14 +27,15 @@ logger = logging.getLogger(__name__)
 
 def register_handlers(dp: Dispatcher):
     """
-    Регистрирует все обработчики.
+    Регистрирует все обработчики бота.
     """
+    # Импортируем функции регистрации из всех модулей
     from handlers import register_handlers as common_register_handlers
     from handlers.user import register_handlers as user_register_handlers
     from handlers.moderator import register_handlers as moderator_register_handlers
     from handlers.admin import register_handlers as admin_register_handlers
 
-    # Регистрируем все обработчики
+    # Регистрируем обработчики
     common_register_handlers(dp)
     user_register_handlers(dp)
     moderator_register_handlers(dp)

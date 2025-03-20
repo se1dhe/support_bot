@@ -57,49 +57,73 @@ async def _process_admin_stats(callback_query: CallbackQuery, session: AsyncSess
         await callback_query.answer()
         return
 
-    # Получаем статистику по пользователям
-    users_stats_query = select(
-        func.count(User.id).filter(User.role == UserRole.USER).label("users_count"),
-        func.count(User.id).filter(User.role == UserRole.MODERATOR).label("moderators_count"),
-        func.count(User.id).filter(User.role == UserRole.ADMIN).label("admins_count")
-    )
-    users_stats_result = await session.execute(users_stats_query)
-    users_stats = users_stats_result.one()
+    # Получаем статистику по пользователям - исправленный запрос
+    users_query = select(User.role, func.count(User.id).label("count")).group_by(User.role)
+    users_result = await session.execute(users_query)
+    users_counts = {role: count for role, count in users_result}
 
-    # Получаем статистику по тикетам
-    tickets_stats_query = select(
-        func.count(Ticket.id).label("total_tickets"),
-        func.count(Ticket.id).filter(Ticket.status == TicketStatus.OPEN).label("open_tickets"),
-        func.count(Ticket.id).filter(Ticket.status == TicketStatus.IN_PROGRESS).label("in_progress_tickets"),
-        func.count(Ticket.id).filter(Ticket.status == TicketStatus.RESOLVED).label("resolved_tickets"),
-        func.count(Ticket.id).filter(Ticket.status == TicketStatus.CLOSED).label("closed_tickets"),
-        func.avg(Ticket.rating).filter(Ticket.status == TicketStatus.CLOSED).label("avg_rating")
-    )
-    tickets_stats_result = await session.execute(tickets_stats_query)
-    tickets_stats = tickets_stats_result.one()
+    # Получаем количество пользователей по ролям
+    users_count = users_counts.get(UserRole.USER, 0)
+    moderators_count = users_counts.get(UserRole.MODERATOR, 0)
+    admins_count = users_counts.get(UserRole.ADMIN, 0)
+
+    # Получаем общее количество тикетов
+    total_tickets_query = select(func.count(Ticket.id))
+    total_tickets_result = await session.execute(total_tickets_query)
+    total_tickets = total_tickets_result.scalar() or 0
+
+    # Получаем количество открытых тикетов
+    open_tickets_query = select(func.count(Ticket.id)).where(Ticket.status == TicketStatus.OPEN)
+    open_tickets_result = await session.execute(open_tickets_query)
+    open_tickets = open_tickets_result.scalar() or 0
+
+    # Получаем количество тикетов в работе
+    in_progress_tickets_query = select(func.count(Ticket.id)).where(Ticket.status == TicketStatus.IN_PROGRESS)
+    in_progress_tickets_result = await session.execute(in_progress_tickets_query)
+    in_progress_tickets = in_progress_tickets_result.scalar() or 0
+
+    # Получаем количество решенных тикетов
+    resolved_tickets_query = select(func.count(Ticket.id)).where(Ticket.status == TicketStatus.RESOLVED)
+    resolved_tickets_result = await session.execute(resolved_tickets_query)
+    resolved_tickets = resolved_tickets_result.scalar() or 0
+
+    # Получаем количество закрытых тикетов
+    closed_tickets_query = select(func.count(Ticket.id)).where(Ticket.status == TicketStatus.CLOSED)
+    closed_tickets_result = await session.execute(closed_tickets_query)
+    closed_tickets = closed_tickets_result.scalar() or 0
+
+    # Получаем среднюю оценку закрытых тикетов
+    avg_rating_query = select(func.avg(Ticket.rating)).where(Ticket.status == TicketStatus.CLOSED)
+    avg_rating_result = await session.execute(avg_rating_query)
+    avg_rating = avg_rating_result.scalar()
+
+    # Правильное форматирование средней оценки
+    if avg_rating is not None:
+        avg_rating_text = f"{avg_rating:.2f}/5.0"
+    else:
+        avg_rating_text = "Нет оценок"
 
     # Получаем статистику по тикетам за последние 7 дней
     week_ago = datetime.now() - timedelta(days=7)
-    recent_tickets_query = select(
-        func.count(Ticket.id).label("total_tickets")
-    ).where(Ticket.created_at >= week_ago)
+    recent_tickets_query = select(func.count(Ticket.id)).where(Ticket.created_at >= week_ago)
     recent_tickets_result = await session.execute(recent_tickets_query)
-    recent_tickets_count = recent_tickets_result.scalar()
+    recent_tickets_count = recent_tickets_result.scalar() or 0
 
     # Получаем статистику по модераторам
     moderators_query = select(
         User,
-        func.count(Ticket.id).filter(Ticket.status == TicketStatus.CLOSED).label("closed_count"),
-        func.avg(Ticket.rating).filter(Ticket.status == TicketStatus.CLOSED).label("avg_rating")
+        func.count(Ticket.id).label("closed_count"),
+        func.avg(Ticket.rating).label("avg_rating")
     ).where(
         User.role == UserRole.MODERATOR
     ).outerjoin(
-        Ticket, Ticket.moderator_id == User.id
+        Ticket, (Ticket.moderator_id == User.id) & (Ticket.status == TicketStatus.CLOSED)
     ).group_by(
         User.id
     ).order_by(
         desc("closed_count")
     ).limit(5)
+
     moderators_result = await session.execute(moderators_query)
     top_moderators = moderators_result.all()
 
@@ -107,24 +131,29 @@ async def _process_admin_stats(callback_query: CallbackQuery, session: AsyncSess
     message_text = (
         f"📈 <b>Общая статистика</b>\n\n"
         f"<b>Пользователи:</b>\n"
-        f"👤 Пользователи: {users_stats.users_count}\n"
-        f"🔑 Модераторы: {users_stats.moderators_count}\n"
-        f"👑 Администраторы: {users_stats.admins_count}\n\n"
+        f"👤 Пользователи: {users_count}\n"
+        f"🔑 Модераторы: {moderators_count}\n"
+        f"👑 Администраторы: {admins_count}\n\n"
 
         f"<b>Тикеты:</b>\n"
-        f"📊 Всего тикетов: {tickets_stats.total_tickets}\n"
-        f"🆕 Открытых: {tickets_stats.open_tickets}\n"
-        f"🔄 В работе: {tickets_stats.in_progress_tickets}\n"
-        f"✅ Решенных (ожидают оценки): {tickets_stats.resolved_tickets}\n"
-        f"🔒 Закрытых: {tickets_stats.closed_tickets}\n"
+        f"📊 Всего тикетов: {total_tickets}\n"
+        f"🆕 Открытых: {open_tickets}\n"
+        f"🔄 В работе: {in_progress_tickets}\n"
+        f"✅ Решенных (ожидают оценки): {resolved_tickets}\n"
+        f"🔒 Закрытых: {closed_tickets}\n"
         f"📅 Новых за последние 7 дней: {recent_tickets_count}\n"
-        f"⭐ Средняя оценка: {tickets_stats.avg_rating:.2f if tickets_stats.avg_rating else 'Нет оценок'}/5.0\n\n"
+        f"⭐ Средняя оценка: {avg_rating_text}\n\n"
     )
 
     if top_moderators:
         message_text += "<b>Топ модераторов:</b>\n"
         for i, (moderator, closed_count, avg_rating) in enumerate(top_moderators, 1):
-            avg_rating_text = f"{avg_rating:.2f}/5.0" if avg_rating else "Нет оценок"
+            # Здесь также нужно исправить форматирование
+            if avg_rating is not None:
+                avg_rating_text = f"{avg_rating:.2f}/5.0"
+            else:
+                avg_rating_text = "Нет оценок"
+
             message_text += (
                 f"{i}. {moderator.full_name} - {closed_count} тикетов, "
                 f"рейтинг: {avg_rating_text}\n"
@@ -596,7 +625,7 @@ async def _process_confirm_remove_moderator(callback_query: CallbackQuery, sessi
 
     # Уведомляем бывшего модератора
     try:
-        await bot.send_message(
+        await callback_query.send_message(
             chat_id=moderator.telegram_id,
             text=f"ℹ️ <b>Уведомление</b>\n\n"
                  f"Ваши права модератора системы поддержки были отозваны администратором.\n\n"

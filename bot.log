@@ -761,3 +761,940 @@ TypeError: command_start() missing 1 required positional argument: 'session'
 2025-03-20 17:21:46,006 - middlewares.database - INFO - DatabaseMiddleware вызван
 2025-03-20 17:21:46,006 - middlewares.database - INFO - Сессия создана и добавлена в data
 2025-03-20 17:21:46,007 - aiogram.event - INFO - Update id=495295213 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:22:05,008 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:22:05,008 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:22:05,233 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 17:22:05,234 - aiogram.event - INFO - Update id=495295214 is handled. Duration 218 ms by bot id=5951537041
+2025-03-20 17:22:07,643 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:22:07,643 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:22:07,649 - handlers.common - INFO - Получен callback: user:create_ticket
+2025-03-20 17:22:07,649 - aiogram.event - INFO - Update id=495295215 is handled. Duration 16 ms by bot id=5951537041
+2025-03-20 17:22:15,370 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:22:15,370 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:22:15,642 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 17:22:15,643 - aiogram.event - INFO - Update id=495295216 is handled. Duration 266 ms by bot id=5951537041
+2025-03-20 17:22:16,611 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:22:16,611 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:22:16,615 - handlers.common - INFO - Получен callback: user:active_ticket
+2025-03-20 17:22:16,616 - aiogram.event - INFO - Update id=495295217 is handled. Duration 14 ms by bot id=5951537041
+2025-03-20 17:22:17,664 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:22:17,664 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:22:17,669 - handlers.common - INFO - Получен callback: user:create_ticket
+2025-03-20 17:22:17,670 - aiogram.event - INFO - Update id=495295218 is handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:22:18,479 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:22:18,479 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:22:18,484 - handlers.common - INFO - Получен callback: user:ticket_history
+2025-03-20 17:22:18,485 - aiogram.event - INFO - Update id=495295219 is handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:22:18,849 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:22:18,849 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:22:18,918 - aiogram.event - INFO - Update id=495295220 is handled. Duration 77 ms by bot id=5951537041
+2025-03-20 17:22:29,146 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:22:29,146 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:22:29,148 - aiogram.event - INFO - Update id=495295221 is not handled. Duration 16 ms by bot id=5951537041
+2025-03-20 17:22:30,160 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:22:30,160 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:22:30,284 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 17:22:30,286 - aiogram.event - INFO - Update id=495295222 is handled. Duration 125 ms by bot id=5951537041
+2025-03-20 17:22:31,184 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:22:31,184 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:22:31,189 - handlers.common - INFO - Получен callback: user:create_ticket
+2025-03-20 17:22:31,189 - aiogram.event - INFO - Update id=495295223 is handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:23:18,589 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:23:18,589 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:23:18,592 - aiogram.event - INFO - Update id=495295224 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:23:19,193 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:23:19,193 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:23:19,372 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 17:23:19,373 - aiogram.event - INFO - Update id=495295225 is handled. Duration 186 ms by bot id=5951537041
+2025-03-20 17:23:20,004 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:23:20,004 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:23:20,009 - handlers.common - INFO - Получен callback: user:create_ticket
+2025-03-20 17:23:20,009 - aiogram.event - INFO - Update id=495295226 is handled. Duration 16 ms by bot id=5951537041
+2025-03-20 17:23:45,134 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 17:23:45,386 - __main__ - INFO - Бот остановлен
+2025-03-20 17:23:45,386 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 17:23:45,387 - __main__ - INFO - Бот остановлен
+2025-03-20 17:23:49,320 - __main__ - INFO - Запуск бота...
+2025-03-20 17:23:49,323 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 17:23:49,406 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 17:23:49,420 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 17:23:49,425 - database - INFO - Таблицы успешно созданы
+2025-03-20 17:23:49,427 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 17:23:49,427 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 17:23:49,428 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 17:23:49,699 - __main__ - INFO - Бот запущен
+2025-03-20 17:23:49,872 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 17:23:49,922 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 17:23:52,123 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:23:52,123 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:23:52,327 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 17:23:52,328 - aiogram.event - INFO - Update id=495295227 is handled. Duration 203 ms by bot id=5951537041
+2025-03-20 17:23:53,916 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:23:53,916 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:23:54,096 - handlers.common - INFO - User 1259547081 (se1dhe) started the bot
+2025-03-20 17:23:54,097 - aiogram.event - INFO - Update id=495295228 is handled. Duration 172 ms by bot id=5951537041
+2025-03-20 17:23:55,221 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:23:55,221 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:23:55,227 - handlers.common - INFO - Получен callback: user:change_language
+2025-03-20 17:23:55,227 - aiogram.event - INFO - Update id=495295229 is handled. Duration 15 ms by bot id=5951537041
+2025-03-20 17:23:56,993 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:23:56,993 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:23:56,999 - handlers.common - INFO - Получен callback: user:active_ticket
+2025-03-20 17:23:56,999 - aiogram.event - INFO - Update id=495295230 is handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:24:15,674 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 17:24:15,931 - __main__ - INFO - Бот остановлен
+2025-03-20 17:24:15,931 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 17:24:15,932 - __main__ - INFO - Бот остановлен
+2025-03-20 17:24:20,648 - __main__ - INFO - Запуск бота...
+2025-03-20 17:24:20,651 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 17:24:20,733 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 17:24:20,746 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 17:24:20,751 - database - INFO - Таблицы успешно созданы
+2025-03-20 17:24:20,753 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 17:24:20,753 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 17:24:20,754 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 17:24:21,028 - __main__ - INFO - Бот запущен
+2025-03-20 17:24:21,180 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 17:24:21,229 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 17:24:24,860 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:24,860 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:25,077 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 17:24:25,078 - aiogram.event - INFO - Update id=495295231 is handled. Duration 218 ms by bot id=5951537041
+2025-03-20 17:24:25,843 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:25,843 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:25,992 - aiogram.event - INFO - Update id=495295232 is handled. Duration 155 ms by bot id=5951537041
+2025-03-20 17:24:26,640 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:26,640 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:26,789 - handlers.user - INFO - User 1259547081 returned to main menu
+2025-03-20 17:24:26,789 - aiogram.event - INFO - Update id=495295233 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 17:24:27,317 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:27,317 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:27,546 - handlers.user - INFO - User 1259547081 accessed language selection
+2025-03-20 17:24:27,547 - aiogram.event - INFO - Update id=495295234 is handled. Duration 233 ms by bot id=5951537041
+2025-03-20 17:24:28,375 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:28,375 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:28,642 - handlers.user - INFO - User 1259547081 changed language to uk
+2025-03-20 17:24:28,643 - aiogram.event - INFO - Update id=495295235 is handled. Duration 266 ms by bot id=5951537041
+2025-03-20 17:24:29,880 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:29,880 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:30,074 - handlers.user - INFO - User 1259547081 started ticket creation
+2025-03-20 17:24:30,075 - aiogram.event - INFO - Update id=495295236 is handled. Duration 203 ms by bot id=5951537041
+2025-03-20 17:24:33,719 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:33,719 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:33,910 - handlers.user - INFO - User 1259547081 returned to main menu
+2025-03-20 17:24:33,911 - aiogram.event - INFO - Update id=495295237 is handled. Duration 187 ms by bot id=5951537041
+2025-03-20 17:24:34,696 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:34,696 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:34,887 - aiogram.event - INFO - Update id=495295238 is handled. Duration 187 ms by bot id=5951537041
+2025-03-20 17:24:35,607 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:35,607 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:36,084 - handlers.user - INFO - User 1259547081 returned to main menu
+2025-03-20 17:24:36,085 - aiogram.event - INFO - Update id=495295239 is handled. Duration 484 ms by bot id=5951537041
+2025-03-20 17:24:36,411 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:36,412 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:36,623 - handlers.user - INFO - User 1259547081 accessed language selection
+2025-03-20 17:24:36,624 - aiogram.event - INFO - Update id=495295240 is handled. Duration 217 ms by bot id=5951537041
+2025-03-20 17:24:36,768 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:36,768 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:36,833 - aiogram.event - INFO - Update id=495295241 is handled. Duration 62 ms by bot id=5951537041
+2025-03-20 17:24:39,412 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:39,412 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:39,557 - handlers.user - INFO - User 1259547081 changed language to en
+2025-03-20 17:24:39,557 - aiogram.event - INFO - Update id=495295242 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 17:24:39,665 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:39,665 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:39,732 - aiogram.event - INFO - Update id=495295243 is handled. Duration 62 ms by bot id=5951537041
+2025-03-20 17:24:42,296 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:42,296 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:42,455 - handlers.user - INFO - User 1259547081 accessed language selection
+2025-03-20 17:24:42,455 - aiogram.event - INFO - Update id=495295244 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 17:24:43,329 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:43,329 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:43,556 - handlers.user - INFO - User 1259547081 changed language to ru
+2025-03-20 17:24:43,556 - aiogram.event - INFO - Update id=495295245 is handled. Duration 235 ms by bot id=5951537041
+2025-03-20 17:24:44,332 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:44,333 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:44,334 - aiogram.event - INFO - Update id=495295246 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:24:45,103 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:45,103 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:45,105 - aiogram.event - INFO - Update id=495295247 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:24:45,721 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:24:45,721 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:24:45,723 - aiogram.event - INFO - Update id=495295248 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:25:10,430 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:25:10,430 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:25:10,432 - aiogram.event - INFO - Update id=495295249 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:25:11,674 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:25:11,674 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:25:11,675 - aiogram.event - INFO - Update id=495295250 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:25:12,103 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:25:12,103 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:25:12,257 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 17:25:12,258 - aiogram.event - INFO - Update id=495295251 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 17:25:12,540 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:25:12,540 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:25:12,542 - aiogram.event - INFO - Update id=495295252 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:25:13,252 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:25:13,252 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:25:13,332 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 17:25:13,334 - aiogram.event - INFO - Update id=495295253 is handled. Duration 78 ms by bot id=5951537041
+2025-03-20 17:25:13,946 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:25:13,946 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:25:14,080 - handlers.user - INFO - User 1259547081 accessed language selection
+2025-03-20 17:25:14,081 - aiogram.event - INFO - Update id=495295254 is handled. Duration 125 ms by bot id=5951537041
+2025-03-20 17:25:14,630 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:25:14,631 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:25:14,767 - handlers.user - INFO - User 1259547081 changed language to uk
+2025-03-20 17:25:14,768 - aiogram.event - INFO - Update id=495295255 is handled. Duration 141 ms by bot id=5951537041
+2025-03-20 17:25:52,002 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 17:25:52,259 - __main__ - INFO - Бот остановлен
+2025-03-20 17:25:52,259 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 17:25:52,261 - __main__ - INFO - Бот остановлен
+2025-03-20 17:25:56,369 - __main__ - INFO - Запуск бота...
+2025-03-20 17:25:56,372 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 17:25:56,450 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 17:25:56,463 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 17:25:56,524 - database - INFO - Таблицы успешно созданы
+2025-03-20 17:25:56,526 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 17:25:56,526 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 17:25:56,526 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 17:25:56,798 - __main__ - INFO - Бот запущен
+2025-03-20 17:25:56,961 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 17:25:57,015 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 17:26:21,268 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:26:21,268 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:26:21,513 - handlers.common - INFO - User 1259547081 (se1dhe) started the bot
+2025-03-20 17:26:21,513 - aiogram.event - INFO - Update id=495295256 is handled. Duration 250 ms by bot id=5951537041
+2025-03-20 17:26:24,143 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:26:24,144 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:26:24,361 - handlers.user - INFO - User 1259547081 changed language to uk
+2025-03-20 17:26:24,361 - aiogram.event - INFO - Update id=495295257 is handled. Duration 218 ms by bot id=5951537041
+2025-03-20 17:26:39,136 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:26:39,136 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:26:39,325 - handlers.common - INFO - User 1259547081 (se1dhe) started the bot
+2025-03-20 17:26:39,326 - aiogram.event - INFO - Update id=495295258 is handled. Duration 187 ms by bot id=5951537041
+2025-03-20 17:26:41,711 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:26:41,711 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:26:41,958 - handlers.moderator - INFO - Moderator 1259547081 switched to user menu
+2025-03-20 17:26:41,959 - aiogram.event - INFO - Update id=495295259 is handled. Duration 250 ms by bot id=5951537041
+2025-03-20 17:26:44,356 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:26:44,356 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:26:44,461 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 17:26:44,462 - aiogram.event - INFO - Update id=495295260 is handled. Duration 109 ms by bot id=5951537041
+2025-03-20 17:26:45,082 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:26:45,082 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:26:45,083 - aiogram.event - INFO - Update id=495295261 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:26:46,132 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:26:46,132 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:26:46,134 - aiogram.event - INFO - Update id=495295262 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:26:46,799 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:26:46,799 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:26:46,801 - aiogram.event - INFO - Update id=495295263 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:26:47,630 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:26:47,630 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:26:47,826 - handlers.moderator - INFO - Moderator 1259547081 viewed their stats
+2025-03-20 17:26:47,828 - aiogram.event - INFO - Update id=495295264 is handled. Duration 203 ms by bot id=5951537041
+2025-03-20 17:26:48,696 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:26:48,697 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:26:48,928 - handlers.moderator - INFO - Moderator 1259547081 returned to main menu
+2025-03-20 17:26:48,930 - aiogram.event - INFO - Update id=495295265 is handled. Duration 235 ms by bot id=5951537041
+2025-03-20 17:26:49,932 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:26:49,932 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:26:50,200 - handlers.moderator - INFO - Moderator 1259547081 viewed their stats
+2025-03-20 17:26:50,201 - aiogram.event - INFO - Update id=495295266 is handled. Duration 264 ms by bot id=5951537041
+2025-03-20 17:26:52,133 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:26:52,133 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:26:52,283 - handlers.moderator - INFO - Moderator 1259547081 returned to main menu
+2025-03-20 17:26:52,284 - aiogram.event - INFO - Update id=495295267 is handled. Duration 141 ms by bot id=5951537041
+2025-03-20 17:26:54,038 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:26:54,038 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:26:54,279 - handlers.moderator - INFO - Moderator 1259547081 switched to user menu
+2025-03-20 17:26:54,280 - aiogram.event - INFO - Update id=495295268 is handled. Duration 235 ms by bot id=5951537041
+2025-03-20 17:27:06,986 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:27:06,986 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:27:07,179 - handlers.common - INFO - User 1259547081 (se1dhe) started the bot
+2025-03-20 17:27:07,180 - aiogram.event - INFO - Update id=495295269 is handled. Duration 203 ms by bot id=5951537041
+2025-03-20 17:27:08,749 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:27:08,749 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:27:08,759 - middlewares.database - ERROR - Ошибка в DatabaseMiddleware: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(WHERE users.`role` = 'USER') AS users_count, count(users.id) FILTER (WHERE user' at line 1")
+[SQL: SELECT count(users.id) FILTER (WHERE users.`role` = %s) AS users_count, count(users.id) FILTER (WHERE users.`role` = %s) AS moderators_count, count(users.id) FILTER (WHERE users.`role` = %s) AS admins_count 
+FROM users]
+[parameters: ('USER', 'MODERATOR', 'ADMIN')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Traceback (most recent call last):
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\dialects\mysql\aiomysql.py", line 97, in execute
+    return self.await_(self._execute_async(operation, parameters))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\dialects\mysql\aiomysql.py", line 106, in _execute_async
+    result = await self._cursor.execute(operation, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\cursors.py", line 239, in execute
+    await self._query(query)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\cursors.py", line 457, in _query
+    await conn.query(q)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 469, in query
+    await self._read_query_result(unbuffered=unbuffered)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 683, in _read_query_result
+    await result.read()
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 1164, in read
+    first_packet = await self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 652, in _read_packet
+    packet.raise_for_error()
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.ProgrammingError: (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(WHERE users.`role` = 'USER') AS users_count, count(users.id) FILTER (WHERE user' at line 1")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 45, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 53, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 52, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 64, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\admin.py", line 39, in admin_stats_wrapper
+    return await _process_admin_stats(callback_query, session, state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\admin.py", line 66, in _process_admin_stats
+    users_stats_result = await session.execute(users_stats_query)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\ext\asyncio\session.py", line 463, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2260, in _execute_internal
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1416, in execute
+    return meth(
+           ^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 523, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1843, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1983, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\dialects\mysql\aiomysql.py", line 97, in execute
+    return self.await_(self._execute_async(operation, parameters))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\dialects\mysql\aiomysql.py", line 106, in _execute_async
+    result = await self._cursor.execute(operation, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\cursors.py", line 239, in execute
+    await self._query(query)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\cursors.py", line 457, in _query
+    await conn.query(q)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 469, in query
+    await self._read_query_result(unbuffered=unbuffered)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 683, in _read_query_result
+    await result.read()
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 1164, in read
+    first_packet = await self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 652, in _read_packet
+    packet.raise_for_error()
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.ProgrammingError: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(WHERE users.`role` = 'USER') AS users_count, count(users.id) FILTER (WHERE user' at line 1")
+[SQL: SELECT count(users.id) FILTER (WHERE users.`role` = %s) AS users_count, count(users.id) FILTER (WHERE users.`role` = %s) AS moderators_count, count(users.id) FILTER (WHERE users.`role` = %s) AS admins_count 
+FROM users]
+[parameters: ('USER', 'MODERATOR', 'ADMIN')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-03-20 17:27:08,864 - aiogram.event - INFO - Update id=495295270 is handled. Duration 110 ms by bot id=5951537041
+2025-03-20 17:27:11,618 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:27:11,618 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:27:11,627 - middlewares.database - ERROR - Ошибка в DatabaseMiddleware: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(WHERE users.`role` = 'USER') AS users_count, count(users.id) FILTER (WHERE user' at line 1")
+[SQL: SELECT count(users.id) FILTER (WHERE users.`role` = %s) AS users_count, count(users.id) FILTER (WHERE users.`role` = %s) AS moderators_count, count(users.id) FILTER (WHERE users.`role` = %s) AS admins_count 
+FROM users]
+[parameters: ('USER', 'MODERATOR', 'ADMIN')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Traceback (most recent call last):
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\dialects\mysql\aiomysql.py", line 97, in execute
+    return self.await_(self._execute_async(operation, parameters))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\dialects\mysql\aiomysql.py", line 106, in _execute_async
+    result = await self._cursor.execute(operation, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\cursors.py", line 239, in execute
+    await self._query(query)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\cursors.py", line 457, in _query
+    await conn.query(q)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 469, in query
+    await self._read_query_result(unbuffered=unbuffered)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 683, in _read_query_result
+    await result.read()
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 1164, in read
+    first_packet = await self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 652, in _read_packet
+    packet.raise_for_error()
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.ProgrammingError: (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(WHERE users.`role` = 'USER') AS users_count, count(users.id) FILTER (WHERE user' at line 1")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 45, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 53, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 52, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 64, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\admin.py", line 39, in admin_stats_wrapper
+    return await _process_admin_stats(callback_query, session, state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\admin.py", line 66, in _process_admin_stats
+    users_stats_result = await session.execute(users_stats_query)
+                         ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\ext\asyncio\session.py", line 463, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2260, in _execute_internal
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1416, in execute
+    return meth(
+           ^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 523, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1843, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1983, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\dialects\mysql\aiomysql.py", line 97, in execute
+    return self.await_(self._execute_async(operation, parameters))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\dialects\mysql\aiomysql.py", line 106, in _execute_async
+    result = await self._cursor.execute(operation, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\cursors.py", line 239, in execute
+    await self._query(query)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\cursors.py", line 457, in _query
+    await conn.query(q)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 469, in query
+    await self._read_query_result(unbuffered=unbuffered)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 683, in _read_query_result
+    await result.read()
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 1164, in read
+    first_packet = await self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 652, in _read_packet
+    packet.raise_for_error()
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.ProgrammingError: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(WHERE users.`role` = 'USER') AS users_count, count(users.id) FILTER (WHERE user' at line 1")
+[SQL: SELECT count(users.id) FILTER (WHERE users.`role` = %s) AS users_count, count(users.id) FILTER (WHERE users.`role` = %s) AS moderators_count, count(users.id) FILTER (WHERE users.`role` = %s) AS admins_count 
+FROM users]
+[parameters: ('USER', 'MODERATOR', 'ADMIN')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-03-20 17:27:11,848 - aiogram.event - INFO - Update id=495295271 is handled. Duration 219 ms by bot id=5951537041
+2025-03-20 17:45:40,439 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 17:45:40,693 - __main__ - INFO - Бот остановлен
+2025-03-20 17:45:40,693 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 17:45:40,694 - __main__ - INFO - Бот остановлен
+2025-03-20 17:45:44,422 - __main__ - INFO - Запуск бота...
+2025-03-20 17:45:44,425 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 17:45:44,504 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 17:45:44,516 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 17:45:44,523 - database - INFO - Таблицы успешно созданы
+2025-03-20 17:45:44,525 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 17:45:44,525 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 17:45:44,526 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 17:45:44,796 - __main__ - INFO - Бот запущен
+2025-03-20 17:45:44,967 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 17:45:45,017 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 17:45:53,340 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:45:53,340 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:45:53,554 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 17:45:53,555 - aiogram.event - INFO - Update id=495295272 is handled. Duration 218 ms by bot id=5951537041
+2025-03-20 17:45:54,934 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:45:54,935 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:45:54,939 - handlers.common - INFO - Получен callback-запрос: admin:manage_mods
+2025-03-20 17:45:54,940 - aiogram.event - INFO - Update id=495295273 is handled. Duration 0 ms by bot id=5951537041
+2025-03-20 17:45:55,790 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:45:55,790 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:45:55,853 - handlers.common - INFO - Получен callback-запрос: admin:user_menu
+2025-03-20 17:45:55,854 - aiogram.event - INFO - Update id=495295274 is handled. Duration 62 ms by bot id=5951537041
+2025-03-20 17:45:56,445 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:45:56,445 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:45:56,516 - handlers.common - INFO - Получен callback-запрос: admin:stats
+2025-03-20 17:45:56,516 - aiogram.event - INFO - Update id=495295275 is handled. Duration 62 ms by bot id=5951537041
+2025-03-20 17:45:56,818 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:45:56,818 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:45:57,021 - aiogram.event - INFO - Update id=495295276 is handled. Duration 202 ms by bot id=5951537041
+2025-03-20 17:45:58,854 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:45:58,854 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:45:58,912 - handlers.common - INFO - Получен callback-запрос: admin:mod_menu
+2025-03-20 17:45:58,912 - aiogram.event - INFO - Update id=495295277 is handled. Duration 47 ms by bot id=5951537041
+2025-03-20 17:46:43,717 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 17:46:43,982 - __main__ - INFO - Бот остановлен
+2025-03-20 17:46:43,982 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 17:46:43,983 - __main__ - INFO - Бот остановлен
+2025-03-20 17:46:47,580 - __main__ - INFO - Запуск бота...
+2025-03-20 17:46:47,583 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 17:46:47,667 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 17:46:47,681 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 17:46:47,686 - database - INFO - Таблицы успешно созданы
+2025-03-20 17:46:47,688 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 17:46:47,688 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 17:46:47,688 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 17:46:47,967 - __main__ - INFO - Бот запущен
+2025-03-20 17:46:48,131 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 17:46:48,186 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 17:47:14,652 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 17:47:14,904 - __main__ - INFO - Бот остановлен
+2025-03-20 17:47:14,904 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 17:47:14,905 - __main__ - INFO - Бот остановлен
+2025-03-20 17:47:18,579 - __main__ - INFO - Запуск бота...
+2025-03-20 17:47:18,582 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 17:47:18,663 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 17:47:18,677 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 17:47:18,682 - database - INFO - Таблицы успешно созданы
+2025-03-20 17:47:18,683 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 17:47:18,684 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 17:47:18,684 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 17:47:18,957 - __main__ - INFO - Бот запущен
+2025-03-20 17:47:19,135 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 17:47:19,186 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 17:47:21,796 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:47:21,796 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:47:22,258 - handlers.common - INFO - User 1259547081 (se1dhe) started the bot
+2025-03-20 17:47:22,259 - aiogram.event - INFO - Update id=495295278 is handled. Duration 468 ms by bot id=5951537041
+2025-03-20 17:47:22,999 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:47:22,999 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:47:23,091 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 17:47:23,092 - aiogram.event - INFO - Update id=495295279 is handled. Duration 94 ms by bot id=5951537041
+2025-03-20 17:47:23,784 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:47:23,785 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:47:23,938 - handlers.admin - INFO - Admin 1259547081 switched to moderator menu
+2025-03-20 17:47:23,938 - aiogram.event - INFO - Update id=495295280 is handled. Duration 156 ms by bot id=5951537041
+2025-03-20 17:47:24,568 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:47:24,568 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:47:24,881 - handlers.moderator - INFO - Moderator 1259547081 switched to user menu
+2025-03-20 17:47:24,882 - aiogram.event - INFO - Update id=495295281 is handled. Duration 311 ms by bot id=5951537041
+2025-03-20 17:47:25,716 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:47:25,716 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:47:25,969 - aiogram.event - INFO - Update id=495295282 is handled. Duration 250 ms by bot id=5951537041
+2025-03-20 17:47:26,466 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:47:26,466 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:47:26,786 - handlers.user - INFO - User 1259547081 returned to main menu
+2025-03-20 17:47:26,787 - aiogram.event - INFO - Update id=495295283 is handled. Duration 312 ms by bot id=5951537041
+2025-03-20 17:47:27,086 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:47:27,086 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:47:27,323 - handlers.user - INFO - User 1259547081 accessed language selection
+2025-03-20 17:47:27,324 - aiogram.event - INFO - Update id=495295284 is handled. Duration 233 ms by bot id=5951537041
+2025-03-20 17:47:31,090 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:47:31,090 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:47:31,226 - handlers.user - INFO - User 1259547081 changed language to uk
+2025-03-20 17:47:31,226 - aiogram.event - INFO - Update id=495295285 is handled. Duration 140 ms by bot id=5951537041
+2025-03-20 17:48:49,134 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 17:48:49,395 - __main__ - INFO - Бот остановлен
+2025-03-20 17:48:49,395 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 17:48:49,396 - __main__ - INFO - Бот остановлен
+2025-03-20 17:48:54,843 - __main__ - INFO - Запуск бота...
+2025-03-20 17:48:54,846 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 17:48:54,930 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 17:48:54,945 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 17:48:54,950 - database - INFO - Таблицы успешно созданы
+2025-03-20 17:48:54,952 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 17:48:54,952 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 17:48:54,953 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 17:48:55,232 - __main__ - INFO - Бот запущен
+2025-03-20 17:48:55,400 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 17:48:55,453 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 17:48:58,248 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:48:58,248 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:48:58,584 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 17:48:58,585 - aiogram.event - INFO - Update id=495295286 is handled. Duration 344 ms by bot id=5951537041
+2025-03-20 17:49:02,384 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 17:49:02,384 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 17:49:02,399 - middlewares.database - ERROR - Ошибка в DatabaseMiddleware: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(WHERE tickets.status = 'OPEN') AS open_tickets, count(tickets.id) FILTER (WHERE' at line 1")
+[SQL: SELECT count(tickets.id) AS total_tickets, count(tickets.id) FILTER (WHERE tickets.status = %s) AS open_tickets, count(tickets.id) FILTER (WHERE tickets.status = %s) AS in_progress_tickets, count(tickets.id) FILTER (WHERE tickets.status = %s) AS resolved_tickets, count(tickets.id) FILTER (WHERE tickets.status = %s) AS closed_tickets, avg(tickets.rating) FILTER (WHERE tickets.status = %s) AS avg_rating 
+FROM tickets]
+[parameters: ('OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED', 'CLOSED')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+Traceback (most recent call last):
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\dialects\mysql\aiomysql.py", line 97, in execute
+    return self.await_(self._execute_async(operation, parameters))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\dialects\mysql\aiomysql.py", line 106, in _execute_async
+    result = await self._cursor.execute(operation, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\cursors.py", line 239, in execute
+    await self._query(query)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\cursors.py", line 457, in _query
+    await conn.query(q)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 469, in query
+    await self._read_query_result(unbuffered=unbuffered)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 683, in _read_query_result
+    await result.read()
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 1164, in read
+    first_packet = await self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 652, in _read_packet
+    packet.raise_for_error()
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+pymysql.err.ProgrammingError: (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(WHERE tickets.status = 'OPEN') AS open_tickets, count(tickets.id) FILTER (WHERE' at line 1")
+
+The above exception was the direct cause of the following exception:
+
+Traceback (most recent call last):
+  File "D:\project\PythonProject\support_bot\middlewares\database.py", line 45, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\dispatcher.py", line 276, in _listen_update
+    return await self.propagate_event(update_type=update_type, event=event, **kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 174, in _propagate_event
+    response = await router.propagate_event(update_type=update_type, event=event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 146, in propagate_event
+    return await observer.wrap_outer_middleware(_wrapped, event=event, data=kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 141, in _wrapped
+    return await self._propagate_event(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\router.py", line 166, in _propagate_event
+    response = await observer.trigger(event, **kwargs)
+               ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\telegram.py", line 121, in trigger
+    return await wrapped_inner(event, kwargs)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\i18n.py", line 53, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\user_activity.py", line 52, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\middlewares\throttling.py", line 64, in __call__
+    return await handler(event, data)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiogram\dispatcher\event\handler.py", line 43, in call
+    return await wrapped()
+           ^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\admin.py", line 39, in admin_stats_wrapper
+    return await _process_admin_stats(callback_query, session, state)
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\support_bot\handlers\admin.py", line 79, in _process_admin_stats
+    tickets_stats_result = await session.execute(tickets_stats_query)
+                           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\ext\asyncio\session.py", line 463, in execute
+    result = await greenlet_spawn(
+             ^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 201, in greenlet_spawn
+    result = context.throw(*sys.exc_info())
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2365, in execute
+    return self._execute_internal(
+           ^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\orm\session.py", line 2251, in _execute_internal
+    result: Result[Any] = compile_state_cls.orm_execute_statement(
+                          ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\orm\context.py", line 306, in orm_execute_statement
+    result = conn.execute(
+             ^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1416, in execute
+    return meth(
+           ^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\sql\elements.py", line 523, in _execute_on_connection
+    return connection._execute_clauseelement(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1638, in _execute_clauseelement
+    ret = self._execute_context(
+          ^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1843, in _execute_context
+    return self._exec_single_context(
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1983, in _exec_single_context
+    self._handle_dbapi_exception(
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 2352, in _handle_dbapi_exception
+    raise sqlalchemy_exception.with_traceback(exc_info[2]) from e
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\base.py", line 1964, in _exec_single_context
+    self.dialect.do_execute(
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\engine\default.py", line 942, in do_execute
+    cursor.execute(statement, parameters)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\dialects\mysql\aiomysql.py", line 97, in execute
+    return self.await_(self._execute_async(operation, parameters))
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 132, in await_only
+    return current.parent.switch(awaitable)  # type: ignore[no-any-return,attr-defined] # noqa: E501
+           ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\util\_concurrency_py3k.py", line 196, in greenlet_spawn
+    value = await result
+            ^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\sqlalchemy\dialects\mysql\aiomysql.py", line 106, in _execute_async
+    result = await self._cursor.execute(operation, parameters)
+             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\cursors.py", line 239, in execute
+    await self._query(query)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\cursors.py", line 457, in _query
+    await conn.query(q)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 469, in query
+    await self._read_query_result(unbuffered=unbuffered)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 683, in _read_query_result
+    await result.read()
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 1164, in read
+    first_packet = await self.connection._read_packet()
+                   ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\aiomysql\connection.py", line 652, in _read_packet
+    packet.raise_for_error()
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\pymysql\protocol.py", line 219, in raise_for_error
+    err.raise_mysql_exception(self._data)
+  File "D:\project\PythonProject\CJ_Actual_Bot\.venv\Lib\site-packages\pymysql\err.py", line 150, in raise_mysql_exception
+    raise errorclass(errno, errval)
+sqlalchemy.exc.ProgrammingError: (pymysql.err.ProgrammingError) (1064, "You have an error in your SQL syntax; check the manual that corresponds to your MySQL server version for the right syntax to use near '(WHERE tickets.status = 'OPEN') AS open_tickets, count(tickets.id) FILTER (WHERE' at line 1")
+[SQL: SELECT count(tickets.id) AS total_tickets, count(tickets.id) FILTER (WHERE tickets.status = %s) AS open_tickets, count(tickets.id) FILTER (WHERE tickets.status = %s) AS in_progress_tickets, count(tickets.id) FILTER (WHERE tickets.status = %s) AS resolved_tickets, count(tickets.id) FILTER (WHERE tickets.status = %s) AS closed_tickets, avg(tickets.rating) FILTER (WHERE tickets.status = %s) AS avg_rating 
+FROM tickets]
+[parameters: ('OPEN', 'IN_PROGRESS', 'RESOLVED', 'CLOSED', 'CLOSED')]
+(Background on this error at: https://sqlalche.me/e/20/f405)
+2025-03-20 17:49:02,500 - aiogram.event - INFO - Update id=495295287 is handled. Duration 108 ms by bot id=5951537041
+2025-03-20 18:20:24,640 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 18:20:24,885 - __main__ - INFO - Бот остановлен
+2025-03-20 18:20:24,885 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 18:20:24,886 - __main__ - INFO - Бот остановлен
+2025-03-20 18:20:28,615 - __main__ - INFO - Запуск бота...
+2025-03-20 18:20:28,617 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 18:20:28,697 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 18:20:28,710 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 18:20:28,716 - database - INFO - Таблицы успешно созданы
+2025-03-20 18:20:28,717 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 18:20:28,718 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 18:20:28,718 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 18:20:29,015 - __main__ - INFO - Бот запущен
+2025-03-20 18:20:29,203 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 18:20:29,259 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 18:20:31,381 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 18:20:31,636 - __main__ - INFO - Бот остановлен
+2025-03-20 18:20:31,636 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 18:20:31,637 - __main__ - INFO - Бот остановлен
+2025-03-20 18:22:23,261 - __main__ - INFO - Запуск бота...
+2025-03-20 18:22:23,264 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 18:22:23,348 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 18:22:23,360 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 18:22:23,365 - database - INFO - Таблицы успешно созданы
+2025-03-20 18:22:23,367 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 18:22:23,368 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 18:22:23,368 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 18:22:23,668 - __main__ - INFO - Бот запущен
+2025-03-20 18:22:23,823 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 18:22:23,873 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 18:27:27,578 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 18:27:27,578 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 18:27:27,926 - handlers.admin - INFO - Admin 1259547081 switched to moderator menu
+2025-03-20 18:27:27,927 - aiogram.event - INFO - Update id=495295288 is handled. Duration 343 ms by bot id=5951537041
+2025-03-20 18:27:28,693 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 18:27:28,694 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 18:27:28,884 - aiogram.event - INFO - Update id=495295289 is handled. Duration 202 ms by bot id=5951537041
+2025-03-20 18:27:31,653 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 18:27:31,653 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 18:27:31,825 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 18:27:31,826 - aiogram.event - INFO - Update id=495295290 is handled. Duration 171 ms by bot id=5951537041
+2025-03-20 18:27:33,358 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 18:27:33,358 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 18:27:33,550 - aiogram.event - INFO - Update id=495295291 is handled. Duration 187 ms by bot id=5951537041
+2025-03-20 18:31:03,647 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 18:31:03,918 - __main__ - INFO - Бот остановлен
+2025-03-20 18:31:03,918 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 18:31:03,920 - __main__ - INFO - Бот остановлен
+2025-03-20 18:31:08,879 - __main__ - INFO - Запуск бота...
+2025-03-20 18:31:08,882 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 18:31:08,967 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 18:31:08,980 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 18:31:08,984 - database - INFO - Таблицы успешно созданы
+2025-03-20 18:31:08,986 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 18:31:08,987 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 18:31:08,987 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 18:31:09,271 - __main__ - INFO - Бот запущен
+2025-03-20 18:31:09,448 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 18:31:09,497 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 18:31:11,992 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 18:31:11,992 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 18:31:12,390 - handlers.common - INFO - User 1259547081 opened the menu using reply button
+2025-03-20 18:31:12,391 - aiogram.event - INFO - Update id=495295292 is handled. Duration 391 ms by bot id=5951537041
+2025-03-20 18:31:13,626 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 18:31:13,626 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 18:31:13,784 - handlers.admin - INFO - Admin 1259547081 viewed general statistics
+2025-03-20 18:31:13,785 - aiogram.event - INFO - Update id=495295293 is handled. Duration 157 ms by bot id=5951537041
+2025-03-20 18:31:24,515 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 18:31:24,515 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 18:31:24,768 - handlers.admin - INFO - Admin 1259547081 returned to main menu
+2025-03-20 18:31:24,769 - aiogram.event - INFO - Update id=495295294 is handled. Duration 250 ms by bot id=5951537041
+2025-03-20 18:31:25,753 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 18:31:25,753 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 18:31:25,754 - aiogram.event - INFO - Update id=495295295 is not handled. Duration 0 ms by bot id=5951537041
+2025-03-20 18:31:26,928 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 18:31:26,928 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 18:31:26,930 - aiogram.event - INFO - Update id=495295296 is not handled. Duration 16 ms by bot id=5951537041
+2025-03-20 18:31:27,647 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 18:31:27,647 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 18:31:27,649 - aiogram.event - INFO - Update id=495295297 is not handled. Duration 0 ms by bot id=5951537041

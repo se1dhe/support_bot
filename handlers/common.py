@@ -267,15 +267,3 @@ def register_handlers(dp: Dispatcher):
     """
     dp.include_router(router)
 
-
-# handlers/common.py
-@router.callback_query()
-async def debug_callback_handler(callback_query: CallbackQuery, state: FSMContext, **kwargs):
-    """
-    Отладочный обработчик для всех callback запросов.
-    Позволяет видеть, какие callback данные приходят от кнопок.
-    """
-    logger.info(f"Получен callback: {callback_query.data}")
-
-    # Просто логируем и не мешаем другим обработчикам
-    return None
