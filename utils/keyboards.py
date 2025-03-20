@@ -121,26 +121,19 @@ class KeyboardFactory:
     def main_reply_keyboard(role: UserRole, language: str = None) -> ReplyKeyboardMarkup:
         """
         Создает основную reply-клавиатуру в зависимости от роли пользователя.
-
-        Args:
-            role: Роль пользователя
-            language: Язык пользователя
-
-        Returns:
-            ReplyKeyboardMarkup: Reply-клавиатура
         """
         # Базовая кнопка меню для всех ролей
         buttons = [[KeyboardButton(text="📋 Меню")]]
 
         # Добавляем кнопки в зависимости от роли
         if role == UserRole.USER:
-            buttons[0].append(KeyboardButton(text=_("menu_active_ticket", language)))
+            buttons[0].append(KeyboardButton(text="📝 Мой активный тикет"))
             buttons.append([
                 KeyboardButton(text=_("menu_create_ticket", language)),
                 KeyboardButton(text=_("menu_ticket_history", language))
             ])
         elif role == UserRole.MODERATOR:
-            buttons[0].append(KeyboardButton(text=_("menu_active_ticket", language)))
+            buttons[0].append(KeyboardButton(text="📝 Активный тикет модератора"))
             buttons.append([
                 KeyboardButton(text=_("menu_unassigned_tickets", language)),
                 KeyboardButton(text=_("menu_my_stats", language))

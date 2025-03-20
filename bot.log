@@ -3555,3 +3555,79 @@ AttributeError: 'FSMContext' object has no attribute 'dispatcher'
 2025-03-20 23:31:05,108 - middlewares.database - INFO - Сессия создана и добавлена в data
 2025-03-20 23:31:05,230 - handlers.user - INFO - User 1259547081 returned to main menu
 2025-03-20 23:31:05,231 - aiogram.event - INFO - Update id=495295529 is handled. Duration 125 ms by bot id=5951537041
+2025-03-20 23:41:06,253 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 23:41:06,509 - __main__ - INFO - Бот остановлен
+2025-03-20 23:41:06,509 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 23:41:06,511 - __main__ - INFO - Бот остановлен
+2025-03-20 23:41:10,266 - __main__ - INFO - Запуск бота...
+2025-03-20 23:41:10,268 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 23:41:10,347 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 23:41:10,360 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 23:41:10,365 - database - INFO - Таблицы успешно созданы
+2025-03-20 23:41:10,367 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 23:41:10,367 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 23:41:10,367 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 23:41:10,668 - __main__ - INFO - Бот запущен
+2025-03-20 23:41:10,842 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 23:41:10,891 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 23:41:18,545 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 23:41:18,545 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 23:41:18,821 - handlers.common - INFO - User 7838299933 (staff_development) started the bot
+2025-03-20 23:41:18,822 - aiogram.event - INFO - Update id=495295530 is handled. Duration 280 ms by bot id=5951537041
+2025-03-20 23:41:20,154 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 23:41:20,154 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 23:41:20,717 - handlers.user - INFO - User 7838299933 viewed active ticket #1
+2025-03-20 23:41:20,717 - handlers.user - INFO - User 7838299933 used Reply button 'Active Ticket'
+2025-03-20 23:41:20,718 - aiogram.event - INFO - Update id=495295531 is handled. Duration 562 ms by bot id=5951537041
+2025-03-20 23:41:26,429 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 23:41:26,429 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 23:41:26,541 - handlers.common - INFO - User 7838299933 opened the menu using reply button
+2025-03-20 23:41:26,542 - aiogram.event - INFO - Update id=495295532 is handled. Duration 109 ms by bot id=5951537041
+2025-03-20 23:41:37,724 - aiogram.dispatcher - INFO - Polling stopped
+2025-03-20 23:41:37,982 - __main__ - INFO - Бот остановлен
+2025-03-20 23:41:37,982 - aiogram.dispatcher - INFO - Polling stopped for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 23:41:37,983 - __main__ - INFO - Бот остановлен
+2025-03-20 23:41:42,738 - __main__ - INFO - Запуск бота...
+2025-03-20 23:41:42,740 - database - INFO - Инициализация соединения с базой данных: localhost:3306/support_bot
+2025-03-20 23:41:42,822 - database - INFO - Соединение с базой данных успешно инициализировано
+2025-03-20 23:41:42,836 - database - INFO - Создание таблиц в базе данных...
+2025-03-20 23:41:42,840 - database - INFO - Таблицы успешно созданы
+2025-03-20 23:41:42,841 - utils.i18n - INFO - Загружен файл локализации: en
+2025-03-20 23:41:42,842 - utils.i18n - INFO - Загружен файл локализации: ru
+2025-03-20 23:41:42,842 - utils.i18n - INFO - Загружен файл локализации: uk
+2025-03-20 23:41:43,144 - __main__ - INFO - Бот запущен
+2025-03-20 23:41:43,291 - aiogram.dispatcher - INFO - Start polling
+2025-03-20 23:41:43,349 - aiogram.dispatcher - INFO - Run polling for bot @se1dhe_bot id=5951537041 - 'se1dhe_bot'
+2025-03-20 23:41:51,702 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 23:41:51,702 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 23:41:51,980 - handlers.common - INFO - User 1259547081 (se1dhe) started the bot
+2025-03-20 23:41:51,981 - aiogram.event - INFO - Update id=495295533 is handled. Duration 282 ms by bot id=5951537041
+2025-03-20 23:41:54,053 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 23:41:54,053 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 23:41:54,516 - handlers.moderator - INFO - Moderator 1259547081 viewed active ticket #1
+2025-03-20 23:41:54,517 - aiogram.event - INFO - Update id=495295534 is handled. Duration 453 ms by bot id=5951537041
+2025-03-20 23:41:57,170 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 23:41:57,170 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 23:41:57,321 - aiogram.event - INFO - Update id=495295535 is handled. Duration 155 ms by bot id=5951537041
+2025-03-20 23:41:59,090 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 23:41:59,090 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 23:41:59,324 - handlers.moderator - INFO - Moderator 1259547081 marked ticket #1 as resolved
+2025-03-20 23:41:59,324 - aiogram.event - INFO - Update id=495295536 is handled. Duration 233 ms by bot id=5951537041
+2025-03-20 23:42:04,333 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 23:42:04,334 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 23:42:04,435 - aiogram.event - INFO - Update id=495295537 is handled. Duration 109 ms by bot id=5951537041
+2025-03-20 23:42:17,556 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 23:42:17,557 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 23:42:17,635 - handlers.common - INFO - User 7838299933 opened the menu using reply button
+2025-03-20 23:42:17,636 - aiogram.event - INFO - Update id=495295538 is handled. Duration 78 ms by bot id=5951537041
+2025-03-20 23:42:25,959 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 23:42:25,960 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 23:42:25,963 - aiogram.event - INFO - Update id=495295539 is not handled. Duration 16 ms by bot id=5951537041
+2025-03-20 23:42:30,347 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 23:42:30,347 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 23:42:30,442 - aiogram.event - INFO - Update id=495295540 is handled. Duration 93 ms by bot id=5951537041
+2025-03-20 23:42:32,377 - middlewares.database - INFO - DatabaseMiddleware вызван
+2025-03-20 23:42:32,377 - middlewares.database - INFO - Сессия создана и добавлена в data
+2025-03-20 23:42:32,535 - handlers.moderator - INFO - Moderator 1259547081 viewed their stats
+2025-03-20 23:42:32,535 - handlers.moderator - INFO - Moderator 1259547081 used Reply button 'My Statistics'
+2025-03-20 23:42:32,536 - aiogram.event - INFO - Update id=495295541 is handled. Duration 157 ms by bot id=5951537041

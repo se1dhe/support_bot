@@ -928,7 +928,7 @@ def register_handlers(dp: Dispatcher):
     dp.include_router(router)
 
 
-@router.message(F.text == "📝 Активный тикет")
+@router.message(F.text == "📝 Мой активный тикет")
 async def active_ticket_button_wrapper(message: Message, state: FSMContext, **kwargs):
     """
     Обертка для обработчика кнопки "Активный тикет" на Reply Keyboard
