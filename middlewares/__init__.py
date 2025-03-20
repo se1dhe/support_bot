@@ -8,11 +8,17 @@ from middlewares.user_activity import UserActivityMiddleware
 from middlewares.throttling import ThrottlingMiddleware
 
 
+# middlewares/__init__.py
 async def setup_middlewares(dp: Dispatcher, bot: Bot, config: Optional[Config] = None):
-    # Убедитесь, что DatabaseMiddleware регистрируется первым
+    # Сначала регистрируем middleware для работы с базой данных
     dp.update.middleware.register(DatabaseMiddleware())
 
-    # Потом остальные middleware
-    dp.update.middleware.register(I18nMiddleware())
-    dp.update.middleware.register(UserActivityMiddleware())
-    dp.update.middleware.register(ThrottlingMiddleware(rate_limit=0.5))
+    # Затем регистрируем остальные middleware
+    dp.message.middleware.register(I18nMiddleware())
+    dp.callback_query.middleware.register(I18nMiddleware())
+
+    dp.message.middleware.register(UserActivityMiddleware())
+    dp.callback_query.middleware.register(UserActivityMiddleware())
+
+    dp.message.middleware.register(ThrottlingMiddleware(rate_limit=0.5))
+    dp.callback_query.middleware.register(ThrottlingMiddleware(rate_limit=0.5))

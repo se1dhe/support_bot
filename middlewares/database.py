@@ -17,6 +17,8 @@ class DatabaseMiddleware(BaseMiddleware):
     Создает сессию для каждого запроса и закрывает ее после обработки.
     """
 
+    # middlewares/database.py
+    # middlewares/database.py
     async def __call__(
             self,
             handler: Callable[[TelegramObject, Dict[str, Any]], Awaitable[Any]],
@@ -45,5 +47,6 @@ class DatabaseMiddleware(BaseMiddleware):
                 return await handler(event, data)
         except Exception as e:
             logger.error(f"Ошибка в DatabaseMiddleware: {e}", exc_info=True)
-            # В случае ошибки всё равно вызываем обработчик
+            # В случае ошибки всё равно вызываем обработчик, но без сессии
+            # Может потребоваться создание временной сессии
             return await handler(event, data)
