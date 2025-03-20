@@ -2,16 +2,16 @@ from typing import Dict, Any, Callable, Awaitable, Optional, Union
 from aiogram import BaseMiddleware
 from aiogram.types import Message, CallbackQuery, TelegramObject
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select
+from sqlalchemy import select, update
+from datetime import datetime
 
 from models import User
-from utils.i18n import get_i18n
 
 
-class I18nMiddleware(BaseMiddleware):
+class UserActivityMiddleware(BaseMiddleware):
     """
-    Middleware для работы с локализацией.
-    Устанавливает текущий язык пользователя на основе данных из БД.
+    Middleware для отслеживания активности пользователей.
+    Обновляет время последней активности пользователя при каждом взаимодействии с ботом.
     """
 
     async def __call__(
@@ -35,19 +35,18 @@ class I18nMiddleware(BaseMiddleware):
             # Если сессии нет, передаем управление дальше
             return await handler(event, data)
 
-        # Получаем пользователя из БД
-        query = select(User).where(User.telegram_id == user_id)
-        result = await session.execute(query)
-        user = result.scalar_one_or_none()
-
-        # Если пользователь найден, устанавливаем его язык
-        if user:
-            # Сохраняем язык пользователя в data
-            data["user_language"] = user.language
-
-            # Устанавливаем текущий язык в i18n менеджере
-            i18n = get_i18n()
-            i18n.current_language = user.language
+        # Обновляем время последней активности пользователя
+        try:
+            current_time = datetime.now()
+            await session.execute(
+                update(User)
+                .where(User.telegram_id == user_id)
+                .values(last_activity=current_time)
+            )
+            await session.commit()
+        except Exception as e:
+            # В случае ошибки просто логируем и продолжаем
+            print(f"Ошибка при обновлении времени активности пользователя: {e}")
 
         # Передаем управление дальше
         return await handler(event, data)

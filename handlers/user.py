@@ -1,28 +1,20 @@
 import logging
-from typing import Union, Dict, List, Any
+from typing import Union, Dict, List, Any, Optional
+from datetime import datetime
 
-from aiogram import Router, F, Bot
-from aiogram.filters import Command
-from aiogram.types import Message, CallbackQuery, InlineKeyboardButton
+from aiogram import Router, F, Bot, Dispatcher
+from aiogram.filters import Command, CommandStart
+from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
-from aiogram.utils.keyboard import InlineKeyboardBuilder
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
-from sqlalchemy.future import select
+from sqlalchemy import select, func, update
 from sqlalchemy.orm import selectinload
 
 from models import User, Ticket, Message as TicketMessage, TicketStatus, MessageType, UserRole
-from utils import (
-    build_user_main_menu,
-    build_ticket_actions_keyboard,
-    build_tickets_list_keyboard,
-    build_back_keyboard,
-    build_rating_keyboard,
-    UserStates,
-    Paginator,
-    TICKET_STATUS_EMOJI,
-    RATING_EMOJI, build_language_keyboard
-)
+from utils.i18n import _
+from utils.keyboards import KeyboardFactory
+from utils.states import UserStates
+from utils.paginator import Paginator
 
 # Инициализация логгера
 logger = logging.getLogger(__name__)
@@ -32,21 +24,55 @@ router = Router()
 
 
 @router.callback_query(F.data == "user:create_ticket")
-async def create_ticket(callback_query: CallbackQuery, state: FSMContext):
+async def create_ticket_cmd(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
     """
-    Обработчик создания нового тикета
+    Обработчик команды создания нового тикета
     """
+    user_id = callback_query.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if not user:
+        await callback_query.message.edit_text(
+            "Произошла ошибка. Пожалуйста, перезапустите бота: /start"
+        )
+        return
+
+    # Проверяем, есть ли у пользователя активные тикеты
+    active_ticket_query = select(Ticket).where(
+        (Ticket.user_id == user.id) &
+        (Ticket.status.in_([TicketStatus.OPEN, TicketStatus.IN_PROGRESS, TicketStatus.RESOLVED]))
+    )
+    active_ticket_result = await session.execute(active_ticket_query)
+    active_ticket = active_ticket_result.scalar_one_or_none()
+
+    if active_ticket:
+        # У пользователя уже есть активный тикет
+        await callback_query.message.edit_text(
+            f"У вас уже есть активный тикет #{active_ticket.id}. "
+            f"Пожалуйста, дождитесь его закрытия, прежде чем создавать новый.",
+            reply_markup=KeyboardFactory.back_button("user:back_to_menu", user.language)
+        )
+        await callback_query.answer()
+        return
+
+    # Отправляем инструкции по созданию тикета
     await callback_query.message.edit_text(
         "✏️ <b>Создание нового тикета</b>\n\n"
         "Пожалуйста, опишите вашу проблему в одном сообщении.\n"
         "Вы можете приложить изображение, видео или документ к вашему сообщению.\n\n"
         "<i>Отправьте сообщение с описанием проблемы:</i>",
-        reply_markup=build_back_keyboard("user:back_to_menu")
+        reply_markup=KeyboardFactory.back_button("user:back_to_menu", user.language)
     )
 
     # Устанавливаем состояние создания тикета
     await state.set_state(UserStates.CREATING_TICKET)
     await callback_query.answer()
+
+    logger.info(f"User {user_id} started ticket creation")
 
 
 @router.message(UserStates.CREATING_TICKET, F.text | F.photo | F.document | F.video)
@@ -68,18 +94,19 @@ async def process_ticket_creation(message: Message, bot: Bot, session: AsyncSess
     # Проверяем, есть ли у пользователя активные тикеты
     active_ticket_query = select(Ticket).where(
         (Ticket.user_id == user.id) &
-        (Ticket.status.in_([TicketStatus.OPEN, TicketStatus.IN_PROGRESS, TicketStatus.RESOLVED]))
-    )
+        (Ticket.status.in_([TicketStatus.OPEN, TicketStatus.IN_PROGRESS, TicketStatus.RESOLVED])))
     active_ticket_result = await session.execute(active_ticket_query)
     active_ticket = active_ticket_result.scalar_one_or_none()
 
     if active_ticket:
         # У пользователя уже есть активный тикет
         await message.answer(
-            f"У вас уже есть активный тикет #{active_ticket.id} "
-            f"({TICKET_STATUS_EMOJI[active_ticket.status]} {active_ticket.status.value}). "
-            f"Пожалуйста, дождитесь его закрытия, прежде чем создавать новый.",
-            reply_markup=build_user_main_menu()
+            _(
+                "error_already_has_active_ticket",
+                user.language,
+                ticket_id=active_ticket.id
+            ),
+            reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language)
         )
         await state.set_state(UserStates.MAIN_MENU)
         return
@@ -129,11 +156,20 @@ async def process_ticket_creation(message: Message, bot: Bot, session: AsyncSess
 
     # Уведомляем пользователя о создании тикета
     await message.answer(
-        f"✅ Тикет #{new_ticket.id} успешно создан!\n\n"
-        f"Ваш запрос был отправлен команде поддержки. "
-        f"Пожалуйста, ожидайте ответа от модератора. "
-        f"Вы получите уведомление, когда ваш тикет будет принят в работу.",
-        reply_markup=build_user_main_menu()
+        _(
+            "ticket_created",
+            user.language,
+            ticket_id=new_ticket.id
+        ) + "\n\n" +
+        _(
+            "ticket_sent_to_support",
+            user.language
+        ) + " " +
+        _(
+            "wait_for_moderator",
+            user.language
+        ),
+        reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language)
     )
 
     # Возвращаем пользователя в главное меню
@@ -146,11 +182,7 @@ async def process_ticket_creation(message: Message, bot: Bot, session: AsyncSess
 
     for moderator in moderators:
         # Создаем клавиатуру с кнопкой "Принять тикет"
-        take_keyboard = InlineKeyboardBuilder()
-        take_keyboard.add(InlineKeyboardButton(
-            text="✅ Принять тикет",
-            callback_data=f"mod:take_ticket:{new_ticket.id}"
-        ))
+        keyboard = KeyboardFactory.ticket_actions(TicketStatus.OPEN, new_ticket.id, moderator.language)
 
         # Отправляем уведомление
         try:
@@ -160,7 +192,7 @@ async def process_ticket_creation(message: Message, bot: Bot, session: AsyncSess
                      f"От: {user.full_name}\n"
                      f"Тема: {new_ticket.subject or 'Не указана'}\n\n"
                      f"Сообщение:\n{text}",
-                reply_markup=take_keyboard.as_markup()
+                reply_markup=keyboard
             )
         except Exception as e:
             logger.error(f"Failed to send notification to moderator {moderator.telegram_id}: {e}")
@@ -196,9 +228,9 @@ async def ticket_history(callback_query: CallbackQuery, session: AsyncSession, s
 
     if not tickets:
         await callback_query.message.edit_text(
-            "📋 <b>История тикетов</b>\n\n"
-            "У вас пока нет закрытых тикетов.",
-            reply_markup=build_back_keyboard("user:back_to_menu")
+            _("ticket_history_title", user.language) + "\n\n" +
+            _("no_closed_tickets", user.language),
+            reply_markup=KeyboardFactory.back_button("user:back_to_menu", user.language)
         )
         await callback_query.answer()
         return
@@ -207,7 +239,8 @@ async def ticket_history(callback_query: CallbackQuery, session: AsyncSession, s
     tickets_data = [
         {
             "id": ticket.id,
-            "subject": ticket.subject or "Без темы",
+            "text": f"Тикет #{ticket.id} - {ticket.subject or 'Без темы'}",
+            "subject": ticket.subject or _("no_subject", user.language),
             "created_at": ticket.created_at.strftime("%d.%m.%Y %H:%M"),
             "closed_at": ticket.closed_at.strftime("%d.%m.%Y %H:%M") if ticket.closed_at else "Не закрыт",
             "rating": ticket.rating
@@ -216,31 +249,42 @@ async def ticket_history(callback_query: CallbackQuery, session: AsyncSession, s
     ]
     await state.update_data(tickets=tickets_data, page=0)
 
-    # Формируем сообщение со списком тикетов
+    # Создаем пагинатор для тикетов
     paginator = Paginator(tickets_data, page_size=5)
     page_items = paginator.get_page(0)
 
-    message_text = "📋 <b>История тикетов</b>\n\n"
+    # Формируем сообщение со списком тикетов
+    message_text = _("ticket_history_title", user.language) + "\n\n"
+
     for item in page_items:
-        stars = RATING_EMOJI.get(int(item["rating"])) if item["rating"] else "Нет оценки"
+        rating_stars = "⭐" * int(item["rating"]) if item["rating"] else "Нет оценки"
         message_text += (
             f"🔹 <b>Тикет #{item['id']}</b>\n"
             f"📝 {item['subject']}\n"
             f"📅 Создан: {item['created_at']}\n"
             f"🔒 Закрыт: {item['closed_at']}\n"
-            f"⭐ Оценка: {stars}\n\n"
+            f"⭐ Оценка: {rating_stars}\n\n"
         )
 
-    message_text += f"Страница {1} из {paginator.total_pages}"
+    message_text += _("page_info", user.language, current_page=1, total_pages=paginator.total_pages)
 
-    # Создаем клавиатуру с навигацией
+    # Отправляем сообщение с клавиатурой
     await callback_query.message.edit_text(
         message_text,
-        reply_markup=build_tickets_list_keyboard(tickets_data, 0)
+        reply_markup=KeyboardFactory.paginated_list(
+            tickets_data,
+            0,
+            page_size=5,
+            action_prefix="ticket",
+            back_callback="user:back_to_menu",
+            language=user.language
+        )
     )
 
     await state.set_state(UserStates.VIEWING_TICKET_HISTORY)
     await callback_query.answer()
+
+    logger.info(f"User {user_id} viewed ticket history")
 
 
 @router.callback_query(F.data == "user:active_ticket")
@@ -271,12 +315,43 @@ async def active_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncS
 
     if not ticket:
         await callback_query.message.edit_text(
-            "📝 <b>Активный тикет</b>\n\n"
-            "У вас нет активных тикетов. Вы можете создать новый тикет в главном меню.",
-            reply_markup=build_back_keyboard("user:back_to_menu")
+            _("active_ticket_title", user.language) + "\n\n" +
+            _("no_active_tickets", user.language),
+            reply_markup=KeyboardFactory.back_button("user:back_to_menu", user.language)
         )
         await callback_query.answer()
         return
+
+    # Формируем сообщение с информацией о тикете
+    status_texts = {
+        TicketStatus.OPEN: "🆕 " + _("status_open", user.language) + " (ожидает модератора)",
+        TicketStatus.IN_PROGRESS: "🔄 " + _("status_in_progress", user.language),
+        TicketStatus.RESOLVED: "✅ " + _("status_resolved", user.language) + " (ожидает подтверждения)",
+        TicketStatus.CLOSED: "🔒 " + _("status_closed", user.language)
+    }
+
+    message_text = (
+        f"📝 <b>Тикет #{ticket.id}</b>\n\n"
+        f"Статус: {status_texts.get(ticket.status, 'Неизвестный статус')}\n"
+        f"Создан: {ticket.created_at.strftime('%d.%m.%Y %H:%M')}\n"
+    )
+
+    if ticket.moderator:
+        message_text += f"Модератор: {ticket.moderator.full_name}\n"
+
+    # Определяем клавиатуру в зависимости от статуса тикета
+    if ticket.status == TicketStatus.RESOLVED:
+        keyboard = KeyboardFactory.rating_keyboard(user.language)
+        await state.set_state(UserStates.RATING_MODERATOR)
+        await state.update_data(active_ticket_id=ticket.id)
+    else:
+        keyboard = KeyboardFactory.back_button("user:back_to_menu", user.language)
+
+    # Отправляем сообщение с информацией о тикете
+    await callback_query.message.edit_text(
+        message_text,
+        reply_markup=keyboard
+    )
 
     # Получаем сообщения тикета
     messages_query = select(TicketMessage).where(
@@ -285,149 +360,69 @@ async def active_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncS
     messages_result = await session.execute(messages_query)
     messages = messages_result.scalars().all()
 
-    # Формируем сообщение с информацией о тикете
-    status_text = {
-        TicketStatus.OPEN: "🆕 Открыт (ожидает модератора)",
-        TicketStatus.IN_PROGRESS: "🔄 В работе",
-        TicketStatus.RESOLVED: "✅ Решен (ожидает подтверждения)",
-        TicketStatus.CLOSED: "🔒 Закрыт"
-    }.get(ticket.status, "Неизвестный статус")
+    # Отправляем историю сообщений
+    if messages:
+        await callback_query.message.answer(_("message_history", user.language))
 
-    message_text = (
-        f"📝 <b>Тикет #{ticket.id}</b>\n\n"
-        f"Статус: {status_text}\n"
-        f"Создан: {ticket.created_at.strftime('%d.%m.%Y %H:%M')}\n"
-    )
+        # Ограничиваем количество сообщений
+        max_messages = 20
+        start_idx = max(0, len(messages) - max_messages)
 
-    if ticket.moderator:
-        message_text += f"Модератор: {ticket.moderator.full_name}\n"
+        # Если в тикете много сообщений, добавляем информацию об ограничении
+        if len(messages) > max_messages:
+            await callback_query.message.answer(
+                f"<i>Показаны последние {max_messages} из {len(messages)} сообщений.</i>"
+            )
 
-    # Добавляем соответствующую клавиатуру в зависимости от статуса
-    if ticket.status == TicketStatus.RESOLVED:
-        await callback_query.message.edit_text(
-            message_text,
-            reply_markup=build_rating_keyboard()
+        # Отправляем сообщения
+        for msg in messages[start_idx:]:
+            sender = "Вы" if msg.sender_id == user.id else "Модератор"
+            time = msg.sent_at.strftime("%d.%m.%Y %H:%M")
+
+            if msg.message_type == MessageType.SYSTEM:
+                await callback_query.message.answer(f"🔔 <i>{msg.text}</i>")
+            elif msg.message_type == MessageType.TEXT:
+                await callback_query.message.answer(f"<b>{sender}</b> [{time}]:\n{msg.text}")
+            elif msg.message_type == MessageType.PHOTO:
+                caption = f"<b>{sender}</b> [{time}]:" + (
+                    f"\n{msg.text.replace('[ФОТО] ', '')}" if msg.text else "")
+                await bot.send_photo(
+                    chat_id=callback_query.from_user.id,
+                    photo=msg.file_id,
+                    caption=caption
+                )
+            elif msg.message_type == MessageType.VIDEO:
+                caption = f"<b>{sender}</b> [{time}]:" + (
+                    f"\n{msg.text.replace('[ВИДЕО] ', '')}" if msg.text else "")
+                await bot.send_video(
+                    chat_id=callback_query.from_user.id,
+                    video=msg.file_id,
+                    caption=caption
+                )
+            elif msg.message_type == MessageType.DOCUMENT:
+                caption = f"<b>{sender}</b> [{time}]:" + (
+                    f"\n{msg.text.replace('[ДОКУМЕНТ: ', '').split(']')[1] if ']' in msg.text else ''}" if msg.text else "")
+                await bot.send_document(
+                    chat_id=callback_query.from_user.id,
+                    document=msg.file_id,
+                    caption=caption
+                )
+
+    # Добавляем дополнительные инструкции в зависимости от статуса тикета
+    if ticket.status == TicketStatus.IN_PROGRESS:
+        await callback_query.message.answer(
+            "<i>Чтобы ответить модератору, просто отправьте сообщение в этот чат.</i>"
         )
-        await state.set_state(UserStates.RATING_MODERATOR)
+        await state.set_state(UserStates.SENDING_MESSAGE)
         await state.update_data(active_ticket_id=ticket.id)
-
-        # Отправляем историю сообщений
-        if messages:
-            await callback_query.message.answer("📜 <b>История сообщений:</b>")
-
-            # Ограничиваем количество сообщений
-            max_messages = 20
-            start_idx = max(0, len(messages) - max_messages)
-
-            # Если в тикете много сообщений, добавляем информацию об ограничении
-            if len(messages) > max_messages:
-                await callback_query.message.answer(
-                    f"<i>Показаны последние {max_messages} из {len(messages)} сообщений.</i>"
-                )
-
-            # Отправляем сообщения
-            for msg in messages[start_idx:]:
-                sender = "Вы" if msg.sender_id == user.id else "Модератор"
-                time = msg.sent_at.strftime("%d.%m.%Y %H:%M")
-
-                if msg.message_type == MessageType.SYSTEM:
-                    await callback_query.message.answer(f"🔔 <i>{msg.text}</i>")
-                elif msg.message_type == MessageType.TEXT:
-                    await callback_query.message.answer(f"<b>{sender}</b> [{time}]:\n{msg.text}")
-                elif msg.message_type == MessageType.PHOTO:
-                    caption = f"<b>{sender}</b> [{time}]:" + (
-                        f"\n{msg.text.replace('[ФОТО] ', '')}" if msg.text else "")
-                    await bot.send_photo(
-                        chat_id=callback_query.from_user.id,
-                        photo=msg.file_id,
-                        caption=caption
-                    )
-                elif msg.message_type == MessageType.VIDEO:
-                    caption = f"<b>{sender}</b> [{time}]:" + (
-                        f"\n{msg.text.replace('[ВИДЕО] ', '')}" if msg.text else "")
-                    await bot.send_video(
-                        chat_id=callback_query.from_user.id,
-                        video=msg.file_id,
-                        caption=caption
-                    )
-                elif msg.message_type == MessageType.DOCUMENT:
-                    caption = f"<b>{sender}</b> [{time}]:" + (
-                        f"\n{msg.text.replace('[ДОКУМЕНТ: ', '').split(']')[1] if ']' in msg.text else ""}" if msg.text else "")
-                    await bot.send_document(
-                        chat_id=callback_query.from_user.id,
-                        document=msg.file_id,
-                        caption=caption
-                    )
-
-            await callback_query.message.answer(
-                "<i>Модератор отметил тикет как решенный. "
-                "Пожалуйста, оцените работу модератора.</i>"
-            )
-        return
-    else:
-        # Для других статусов
-        await callback_query.message.edit_text(
-            message_text,
-            reply_markup=build_back_keyboard("user:back_to_menu")
+    elif ticket.status == TicketStatus.OPEN:
+        await callback_query.message.answer(
+            _("wait_for_moderator_assignment", user.language)
         )
-
-        # Отправляем историю сообщений и инструкции в зависимости от статуса
-        if messages:
-            await callback_query.message.answer("📜 <b>История сообщений:</b>")
-
-            max_messages = 20
-            start_idx = max(0, len(messages) - max_messages)
-
-            if len(messages) > max_messages:
-                await callback_query.message.answer(
-                    f"<i>Показаны последние {max_messages} из {len(messages)} сообщений.</i>"
-                )
-
-            for msg in messages[start_idx:]:
-                sender = "Вы" if msg.sender_id == user.id else "Модератор"
-                time = msg.sent_at.strftime("%d.%m.%Y %H:%M")
-
-                if msg.message_type == MessageType.SYSTEM:
-                    await callback_query.message.answer(f"🔔 <i>{msg.text}</i>")
-                elif msg.message_type == MessageType.TEXT:
-                    await callback_query.message.answer(f"<b>{sender}</b> [{time}]:\n{msg.text}")
-                elif msg.message_type == MessageType.PHOTO:
-                    caption = f"<b>{sender}</b> [{time}]:" + (
-                        f"\n{msg.text.replace('[ФОТО] ', '')}" if msg.text else "")
-                    await bot.send_photo(
-                        chat_id=callback_query.from_user.id,
-                        photo=msg.file_id,
-                        caption=caption
-                    )
-                elif msg.message_type == MessageType.VIDEO:
-                    caption = f"<b>{sender}</b> [{time}]:" + (
-                        f"\n{msg.text.replace('[ВИДЕО] ', '')}" if msg.text else "")
-                    await bot.send_video(
-                        chat_id=callback_query.from_user.id,
-                        video=msg.file_id,
-                        caption=caption
-                    )
-                elif msg.message_type == MessageType.DOCUMENT:
-                    caption = f"<b>{sender}</b> [{time}]:" + (
-                        f"\n{msg.text.replace('[ДОКУМЕНТ: ', '').split(']')[1] if ']' in msg.text else ""}" if msg.text else "")
-                    await bot.send_document(
-                        chat_id=callback_query.from_user.id,
-                        document=msg.file_id,
-                        caption=caption
-                    )
-
-        if ticket.status == TicketStatus.IN_PROGRESS:
-            await callback_query.message.answer(
-                "<i>Чтобы ответить модератору, просто отправьте сообщение в этот чат.</i>"
-            )
-            await state.set_state(UserStates.SENDING_MESSAGE)
-            await state.update_data(active_ticket_id=ticket.id)
-        else:
-            await callback_query.message.answer(
-                "<i>Ожидайте, пока модератор примет ваш тикет в работу.</i>"
-            )
 
     await callback_query.answer()
+
+    logger.info(f"User {user_id} viewed active ticket #{ticket.id}")
 
 
 @router.message(UserStates.SENDING_MESSAGE, F.text | F.photo | F.document | F.video)
@@ -469,7 +464,7 @@ async def process_ticket_message(message: Message, bot: Bot, session: AsyncSessi
         await message.answer(
             "Невозможно отправить сообщение. Возможно, тикет был закрыт "
             "или еще не принят модератором.",
-            reply_markup=build_user_main_menu()
+            reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language)
         )
         await state.set_state(UserStates.MAIN_MENU)
         return
@@ -506,12 +501,12 @@ async def process_ticket_message(message: Message, bot: Bot, session: AsyncSessi
     session.add(ticket_message)
 
     # Обновляем время последнего обновления тикета
-    ticket.updated_at = func.now()
+    ticket.updated_at = datetime.now()
 
     await session.commit()
 
     # Отправляем подтверждение пользователю
-    await message.answer("✅ Ваше сообщение отправлено модератору.")
+    await message.answer(_("user_message_sent", user.language))
 
     # Отправляем сообщение модератору
     try:
@@ -598,7 +593,7 @@ async def process_rating(callback_query: CallbackQuery, bot: Bot, session: Async
     if not ticket or not ticket.moderator:
         await callback_query.message.edit_text(
             "Невозможно оценить тикет. Возможно, он уже был закрыт.",
-            reply_markup=build_user_main_menu()
+            reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language)
         )
         await state.set_state(UserStates.MAIN_MENU)
         return
@@ -606,14 +601,14 @@ async def process_rating(callback_query: CallbackQuery, bot: Bot, session: Async
     # Обновляем тикет: ставим оценку, меняем статус и добавляем время закрытия
     ticket.rating = rating
     ticket.status = TicketStatus.CLOSED
-    ticket.closed_at = func.now()
+    ticket.closed_at = datetime.now()
 
     # Добавляем системное сообщение об оценке
     system_message = TicketMessage(
         ticket_id=ticket.id,
         sender_id=user.id,
         message_type=MessageType.SYSTEM,
-        text=f"Пользователь оценил работу модератора на {RATING_EMOJI[rating]} ({rating}/5)"
+        text=f"Пользователь оценил работу модератора на {'⭐' * rating} ({rating}/5)"
     )
     session.add(system_message)
 
@@ -621,11 +616,10 @@ async def process_rating(callback_query: CallbackQuery, bot: Bot, session: Async
 
     # Отправляем подтверждение пользователю
     await callback_query.message.edit_text(
-        f"🌟 <b>Спасибо за вашу оценку!</b>\n\n"
-        f"Вы оценили работу модератора на {RATING_EMOJI[rating]} ({rating}/5).\n"
-        f"Тикет #{ticket.id} закрыт.\n\n"
-        f"Если у вас возникнут новые вопросы, вы можете создать новый тикет в главном меню.",
-        reply_markup=build_user_main_menu()
+        _("thank_you_for_rating", user.language) + "\n\n" +
+        _("ticket_closed", user.language, ticket_id=ticket.id) + "\n\n" +
+        _("create_new_ticket_info", user.language),
+        reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language)
     )
 
     # Уведомляем модератора об оценке
@@ -634,7 +628,7 @@ async def process_rating(callback_query: CallbackQuery, bot: Bot, session: Async
             chat_id=ticket.moderator.telegram_id,
             text=f"⭐ <b>Тикет #{ticket.id} закрыт</b>\n\n"
                  f"Пользователь {user.full_name} оценил вашу работу на "
-                 f"{RATING_EMOJI[rating]} ({rating}/5).\n\n"
+                 f"{'⭐' * rating} ({rating}/5).\n\n"
                  f"Спасибо за вашу работу!"
         )
     except Exception as e:
@@ -647,29 +641,112 @@ async def process_rating(callback_query: CallbackQuery, bot: Bot, session: Async
 
 
 @router.callback_query(F.data == "user:change_language")
-async def change_language(callback_query: CallbackQuery, state: FSMContext):
+async def change_language(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
     """
     Обработчик изменения языка
     """
+    user_id = callback_query.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if not user:
+        await callback_query.message.edit_text(
+            "Произошла ошибка. Пожалуйста, перезапустите бота: /start"
+        )
+        return
+
     await callback_query.message.edit_text(
-        "🌐 <b>Выбор языка</b>\n\n"
-        "Пожалуйста, выберите язык интерфейса:",
-        reply_markup=build_language_keyboard()
+        _("language_selection", user.language),
+        reply_markup=KeyboardFactory.language_selection(user.language)
     )
 
     await callback_query.answer()
 
+    logger.info(f"User {user_id} accessed language selection")
+
 
 @router.callback_query(F.data == "user:back_to_menu")
-async def back_to_menu(callback_query: CallbackQuery, state: FSMContext):
+async def back_to_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
     """
     Обработчик возврата в главное меню
     """
+    user_id = callback_query.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if not user:
+        await callback_query.message.edit_text(
+            "Произошла ошибка. Пожалуйста, перезапустите бота: /start"
+        )
+        return
+
     await callback_query.message.edit_text(
-        "👤 <b>Главное меню</b>\n\n"
-        "Выберите действие из меню:",
-        reply_markup=build_user_main_menu()
+        _("user_main_menu", user.language),
+        reply_markup=KeyboardFactory.main_menu(UserRole.USER, user.language)
     )
 
     await state.set_state(UserStates.MAIN_MENU)
     await callback_query.answer()
+
+    logger.info(f"User {user_id} returned to main menu")
+
+
+@router.callback_query(F.data.startswith("language:"))
+async def process_language_selection(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+    """
+    Обработчик выбора языка
+    """
+    user_id = callback_query.from_user.id
+    selected_language = callback_query.data.split(":")[1]
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    if not user:
+        await callback_query.message.edit_text(
+            "Произошла ошибка. Пожалуйста, перезапустите бота: /start"
+        )
+        return
+
+    # Обновляем язык пользователя
+    user.language = selected_language
+    await session.commit()
+
+    # Формируем приветственное сообщение в зависимости от выбранного языка
+    if selected_language == "ru":
+        welcome_text = "🇷🇺 Язык изменен на русский. Добро пожаловать в систему поддержки!"
+    elif selected_language == "en":
+        welcome_text = "🇬🇧 Language changed to English. Welcome to the support system!"
+    elif selected_language == "uk":
+        welcome_text = "🇺🇦 Мову змінено на українську. Ласкаво просимо до системи підтримки!"
+    else:
+        welcome_text = "Язык успешно выбран. Добро пожаловать в систему поддержки!"
+
+    # Отправляем сообщение с новым языком
+    await callback_query.message.edit_text(
+        welcome_text + "\n\n" + _("user_main_menu", selected_language),
+        reply_markup=KeyboardFactory.main_menu(UserRole.USER, selected_language)
+    )
+
+    # Устанавливаем состояние главного меню
+    await state.set_state(UserStates.MAIN_MENU)
+    await callback_query.answer()
+
+    logger.info(f"User {user_id} changed language to {selected_language}")
+
+def register_handlers(dp: Dispatcher):
+    """
+    Регистрирует все обработчики данного модуля.
+
+    Args:
+        dp: Диспетчер
+    """
+    dp.include_router(router)

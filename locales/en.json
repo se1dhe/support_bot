@@ -1,0 +1,75 @@
+{
+    "menu_create_ticket": "✏️ Create Ticket",
+    "menu_ticket_history": "📋 Ticket History",
+    "menu_active_ticket": "📝 Active Ticket",
+    "menu_change_language": "🌐 Change Language",
+
+    "menu_unassigned_tickets": "📨 Unassigned Tickets",
+    "menu_reassign_ticket": "🔄 Reassign Current Ticket",
+    "menu_my_stats": "📊 My Statistics",
+    "menu_user_menu": "👤 User Menu",
+
+    "menu_general_stats": "📈 General Statistics",
+    "menu_manage_moderators": "👨‍💼 Manage Moderators",
+    "menu_moderator_menu": "🔑 Moderator Menu",
+
+    "action_take_ticket": "✅ Take Ticket",
+    "action_mark_resolved": "✅ Mark as Resolved",
+    "action_reassign": "🔄 Reassign",
+    "action_rate_close": "⭐ Rate and Close",
+    "action_back": "🔙 Back",
+
+    "status_open": "Open",
+    "status_in_progress": "In Progress",
+    "status_resolved": "Resolved",
+    "status_closed": "Closed",
+
+    "no_subject": "No Subject",
+    "ticket_created": "Ticket #{ticket_id} successfully created!",
+    "ticket_sent_to_support": "Your request has been sent to the support team.",
+    "wait_for_moderator": "Please wait for a response from a moderator.",
+    "moderator_took_ticket": "Moderator {moderator_name} has taken your ticket",
+    "moderator_resolved_ticket": "Moderator {moderator_name} marked the ticket as resolved",
+    "please_rate_service": "Please rate the quality of service",
+    "thank_you_for_rating": "Thank you for your rating!",
+    "ticket_closed": "Ticket #{ticket_id} closed.",
+    "create_new_ticket_info": "If you have any new questions, you can create a new ticket in the main menu.",
+
+    "language_selection": "🌐 Language Selection\n\nPlease select your interface language:",
+    "language_changed": "🇬🇧 Language changed to English. Welcome to the support system!",
+
+    "welcome_user": "👤 Welcome, {name}!\nChoose an action from the menu:",
+    "welcome_moderator": "🔑 Welcome, moderator {name}!\nChoose an action from the menu:",
+    "welcome_admin": "👑 Welcome, administrator {name}!\nChoose an action from the menu:",
+
+    "main_menu": "Main menu:",
+    "user_main_menu": "👤 Main Menu\n\nChoose an action from the menu:",
+    "moderator_main_menu": "🔑 Moderator Menu\n\nChoose an action from the menu:",
+    "admin_main_menu": "👑 Admin Menu\n\nChoose an action from the menu:",
+
+    "no_active_tickets": "You don't have any active tickets. You can create a new ticket in the main menu.",
+    "no_closed_tickets": "You don't have any closed tickets yet.",
+    "ticket_history_title": "📋 Ticket History",
+    "active_ticket_title": "📝 Active Ticket",
+    "message_history": "📜 Message History:",
+    "wait_for_moderator_assignment": "Please wait for a moderator to take your ticket.",
+    "moderator_message_sent": "✅ Your message has been sent to the user.",
+    "user_message_sent": "✅ Your message has been sent to the moderator.",
+
+    "confirm_prompt": "⚠️ Confirmation\n\nAre you sure you want to {action}?",
+    "confirm_yes": "✅ Yes",
+    "confirm_no": "❌ No",
+
+    "page_info": "Page {current_page} of {total_pages}",
+
+    "error_access_denied": "You don't have access to this feature.",
+    "error_ticket_not_found": "Ticket #{ticket_id} not found.",
+    "error_already_has_active_ticket": "You already have an active ticket #{ticket_id}",
+
+    "rating_prompt": "Rate the quality of service:",
+    "rating_1": "⭐",
+    "rating_2": "⭐⭐",
+    "rating_3": "⭐⭐⭐",
+    "rating_4": "⭐⭐⭐⭐",
+    "rating_5": "⭐⭐⭐⭐⭐"
+}

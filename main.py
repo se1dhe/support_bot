@@ -1,17 +1,17 @@
-# main.py
-# -------
-
 import asyncio
 import logging
+import os
+from pathlib import Path
 
 from aiogram import Bot, Dispatcher
+from aiogram.client.default import DefaultBotProperties
 from aiogram.fsm.storage.memory import MemoryStorage
 
-from bot import setup_bot, setup_dispatcher
 from config import load_config
-from database import create_tables, config
+from database import init_db, create_tables
 from handlers import register_all_handlers
 from middlewares import setup_middlewares
+from utils.i18n import setup_i18n
 
 # Настройка логирования
 logging.basicConfig(
@@ -23,39 +23,61 @@ logging.basicConfig(
     ]
 )
 
-# В начале функции main после загрузки config добавьте:
-from i18n_setup import setup_i18n
-setup_i18n(config.localization.locales_dir,
-           config.localization.default_language,
-           config.localization.domain)
-
 logger = logging.getLogger(__name__)
 
 
 async def main():
+    """
+    Основная функция запуска бота.
+    """
+    logger.info("Запуск бота...")
+
     # Загрузка конфигурации
     config = load_config()
 
-    # Настройка бота и диспетчера
-    bot = await setup_bot(config)
-    dp = setup_dispatcher()
+    # Инициализация базы данных
+    await init_db(config)
 
-    # Регистрация всех хендлеров
-    register_all_handlers(dp)
-
-    # Настройка мидлварей
-    await setup_middlewares(dp, bot, config)
-
-    # Создание таблиц в БД
+    # Создание таблиц (если они не существуют)
     await create_tables()
 
-    # Запуск polling
-    logger.info("Starting bot")
-    await dp.start_polling(bot, skip_updates=True)
+    # Инициализация i18n
+    setup_i18n(
+        locales_dir=str(Path(__file__).parent / 'locales'),
+        default_language=config.localization.default_language
+    )
+
+    # Создание экземпляра бота с использованием DefaultBotProperties
+    bot = Bot(
+        token=config.tg_bot.token,
+        default=DefaultBotProperties(parse_mode="HTML")
+    )
+
+    # Создание диспетчера
+    storage = MemoryStorage()
+    dp = Dispatcher(storage=storage)
+
+    # Настройка middleware
+    await setup_middlewares(dp, bot, config)
+
+    # Регистрация всех обработчиков
+    register_all_handlers(dp)
+
+    try:
+        logger.info("Бот запущен")
+
+        # Удаляем вебхук на всякий случай
+        await bot.delete_webhook(drop_pending_updates=True)
+
+        # Запуск поллинга
+        await dp.start_polling(bot, allowed_updates=dp.resolve_used_update_types())
+    finally:
+        logger.info("Бот остановлен")
+        await bot.session.close()
 
 
 if __name__ == "__main__":
     try:
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
-        logger.info("Bot stopped")
+        logger.info("Бот остановлен")

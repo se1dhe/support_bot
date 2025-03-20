@@ -1,29 +1,19 @@
 import logging
-from typing import Union, Dict, List, Any
+from typing import Union, Dict, List, Any, Optional
 from datetime import datetime, timedelta
 
-from aiogram import Router, F, Bot
+from aiogram import Router, F, Bot, Dispatcher
 from aiogram.filters import Command
-from aiogram.types import Message, CallbackQuery, InlineKeyboardButton
+from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
-from aiogram.utils.keyboard import InlineKeyboardBuilder
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func, desc
-from sqlalchemy.orm import selectinload
-from sqlalchemy.future import select
+from sqlalchemy import select, func, desc, update
+from sqlalchemy.orm import selectinload, session
 
 from models import User, Ticket, Message as TicketMessage, TicketStatus, MessageType, UserRole
-from utils import (
-    build_admin_main_menu,
-    build_moderator_main_menu,
-    build_user_main_menu,
-    build_back_keyboard,
-    build_confirm_keyboard,
-    AdminStates,
-    ModeratorStates,
-    UserStates,
-    TICKET_STATUS_EMOJI
-)
+from utils.i18n import _
+from utils.keyboards import KeyboardFactory
+from utils.states import AdminStates, ModeratorStates, UserStates
 
 # Инициализация логгера
 logger = logging.getLogger(__name__)
@@ -46,8 +36,9 @@ async def admin_stats(callback_query: CallbackQuery, session: AsyncSession, stat
 
     if not admin or admin.role != UserRole.ADMIN:
         await callback_query.message.edit_text(
-            "У вас нет доступа к этой функции."
+            _("error_access_denied", admin.language if admin else None)
         )
+        await callback_query.answer()
         return
 
     # Получаем статистику по пользователям
@@ -125,7 +116,7 @@ async def admin_stats(callback_query: CallbackQuery, session: AsyncSession, stat
 
     await callback_query.message.edit_text(
         message_text,
-        reply_markup=build_back_keyboard("admin:back_to_menu")
+        reply_markup=KeyboardFactory.back_button("admin:back_to_menu", admin.language)
     )
 
     await state.set_state(AdminStates.VIEWING_STATISTICS)
@@ -148,8 +139,9 @@ async def manage_moderators(callback_query: CallbackQuery, session: AsyncSession
 
     if not admin or admin.role != UserRole.ADMIN:
         await callback_query.message.edit_text(
-            "У вас нет доступа к этой функции."
+            _("error_access_denied", admin.language if admin else None)
         )
+        await callback_query.answer()
         return
 
     # Получаем список модераторов
@@ -168,24 +160,31 @@ async def manage_moderators(callback_query: CallbackQuery, session: AsyncSession
             message_text += f"{i}. {mod.full_name} (ID: {mod.telegram_id})\n"
 
     # Создаем клавиатуру с действиями
-    kb = InlineKeyboardBuilder()
-    kb.add(InlineKeyboardButton(text="➕ Добавить модератора", callback_data="admin:add_moderator"))
+    kb_items = [
+        {"id": "add_moderator", "text": "➕ Добавить модератора"}
+    ]
 
     if moderators:
-        kb.add(InlineKeyboardButton(text="❌ Удалить модератора", callback_data="admin:remove_moderator"))
+        kb_items.append({"id": "remove_moderator", "text": "❌ Удалить модератора"})
 
-    kb.add(InlineKeyboardButton(text="🔙 Назад", callback_data="admin:back_to_menu"))
+    kb_items.append({"id": "back_to_menu", "text": "🔙 Назад"})
 
-    # Размещаем кнопки в один столбец
-    kb.adjust(1)
-
+    # Отправляем сообщение с клавиатурой
     await callback_query.message.edit_text(
         message_text,
-        reply_markup=kb.as_markup()
+        reply_markup=KeyboardFactory.paginated_list(
+            kb_items,
+            0,
+            action_prefix="admin",
+            back_callback="admin:back_to_menu",
+            language=admin.language
+        )
     )
 
     await state.set_state(AdminStates.MANAGING_MODERATORS)
     await callback_query.answer()
+
+    logger.info(f"Admin {user_id} accessed moderator management")
 
 
 @router.callback_query(F.data == "admin:add_moderator")
@@ -193,16 +192,32 @@ async def add_moderator_start(callback_query: CallbackQuery, state: FSMContext):
     """
     Обработчик начала процесса добавления модератора
     """
+    user_id = callback_query.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    admin = result.scalar_one_or_none()
+
+    if not admin or admin.role != UserRole.ADMIN:
+        await callback_query.message.edit_text(
+            _("error_access_denied", admin.language if admin else None)
+        )
+        await callback_query.answer()
+        return
+
     await callback_query.message.edit_text(
         "➕ <b>Добавление нового модератора</b>\n\n"
         "Пожалуйста, отправьте Telegram ID пользователя, "
         "которого вы хотите назначить модератором.\n\n"
         "<i>Пользователь должен быть зарегистрирован в боте.</i>",
-        reply_markup=build_back_keyboard("admin:back_to_manage_mods")
+        reply_markup=KeyboardFactory.back_button("admin:back_to_manage_mods", admin.language)
     )
 
     await state.set_state(AdminStates.ADDING_MODERATOR)
     await callback_query.answer()
+
+    logger.info(f"Admin {user_id} started adding a moderator")
 
 
 @router.message(AdminStates.ADDING_MODERATOR, F.text)
@@ -218,7 +233,7 @@ async def process_add_moderator(message: Message, session: AsyncSession, state: 
     admin = admin_result.scalar_one_or_none()
 
     if not admin or admin.role != UserRole.ADMIN:
-        await message.answer("У вас нет доступа к этой функции.")
+        await message.answer(_("error_access_denied", admin.language if admin else None))
         return
 
     # Проверяем, что введенный текст - число
@@ -227,7 +242,7 @@ async def process_add_moderator(message: Message, session: AsyncSession, state: 
     except ValueError:
         await message.answer(
             "❌ Некорректный ввод. Пожалуйста, введите числовой ID пользователя.",
-            reply_markup=build_back_keyboard("admin:back_to_manage_mods")
+            reply_markup=KeyboardFactory.back_button("admin:back_to_manage_mods", admin.language)
         )
         return
 
@@ -240,38 +255,34 @@ async def process_add_moderator(message: Message, session: AsyncSession, state: 
         await message.answer(
             f"❌ Пользователь с ID {new_moderator_id} не найден в базе данных.\n\n"
             f"Пользователь должен быть зарегистрирован в боте (выполнить команду /start).",
-            reply_markup=build_back_keyboard("admin:back_to_manage_mods")
+            reply_markup=KeyboardFactory.back_button("admin:back_to_manage_mods", admin.language)
         )
         return
 
     if user.role == UserRole.ADMIN:
         await message.answer(
             f"❌ Пользователь {user.full_name} уже является администратором.",
-            reply_markup=build_back_keyboard("admin:back_to_manage_mods")
+            reply_markup=KeyboardFactory.back_button("admin:back_to_manage_mods", admin.language)
         )
         return
 
     if user.role == UserRole.MODERATOR:
         await message.answer(
             f"❌ Пользователь {user.full_name} уже является модератором.",
-            reply_markup=build_back_keyboard("admin:back_to_manage_mods")
+            reply_markup=KeyboardFactory.back_button("admin:back_to_manage_mods", admin.language)
         )
         return
 
     # Подтверждение действия
-    kb = InlineKeyboardBuilder()
-    kb.add(InlineKeyboardButton(text="✅ Да", callback_data=f"admin:confirm_add_mod:{new_moderator_id}"))
-    kb.add(InlineKeyboardButton(text="❌ Нет", callback_data="admin:back_to_manage_mods"))
-
     await message.answer(
         f"⚠️ <b>Подтверждение</b>\n\n"
         f"Вы действительно хотите назначить пользователя {user.full_name} "
         f"(ID: {user.telegram_id}) модератором?",
-        reply_markup=kb.as_markup()
+        reply_markup=KeyboardFactory.confirmation_keyboard(f"add_mod:{new_moderator_id}", admin.language)
     )
 
 
-@router.callback_query(F.data.startswith("admin:confirm_add_mod:"))
+@router.callback_query(F.data.startswith("confirm:add_mod:"))
 async def confirm_add_moderator(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
     """
     Обработчик подтверждения добавления модератора
@@ -286,8 +297,9 @@ async def confirm_add_moderator(callback_query: CallbackQuery, bot: Bot, session
 
     if not admin or admin.role != UserRole.ADMIN:
         await callback_query.message.edit_text(
-            "У вас нет доступа к этой функции."
+            _("error_access_denied", admin.language if admin else None)
         )
+        await callback_query.answer()
         return
 
     # Получаем пользователя из БД
@@ -298,7 +310,7 @@ async def confirm_add_moderator(callback_query: CallbackQuery, bot: Bot, session
     if not user:
         await callback_query.message.edit_text(
             f"Пользователь с ID {new_moderator_id} не найден в базе данных.",
-            reply_markup=build_back_keyboard("admin:back_to_manage_mods")
+            reply_markup=KeyboardFactory.back_button("admin:back_to_manage_mods", admin.language)
         )
         await callback_query.answer()
         return
@@ -310,7 +322,7 @@ async def confirm_add_moderator(callback_query: CallbackQuery, bot: Bot, session
     await callback_query.message.edit_text(
         f"✅ Пользователь {user.full_name} (ID: {user.telegram_id}) "
         f"успешно назначен модератором.",
-        reply_markup=build_back_keyboard("admin:back_to_manage_mods")
+        reply_markup=KeyboardFactory.back_button("admin:back_to_manage_mods", admin.language)
     )
 
     # Уведомляем нового модератора
@@ -344,8 +356,9 @@ async def remove_moderator_start(callback_query: CallbackQuery, session: AsyncSe
 
     if not admin or admin.role != UserRole.ADMIN:
         await callback_query.message.edit_text(
-            "У вас нет доступа к этой функции."
+            _("error_access_denied", admin.language if admin else None)
         )
+        await callback_query.answer()
         return
 
     # Получаем список модераторов
@@ -356,7 +369,7 @@ async def remove_moderator_start(callback_query: CallbackQuery, session: AsyncSe
     if not moderators:
         await callback_query.message.edit_text(
             "В настоящее время нет назначенных модераторов.",
-            reply_markup=build_back_keyboard("admin:back_to_manage_mods")
+            reply_markup=KeyboardFactory.back_button("admin:back_to_manage_mods", admin.language)
         )
         await callback_query.answer()
         return
@@ -365,27 +378,36 @@ async def remove_moderator_start(callback_query: CallbackQuery, session: AsyncSe
     message_text = "❌ <b>Удаление модератора</b>\n\n"
     message_text += "Выберите модератора, которого вы хотите удалить:\n\n"
 
-    # Создаем клавиатуру со списком модераторов
-    kb = InlineKeyboardBuilder()
-
+    # Создаем список модераторов для клавиатуры
+    mod_items = []
     for mod in moderators:
-        kb.add(InlineKeyboardButton(
-            text=f"{mod.full_name} (ID: {mod.telegram_id})",
-            callback_data=f"admin:confirm_remove_mod:{mod.telegram_id}"
-        ))
+        mod_items.append({
+            "id": f"confirm_remove_mod:{mod.telegram_id}",
+            "text": f"{mod.full_name} (ID: {mod.telegram_id})"
+        })
 
-    kb.add(InlineKeyboardButton(text="🔙 Назад", callback_data="admin:back_to_manage_mods"))
+    # Добавляем кнопку "Назад"
+    mod_items.append({
+        "id": "back_to_manage_mods",
+        "text": "🔙 Назад"
+    })
 
-    # Размещаем кнопки в один столбец
-    kb.adjust(1)
-
+    # Отправляем сообщение с клавиатурой
     await callback_query.message.edit_text(
         message_text,
-        reply_markup=kb.as_markup()
+        reply_markup=KeyboardFactory.paginated_list(
+            mod_items,
+            0,
+            action_prefix="admin",
+            back_callback="admin:back_to_manage_mods",
+            language=admin.language
+        )
     )
 
     await state.set_state(AdminStates.REMOVING_MODERATOR)
     await callback_query.answer()
+
+    logger.info(f"Admin {user_id} started removing a moderator")
 
 
 @router.callback_query(F.data.startswith("admin:confirm_remove_mod:"))
@@ -394,7 +416,7 @@ async def confirm_remove_moderator(callback_query: CallbackQuery, bot: Bot, sess
     Обработчик подтверждения удаления модератора
     """
     admin_id = callback_query.from_user.id
-    moderator_id = int(callback_query.data.split(":")[2])
+    moderator_id = int(callback_query.data.split(":")[3])
 
     # Получаем админа из БД
     admin_query = select(User).where(User.telegram_id == admin_id)
@@ -403,8 +425,9 @@ async def confirm_remove_moderator(callback_query: CallbackQuery, bot: Bot, sess
 
     if not admin or admin.role != UserRole.ADMIN:
         await callback_query.message.edit_text(
-            "У вас нет доступа к этой функции."
+            _("error_access_denied", admin.language if admin else None)
         )
+        await callback_query.answer()
         return
 
     # Получаем модератора из БД
@@ -415,7 +438,7 @@ async def confirm_remove_moderator(callback_query: CallbackQuery, bot: Bot, sess
     if not moderator or moderator.role != UserRole.MODERATOR:
         await callback_query.message.edit_text(
             f"Модератор с ID {moderator_id} не найден.",
-            reply_markup=build_back_keyboard("admin:back_to_manage_mods")
+            reply_markup=KeyboardFactory.back_button("admin:back_to_manage_mods", admin.language)
         )
         await callback_query.answer()
         return
@@ -430,19 +453,12 @@ async def confirm_remove_moderator(callback_query: CallbackQuery, bot: Bot, sess
 
     if active_tickets_count > 0:
         # Модератор имеет активные тикеты, нужно подтверждение
-        kb = InlineKeyboardBuilder()
-        kb.add(InlineKeyboardButton(
-            text="✅ Да, удалить и переназначить тикеты",
-            callback_data=f"admin:force_remove_mod:{moderator_id}"
-        ))
-        kb.add(InlineKeyboardButton(text="❌ Отмена", callback_data="admin:back_to_manage_mods"))
-
         await callback_query.message.edit_text(
             f"⚠️ <b>Внимание!</b>\n\n"
             f"Модератор {moderator.full_name} имеет {active_tickets_count} активных тикетов.\n\n"
             f"Если вы продолжите, все активные тикеты будут возвращены в очередь неназначенных тикетов.\n\n"
             f"Вы уверены, что хотите удалить этого модератора?",
-            reply_markup=kb.as_markup()
+            reply_markup=KeyboardFactory.confirmation_keyboard(f"force_remove_mod:{moderator_id}", admin.language)
         )
         await callback_query.answer()
         return
@@ -454,7 +470,7 @@ async def confirm_remove_moderator(callback_query: CallbackQuery, bot: Bot, sess
     await callback_query.message.edit_text(
         f"✅ Модератор {moderator.full_name} (ID: {moderator.telegram_id}) "
         f"успешно удален из списка модераторов.",
-        reply_markup=build_back_keyboard("admin:back_to_manage_mods")
+        reply_markup=KeyboardFactory.back_button("admin:back_to_manage_mods", admin.language)
     )
 
     # Уведомляем бывшего модератора
@@ -473,7 +489,7 @@ async def confirm_remove_moderator(callback_query: CallbackQuery, bot: Bot, sess
     logger.info(f"Admin {admin_id} removed moderator {moderator_id}")
 
 
-@router.callback_query(F.data.startswith("admin:force_remove_mod:"))
+@router.callback_query(F.data.startswith("confirm:force_remove_mod:"))
 async def force_remove_moderator(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
     """
     Обработчик принудительного удаления модератора с активными тикетами
@@ -488,8 +504,9 @@ async def force_remove_moderator(callback_query: CallbackQuery, bot: Bot, sessio
 
     if not admin or admin.role != UserRole.ADMIN:
         await callback_query.message.edit_text(
-            "У вас нет доступа к этой функции."
+            _("error_access_denied", admin.language if admin else None)
         )
+        await callback_query.answer()
         return
 
     # Получаем модератора из БД
@@ -500,7 +517,7 @@ async def force_remove_moderator(callback_query: CallbackQuery, bot: Bot, sessio
     if not moderator or moderator.role != UserRole.MODERATOR:
         await callback_query.message.edit_text(
             f"Модератор с ID {moderator_id} не найден.",
-            reply_markup=build_back_keyboard("admin:back_to_manage_mods")
+            reply_markup=KeyboardFactory.back_button("admin:back_to_manage_mods", admin.language)
         )
         await callback_query.answer()
         return
@@ -547,7 +564,7 @@ async def force_remove_moderator(callback_query: CallbackQuery, bot: Bot, sessio
         f"✅ Модератор {moderator.full_name} (ID: {moderator.telegram_id}) "
         f"успешно удален из списка модераторов.\n\n"
         f"Все активные тикеты ({len(active_tickets)}) были возвращены в общую очередь.",
-        reply_markup=build_back_keyboard("admin:back_to_manage_mods")
+        reply_markup=KeyboardFactory.back_button("admin:back_to_manage_mods", admin.language)
     )
 
     # Уведомляем бывшего модератора
@@ -568,18 +585,28 @@ async def force_remove_moderator(callback_query: CallbackQuery, bot: Bot, sessio
 
 
 @router.callback_query(F.data == "admin:back_to_menu")
-async def back_to_menu(callback_query: CallbackQuery, state: FSMContext):
+async def back_to_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
     """
     Обработчик возврата в главное меню администратора
     """
+    user_id = callback_query.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    admin = result.scalar_one_or_none()
+
+    language = admin.language if admin else "ru"
+
     await callback_query.message.edit_text(
-        "👑 <b>Меню администратора</b>\n\n"
-        "Выберите действие из меню:",
-        reply_markup=build_admin_main_menu()
+        _("admin_main_menu", language),
+        reply_markup=KeyboardFactory.main_menu(UserRole.ADMIN, language)
     )
 
     await state.set_state(AdminStates.MAIN_MENU)
     await callback_query.answer()
+
+    logger.info(f"Admin {user_id} returned to main menu")
 
 
 @router.callback_query(F.data == "admin:back_to_manage_mods")
@@ -592,30 +619,60 @@ async def back_to_manage_mods(callback_query: CallbackQuery, session: AsyncSessi
 
 
 @router.callback_query(F.data == "admin:mod_menu")
-async def switch_to_mod_menu(callback_query: CallbackQuery, state: FSMContext):
+async def switch_to_mod_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
     """
     Обработчик переключения на меню модератора
     """
+    user_id = callback_query.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    admin = result.scalar_one_or_none()
+
+    language = admin.language if admin else "ru"
+
     await callback_query.message.edit_text(
-        "🔑 <b>Меню модератора</b>\n\n"
-        "Выберите действие из меню:",
-        reply_markup=build_moderator_main_menu()
+        _("moderator_main_menu", language),
+        reply_markup=KeyboardFactory.main_menu(UserRole.MODERATOR, language)
     )
 
     await state.set_state(ModeratorStates.MAIN_MENU)
     await callback_query.answer()
 
+    logger.info(f"Admin {user_id} switched to moderator menu")
+
 
 @router.callback_query(F.data == "admin:user_menu")
-async def switch_to_user_menu(callback_query: CallbackQuery, state: FSMContext):
+async def switch_to_user_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
     """
     Обработчик переключения на меню пользователя
     """
+    user_id = callback_query.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    admin = result.scalar_one_or_none()
+
+    language = admin.language if admin else "ru"
+
     await callback_query.message.edit_text(
-        "👤 <b>Меню пользователя</b>\n\n"
-        "Выберите действие из меню:",
-        reply_markup=build_user_main_menu()
+        _("user_main_menu", language),
+        reply_markup=KeyboardFactory.main_menu(UserRole.USER, language)
     )
 
     await state.set_state(UserStates.MAIN_MENU)
     await callback_query.answer()
+
+    logger.info(f"Admin {user_id} switched to user menu")
+
+
+def register_handlers(dp: Dispatcher):
+    """
+    Регистрирует все обработчики данного модуля.
+
+    Args:
+        dp: Диспетчер
+    """
+    dp.include_router(router)

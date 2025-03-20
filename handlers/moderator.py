@@ -1,30 +1,20 @@
 import logging
-from typing import Union, Dict, List, Any
+from typing import Union, Dict, List, Any, Optional
 from datetime import datetime
 
-from aiogram import Router, F, Bot
+from aiogram import Router, F, Bot, Dispatcher
 from aiogram.filters import Command
-from aiogram.types import Message, CallbackQuery, InlineKeyboardButton
+from aiogram.types import Message, CallbackQuery
 from aiogram.fsm.context import FSMContext
-from aiogram.utils.keyboard import InlineKeyboardBuilder
 from sqlalchemy.ext.asyncio import AsyncSession
-from sqlalchemy import select, func
+from sqlalchemy import select, func, update
 from sqlalchemy.orm import selectinload
-from sqlalchemy.future import select
 
 from models import User, Ticket, Message as TicketMessage, TicketStatus, MessageType, UserRole
-from utils import (
-    build_moderator_main_menu,
-    build_user_main_menu,
-    build_tickets_list_keyboard,
-    build_back_keyboard,
-    build_confirm_keyboard,
-    ModeratorStates,
-    UserStates,
-    Paginator,
-    TICKET_STATUS_EMOJI,
-    RATING_EMOJI, build_rating_keyboard
-)
+from utils.i18n import _
+from utils.keyboards import KeyboardFactory
+from utils.states import ModeratorStates, UserStates
+from utils.paginator import Paginator
 
 # Инициализация логгера
 logger = logging.getLogger(__name__)
@@ -47,8 +37,9 @@ async def unassigned_tickets(callback_query: CallbackQuery, session: AsyncSessio
 
     if not user or user.role != UserRole.MODERATOR:
         await callback_query.message.edit_text(
-            "У вас нет доступа к этой функции."
+            _("error_access_denied", user.language if user else None)
         )
+        await callback_query.answer()
         return
 
     # Проверяем, есть ли у модератора активный тикет
@@ -64,7 +55,7 @@ async def unassigned_tickets(callback_query: CallbackQuery, session: AsyncSessio
             f"⚠️ У вас уже есть активный тикет #{active_mod_ticket.id}.\n\n"
             f"Модератор может работать только с одним тикетом одновременно. "
             f"Пожалуйста, завершите работу с текущим тикетом, прежде чем принимать новый.",
-            reply_markup=build_back_keyboard("mod:back_to_menu")
+            reply_markup=KeyboardFactory.back_button("mod:back_to_menu", user.language)
         )
         await callback_query.answer()
         return
@@ -81,7 +72,7 @@ async def unassigned_tickets(callback_query: CallbackQuery, session: AsyncSessio
         await callback_query.message.edit_text(
             "📨 <b>Неназначенные тикеты</b>\n\n"
             "В настоящее время нет неназначенных тикетов.",
-            reply_markup=build_back_keyboard("mod:back_to_menu")
+            reply_markup=KeyboardFactory.back_button("mod:back_to_menu", user.language)
         )
         await callback_query.answer()
         return
@@ -90,9 +81,11 @@ async def unassigned_tickets(callback_query: CallbackQuery, session: AsyncSessio
     tickets_data = [
         {
             "id": ticket.id,
+            "text": f"Тикет #{ticket.id} - {ticket.user.full_name if ticket.user else 'Неизвестный пользователь'}",
             "subject": ticket.subject or "Без темы",
             "created_at": ticket.created_at.strftime("%d.%m.%Y %H:%M"),
-            "user_name": ticket.user.full_name if ticket.user else "Неизвестный пользователь"
+            "user_name": ticket.user.full_name if ticket.user else "Неизвестный пользователь",
+            "user_id": ticket.user.id if ticket.user else None
         }
         for ticket in unassigned_tickets
     ]
@@ -111,35 +104,38 @@ async def unassigned_tickets(callback_query: CallbackQuery, session: AsyncSessio
             f"📅 Создан: {item['created_at']}\n\n"
         )
 
-    message_text += f"Страница {1} из {paginator.total_pages}"
+    page_info = paginator.get_page_info(0)
+    message_text += _("page_info", user.language,
+                      current_page=page_info["current_page"],
+                      total_pages=page_info["total_pages"])
 
-    # Создаем клавиатуру с навигацией
-    kb = InlineKeyboardBuilder()
-
+    # Создаем клавиатуру с тикетами и кнопками действий
+    kb_items = []
     for item in page_items:
-        kb.add(InlineKeyboardButton(
-            text=f"Принять тикет #{item['id']}",
-            callback_data=f"mod:take_ticket:{item['id']}"
-        ))
+        kb_items.append({
+            "id": f"take:{item['id']}",
+            "text": f"Принять тикет #{item['id']}"
+        })
 
-    # Добавляем навигационные кнопки
-    row = []
-    if paginator.total_pages > 1:
-        row.append(InlineKeyboardButton(text="▶️", callback_data="mod:page:1"))
-
-    row.append(InlineKeyboardButton(text="🔙 Назад", callback_data="mod:back_to_menu"))
-    kb.row(*row)
-
+    # Отправляем сообщение с клавиатурой
     await callback_query.message.edit_text(
         message_text,
-        reply_markup=kb.as_markup()
+        reply_markup=KeyboardFactory.paginated_list(
+            kb_items,
+            0,
+            action_prefix="mod",
+            back_callback="mod:back_to_menu",
+            language=user.language
+        )
     )
 
     await state.set_state(ModeratorStates.VIEWING_TICKETS)
     await callback_query.answer()
 
+    logger.info(f"Moderator {user_id} viewed unassigned tickets")
 
-@router.callback_query(F.data.startswith("mod:take_ticket:"))
+
+@router.callback_query(F.data.startswith("mod:take:"))
 async def take_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
     """
     Обработчик принятия тикета в работу
@@ -154,8 +150,9 @@ async def take_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSes
 
     if not moderator or moderator.role != UserRole.MODERATOR:
         await callback_query.message.edit_text(
-            "У вас нет доступа к этой функции."
+            _("error_access_denied", moderator.language if moderator else None)
         )
+        await callback_query.answer()
         return
 
     # Проверяем, есть ли у модератора активный тикет
@@ -171,7 +168,7 @@ async def take_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSes
             f"⚠️ У вас уже есть активный тикет #{active_mod_ticket.id}.\n\n"
             f"Модератор может работать только с одним тикетом одновременно. "
             f"Пожалуйста, завершите работу с текущим тикетом, прежде чем принимать новый.",
-            reply_markup=build_back_keyboard("mod:back_to_menu")
+            reply_markup=KeyboardFactory.back_button("mod:back_to_menu", moderator.language)
         )
         await callback_query.answer()
         return
@@ -186,8 +183,9 @@ async def take_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSes
 
     if not ticket:
         await callback_query.message.edit_text(
-            f"Тикет #{ticket_id} не найден или уже взят другим модератором.",
-            reply_markup=build_back_keyboard("mod:back_to_menu")
+            _("error_ticket_not_found", moderator.language, ticket_id=ticket_id) + " " +
+            "Возможно, тикет уже был взят другим модератором.",
+            reply_markup=KeyboardFactory.back_button("mod:back_to_menu", moderator.language)
         )
         await callback_query.answer()
         return
@@ -195,14 +193,14 @@ async def take_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSes
     # Обновляем тикет: назначаем модератора и меняем статус
     ticket.moderator_id = moderator.id
     ticket.status = TicketStatus.IN_PROGRESS
-    ticket.updated_at = func.now()
+    ticket.updated_at = datetime.now()
 
     # Добавляем системное сообщение о принятии тикета
     system_message = TicketMessage(
         ticket_id=ticket.id,
         sender_id=moderator.id,
         message_type=MessageType.SYSTEM,
-        text=f"Модератор {moderator.full_name} принял тикет в работу"
+        text=_("moderator_took_ticket", None, moderator_name=moderator.full_name)
     )
     session.add(system_message)
 
@@ -216,16 +214,12 @@ async def take_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSes
         f"📅 Создан: {ticket.created_at.strftime('%d.%m.%Y %H:%M')}\n\n"
     )
 
-    # Создаем клавиатуру
-    kb = InlineKeyboardBuilder()
-    kb.add(InlineKeyboardButton(text="✅ Отметить как решённый", callback_data=f"mod:resolve_ticket:{ticket.id}"))
-    kb.add(InlineKeyboardButton(text="🔄 Переназначить", callback_data=f"mod:reassign_ticket:{ticket.id}"))
-    kb.add(InlineKeyboardButton(text="🔙 В меню", callback_data="mod:back_to_menu"))
+    # Создаем клавиатуру с действиями для тикета
+    keyboard = KeyboardFactory.ticket_actions(TicketStatus.IN_PROGRESS, ticket.id, moderator.language)
 
-    # Отправляем информацию о тикете
     await callback_query.message.edit_text(
         message_text,
-        reply_markup=kb.as_markup()
+        reply_markup=keyboard
     )
 
     # Устанавливаем состояние работы с тикетом
@@ -234,10 +228,26 @@ async def take_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSes
 
     # Отправляем историю сообщений отдельными сообщениями
     if ticket.messages:
-        await callback_query.message.answer("📜 <b>История сообщений:</b>")
+        await callback_query.message.answer(_("message_history", moderator.language))
 
-        for msg in ticket.messages:
-            sender = "Пользователь" if msg.sender_id == ticket.user_id else "Модератор"
+        # Ограничиваем количество сообщений
+        max_messages = 20
+        start_idx = max(0, len(ticket.messages) - max_messages)
+
+        # Если в тикете много сообщений, добавляем информацию об ограничении
+        if len(ticket.messages) > max_messages:
+            await callback_query.message.answer(
+                f"<i>Показаны последние {max_messages} из {len(ticket.messages)} сообщений.</i>"
+            )
+
+        for msg in ticket.messages[start_idx:]:
+            if msg.sender_id == ticket.user_id:
+                sender = "Пользователь"
+            elif msg.sender_id == moderator.id:
+                sender = "Вы"
+            else:
+                sender = "Система"
+
             time = msg.sent_at.strftime("%d.%m.%Y %H:%M")
 
             if msg.message_type == MessageType.SYSTEM:
@@ -260,7 +270,7 @@ async def take_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSes
                 )
             elif msg.message_type == MessageType.DOCUMENT:
                 caption = f"<b>{sender}</b> [{time}]:" + (
-                    f"\n{msg.text.replace('[ДОКУМЕНТ: ', '').split(']')[1] if ']' in msg.text else ""}" if msg.text else "")
+                    f"\n{msg.text.replace('[ДОКУМЕНТ: ', '').split(']')[1] if ']' in msg.text else ''}" if msg.text else "")
                 await bot.send_document(
                     chat_id=callback_query.from_user.id,
                     document=msg.file_id,
@@ -302,8 +312,9 @@ async def resolve_ticket(callback_query: CallbackQuery, bot: Bot, session: Async
 
     if not moderator or moderator.role != UserRole.MODERATOR:
         await callback_query.message.edit_text(
-            "У вас нет доступа к этой функции."
+            _("error_access_denied", moderator.language if moderator else None)
         )
+        await callback_query.answer()
         return
 
     # Получаем тикет из БД
@@ -317,18 +328,18 @@ async def resolve_ticket(callback_query: CallbackQuery, bot: Bot, session: Async
 
     if not ticket:
         await callback_query.message.edit_text(
-            f"Тикет #{ticket_id} не найден или не находится в работе у вас.",
-            reply_markup=build_back_keyboard("mod:back_to_menu")
+            _("error_ticket_not_found", moderator.language, ticket_id=ticket_id) + " " +
+            "или он не находится в работе у вас.",
+            reply_markup=KeyboardFactory.back_button("mod:back_to_menu", moderator.language)
         )
         await callback_query.answer()
         return
 
     # Подтверждение действия
     await callback_query.message.edit_text(
-        f"⚠️ <b>Подтверждение</b>\n\n"
-        f"Вы уверены, что хотите отметить тикет #{ticket.id} как решенный?\n\n"
+        _("confirm_prompt", moderator.language, action="отметить тикет как решенный") + "\n\n" +
         f"После этого пользователю будет предложено оценить вашу работу и закрыть тикет.",
-        reply_markup=build_confirm_keyboard(f"resolve:{ticket.id}")
+        reply_markup=KeyboardFactory.confirmation_keyboard(f"resolve:{ticket.id}", moderator.language)
     )
 
     await callback_query.answer()
@@ -349,8 +360,9 @@ async def confirm_resolve_ticket(callback_query: CallbackQuery, bot: Bot, sessio
 
     if not moderator or moderator.role != UserRole.MODERATOR:
         await callback_query.message.edit_text(
-            "У вас нет доступа к этой функции."
+            _("error_access_denied", moderator.language if moderator else None)
         )
+        await callback_query.answer()
         return
 
     # Получаем тикет из БД
@@ -364,22 +376,23 @@ async def confirm_resolve_ticket(callback_query: CallbackQuery, bot: Bot, sessio
 
     if not ticket:
         await callback_query.message.edit_text(
-            f"Тикет #{ticket_id} не найден или не находится в работе у вас.",
-            reply_markup=build_back_keyboard("mod:back_to_menu")
+            _("error_ticket_not_found", moderator.language, ticket_id=ticket_id) + " " +
+            "или он не находится в работе у вас.",
+            reply_markup=KeyboardFactory.back_button("mod:back_to_menu", moderator.language)
         )
         await callback_query.answer()
         return
 
     # Обновляем тикет: меняем статус
     ticket.status = TicketStatus.RESOLVED
-    ticket.updated_at = func.now()
+    ticket.updated_at = datetime.now()
 
     # Добавляем системное сообщение о решении тикета
     system_message = TicketMessage(
         ticket_id=ticket.id,
         sender_id=moderator.id,
         message_type=MessageType.SYSTEM,
-        text=f"Модератор {moderator.full_name} отметил тикет как решенный"
+        text=_("moderator_resolved_ticket", None, moderator_name=moderator.full_name)
     )
     session.add(system_message)
 
@@ -390,7 +403,7 @@ async def confirm_resolve_ticket(callback_query: CallbackQuery, bot: Bot, sessio
         f"✅ <b>Тикет #{ticket.id} отмечен как решенный</b>\n\n"
         f"Пользователю было отправлено уведомление с предложением "
         f"оценить вашу работу и закрыть тикет.",
-        reply_markup=build_moderator_main_menu()
+        reply_markup=KeyboardFactory.main_menu(UserRole.MODERATOR, moderator.language)
     )
 
     # Сбрасываем состояние
@@ -399,12 +412,13 @@ async def confirm_resolve_ticket(callback_query: CallbackQuery, bot: Bot, sessio
 
     # Уведомляем пользователя о решении тикета
     try:
+        user_language = ticket.user.language if ticket.user else "ru"
         await bot.send_message(
             chat_id=ticket.user.telegram_id,
             text=f"🔔 <b>Ваш тикет #{ticket.id} отмечен как решенный</b>\n\n"
                  f"Модератор {moderator.full_name} отметил ваш запрос как решенный.\n"
                  f"Пожалуйста, оцените качество обслуживания и закройте тикет.",
-            reply_markup=build_rating_keyboard()
+            reply_markup=KeyboardFactory.rating_keyboard(user_language)
         )
     except Exception as e:
         logger.error(f"Failed to send notification to user {ticket.user.telegram_id}: {e}")
@@ -412,243 +426,6 @@ async def confirm_resolve_ticket(callback_query: CallbackQuery, bot: Bot, sessio
     await callback_query.answer()
 
     logger.info(f"Moderator {user_id} marked ticket #{ticket.id} as resolved")
-
-
-@router.callback_query(F.data.startswith("mod:reassign_ticket"))
-async def reassign_ticket_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
-    """
-    Обработчик меню переназначения тикета
-    """
-    user_id = callback_query.from_user.id
-
-    # Если в callback_data есть id тикета, используем его
-    if ":" in callback_query.data:
-        ticket_id = int(callback_query.data.split(":")[2])
-        await state.update_data(active_ticket_id=ticket_id)
-    else:
-        # Иначе берем id из состояния
-        state_data = await state.get_data()
-        ticket_id = state_data.get("active_ticket_id")
-
-    if not ticket_id:
-        await callback_query.message.edit_text(
-            "Не удалось определить тикет для переназначения.",
-            reply_markup=build_back_keyboard("mod:back_to_menu")
-        )
-        await callback_query.answer()
-        return
-
-    # Получаем пользователя из БД
-    query = select(User).where(User.telegram_id == user_id)
-    result = await session.execute(query)
-    moderator = result.scalar_one_or_none()
-
-    if not moderator or moderator.role != UserRole.MODERATOR:
-        await callback_query.message.edit_text(
-            "У вас нет доступа к этой функции."
-        )
-        return
-
-    # Получаем тикет из БД
-    ticket_query = select(Ticket).where(
-        (Ticket.id == ticket_id) &
-        (Ticket.moderator_id == moderator.id) &
-        (Ticket.status == TicketStatus.IN_PROGRESS)
-    )
-    ticket_result = await session.execute(ticket_query)
-    ticket = ticket_result.scalar_one_or_none()
-
-    if not ticket:
-        await callback_query.message.edit_text(
-            f"Тикет #{ticket_id} не найден или не находится в работе у вас.",
-            reply_markup=build_back_keyboard("mod:back_to_menu")
-        )
-        await callback_query.answer()
-        return
-
-    # Получаем список свободных модераторов
-    free_moderators_query = select(User).where(
-        (User.role == UserRole.MODERATOR) &
-        (User.id != moderator.id)
-    )
-    free_moderators_result = await session.execute(free_moderators_query)
-    free_moderators = free_moderators_result.scalars().all()
-
-    # Фильтруем модераторов, у которых уже есть активные тикеты
-    busy_moderators_query = select(User.id).where(
-        (User.role == UserRole.MODERATOR) &
-        (User.id.in_([mod.id for mod in free_moderators])) &
-        (User.id == Ticket.moderator_id) &
-        (Ticket.status == TicketStatus.IN_PROGRESS)
-    )
-    busy_moderators_result = await session.execute(busy_moderators_query)
-    busy_moderators_ids = [row[0] for row in busy_moderators_result.all()]
-
-    available_moderators = [mod for mod in free_moderators if mod.id not in busy_moderators_ids]
-
-    if not available_moderators:
-        await callback_query.message.edit_text(
-            f"⚠️ Нет доступных модераторов для переназначения тикета.\n\n"
-            f"Все модераторы либо заняты, либо недоступны.",
-            reply_markup=build_back_keyboard("mod:back_to_ticket")
-        )
-        await callback_query.answer()
-        return
-
-    # Формируем клавиатуру с доступными модераторами
-    kb = InlineKeyboardBuilder()
-    for mod in available_moderators:
-        kb.add(InlineKeyboardButton(
-            text=f"{mod.full_name}",
-            callback_data=f"mod:assign_to:{mod.id}:{ticket.id}"
-        ))
-
-    kb.add(InlineKeyboardButton(text="🔙 Назад", callback_data="mod:back_to_ticket"))
-
-    await callback_query.message.edit_text(
-        f"🔄 <b>Переназначение тикета #{ticket.id}</b>\n\n"
-        f"Выберите модератора, которому вы хотите переназначить этот тикет:",
-        reply_markup=kb.as_markup()
-    )
-
-    await state.set_state(ModeratorStates.REASSIGNING_TICKET)
-    await callback_query.answer()
-
-
-@router.callback_query(F.data.startswith("mod:assign_to:"))
-async def assign_to_moderator(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
-    """
-    Обработчик переназначения тикета другому модератору
-    """
-    user_id = callback_query.from_user.id
-    parts = callback_query.data.split(":")
-    new_moderator_id = int(parts[2])
-    ticket_id = int(parts[3])
-
-    # Получаем текущего модератора из БД
-    query = select(User).where(User.telegram_id == user_id)
-    result = await session.execute(query)
-    current_moderator = result.scalar_one_or_none()
-
-    if not current_moderator or current_moderator.role != UserRole.MODERATOR:
-        await callback_query.message.edit_text(
-            "У вас нет доступа к этой функции."
-        )
-        return
-
-    # Получаем нового модератора из БД
-    new_moderator_query = select(User).where(User.id == new_moderator_id)
-    new_moderator_result = await session.execute(new_moderator_query)
-    new_moderator = new_moderator_result.scalar_one_or_none()
-
-    if not new_moderator or new_moderator.role != UserRole.MODERATOR:
-        await callback_query.message.edit_text(
-            "Выбранный модератор не найден или не является модератором.",
-            reply_markup=build_back_keyboard("mod:back_to_menu")
-        )
-        await callback_query.answer()
-        return
-
-    # Получаем тикет из БД
-    ticket_query = select(Ticket).where(
-        (Ticket.id == ticket_id) &
-        (Ticket.moderator_id == current_moderator.id) &
-        (Ticket.status == TicketStatus.IN_PROGRESS)
-    ).options(selectinload(Ticket.user), selectinload(Ticket.messages))
-    ticket_result = await session.execute(ticket_query)
-    ticket = ticket_result.scalar_one_or_none()
-
-    if not ticket:
-        await callback_query.message.edit_text(
-            f"Тикет #{ticket_id} не найден или не находится в работе у вас.",
-            reply_markup=build_back_keyboard("mod:back_to_menu")
-        )
-        await callback_query.answer()
-        return
-
-    # Обновляем тикет: меняем модератора
-    ticket.moderator_id = new_moderator.id
-    ticket.updated_at = func.now()
-
-    # Добавляем системное сообщение о переназначении тикета
-    system_message = TicketMessage(
-        ticket_id=ticket.id,
-        sender_id=current_moderator.id,
-        message_type=MessageType.SYSTEM,
-        text=f"Тикет переназначен с модератора {current_moderator.full_name} на модератора {new_moderator.full_name}"
-    )
-    session.add(system_message)
-
-    await session.commit()
-
-    # Отправляем подтверждение текущему модератору
-    await callback_query.message.edit_text(
-        f"✅ <b>Тикет #{ticket.id} успешно переназначен</b>\n\n"
-        f"Тикет был переназначен модератору {new_moderator.full_name}.",
-        reply_markup=build_moderator_main_menu()
-    )
-
-    # Сбрасываем состояние
-    await state.set_state(ModeratorStates.MAIN_MENU)
-    await state.clear()
-    # Отправляем уведомление новому модератору
-    try:
-        # Формируем сообщение с историей тикета
-        message_text = (
-            f"🔄 <b>Вам переназначен тикет #{ticket.id}</b>\n\n"
-            f"👤 Пользователь: {ticket.user.full_name}\n"
-            f"📝 Тема: {ticket.subject or 'Не указана'}\n"
-            f"📅 Создан: {ticket.created_at.strftime('%d.%m.%Y %H:%M')}\n\n"
-            f"<b>История переписки:</b>\n\n"
-        )
-
-        for msg in ticket.messages:
-            if msg.sender_id == ticket.user_id:
-                sender = "Пользователь"
-            elif msg.sender_id == current_moderator.id:
-                sender = f"Модератор {current_moderator.full_name}"
-            else:
-                sender = "Система"
-
-            time = msg.sent_at.strftime("%d.%m.%Y %H:%M")
-
-            if msg.message_type == MessageType.SYSTEM:
-                message_text += f"🔔 <i>{msg.text}</i>\n\n"
-            else:
-                message_text += f"<b>{sender}</b> [{time}]:\n{msg.text}\n\n"
-
-        message_text += (
-            "<i>Чтобы ответить пользователю, просто отправьте сообщение в этот чат.</i>"
-        )
-
-        # Клавиатура для нового модератора
-        kb = InlineKeyboardBuilder()
-        kb.add(InlineKeyboardButton(text="✅ Отметить как решённый", callback_data=f"mod:resolve_ticket:{ticket.id}"))
-        kb.add(InlineKeyboardButton(text="🔄 Переназначить", callback_data=f"mod:reassign_ticket:{ticket.id}"))
-        kb.add(InlineKeyboardButton(text="🔙 В меню", callback_data="mod:back_to_menu"))
-
-        await bot.send_message(
-            chat_id=new_moderator.telegram_id,
-            text=message_text,
-            reply_markup=kb.as_markup()
-        )
-    except Exception as e:
-        logger.error(f"Failed to send notification to new moderator {new_moderator.telegram_id}: {e}")
-
-    # Уведомляем пользователя о переназначении тикета
-    try:
-        await bot.send_message(
-            chat_id=ticket.user.telegram_id,
-            text=f"🔔 <b>Ваш тикет #{ticket.id} переназначен</b>\n\n"
-                 f"Ваш запрос был переназначен модератору {new_moderator.full_name}.\n"
-                 f"Продолжайте общение через бота как обычно."
-        )
-    except Exception as e:
-        logger.error(f"Failed to send notification to user {ticket.user.telegram_id}: {e}")
-
-    await callback_query.answer()
-
-    logger.info(f"Moderator {user_id} reassigned ticket #{ticket.id} to moderator {new_moderator_id}")
 
 
 @router.callback_query(F.data == "mod:my_stats")
@@ -665,8 +442,9 @@ async def my_stats(callback_query: CallbackQuery, session: AsyncSession, state: 
 
     if not moderator or moderator.role != UserRole.MODERATOR:
         await callback_query.message.edit_text(
-            "У вас нет доступа к этой функции."
+            _("error_access_denied", moderator.language if moderator else None)
         )
+        await callback_query.answer()
         return
 
     # Получаем статистику по закрытым тикетам
@@ -702,7 +480,7 @@ async def my_stats(callback_query: CallbackQuery, session: AsyncSession, state: 
 
     # Форматируем средний рейтинг
     avg_rating_text = f"{avg_rating:.2f}" if avg_rating else "Нет оценок"
-    avg_rating_stars = RATING_EMOJI.get(round(avg_rating)) if avg_rating else "Нет оценок"
+    avg_rating_stars = "⭐" * round(avg_rating) if avg_rating else "Нет оценок"
 
     # Формируем сообщение со статистикой
     message_text = (
@@ -725,18 +503,19 @@ async def my_stats(callback_query: CallbackQuery, session: AsyncSession, state: 
     if recent_tickets:
         message_text += "\n<b>Последние закрытые тикеты:</b>\n"
         for ticket in recent_tickets:
-            rating_text = RATING_EMOJI.get(int(ticket.rating)) if ticket.rating else "Без оценки"
+            rating_stars = "⭐" * int(ticket.rating) if ticket.rating else "Без оценки"
             message_text += (
-                f"🔹 <b>Тикет #{ticket.id}</b> - {rating_text}\n"
-                f"👤 Пользователь: {ticket.user.full_name}\n"
+                f"🔹 <b>Тикет #{ticket.id}</b> - {rating_stars}\n"
+                f"👤 Пользователь: {ticket.user.full_name if ticket.user else 'Неизвестный'}\n"
                 f"📅 Закрыт: {ticket.closed_at.strftime('%d.%m.%Y %H:%M')}\n\n"
             )
 
     await callback_query.message.edit_text(
         message_text,
-        reply_markup=build_back_keyboard("mod:back_to_menu")
+        reply_markup=KeyboardFactory.back_button("mod:back_to_menu", moderator.language)
     )
 
+    await state.set_state(ModeratorStates.VIEWING_STATISTICS)
     await callback_query.answer()
 
     logger.info(f"Moderator {user_id} viewed their stats")
@@ -780,7 +559,7 @@ async def process_moderator_message(message: Message, bot: Bot, session: AsyncSe
     if not ticket:
         await message.answer(
             f"Тикет #{ticket_id} не найден или не находится в работе у вас.",
-            reply_markup=build_moderator_main_menu()
+            reply_markup=KeyboardFactory.main_menu(UserRole.MODERATOR, moderator.language)
         )
         await state.set_state(ModeratorStates.MAIN_MENU)
         return
@@ -817,15 +596,17 @@ async def process_moderator_message(message: Message, bot: Bot, session: AsyncSe
     session.add(ticket_message)
 
     # Обновляем время последнего обновления тикета
-    ticket.updated_at = func.now()
+    ticket.updated_at = datetime.now()
 
     await session.commit()
 
     # Отправляем подтверждение модератору
-    await message.answer("✅ Ваше сообщение отправлено пользователю.")
+    await message.answer(_("moderator_message_sent", moderator.language))
 
     # Отправляем сообщение пользователю
     try:
+        user_language = ticket.user.language if ticket.user else "ru"
+
         # Отправляем в зависимости от типа сообщения
         if message_type == MessageType.TEXT:
             await bot.send_message(
@@ -873,223 +654,57 @@ async def back_to_menu(callback_query: CallbackQuery, state: FSMContext):
     """
     Обработчик возврата в главное меню модератора
     """
+    user_id = callback_query.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    moderator = result.scalar_one_or_none()
+
+    language = moderator.language if moderator else "ru"
+
     await callback_query.message.edit_text(
-        "🔑 <b>Меню модератора</b>\n\n"
-        "Выберите действие из меню:",
-        reply_markup=build_moderator_main_menu()
+        _("moderator_main_menu", language),
+        reply_markup=KeyboardFactory.main_menu(UserRole.MODERATOR, language)
     )
 
     await state.set_state(ModeratorStates.MAIN_MENU)
     await state.clear()
     await callback_query.answer()
 
-
-@router.callback_query(F.data == "mod:back_to_ticket")
-async def back_to_ticket(callback_query: CallbackQuery, bot: Bot, session: AsyncSession, state: FSMContext):
-    """
-    Обработчик возврата к активному тикету
-    """
-    user_id = callback_query.from_user.id
-
-    # Получаем данные из состояния
-    state_data = await state.get_data()
-    ticket_id = state_data.get("active_ticket_id")
-
-    if not ticket_id:
-        await callback_query.message.edit_text(
-            "Не удалось определить активный тикет.",
-            reply_markup=build_back_keyboard("mod:back_to_menu")
-        )
-        await callback_query.answer()
-        return
-
-    # Получаем модератора из БД
-    query = select(User).where(User.telegram_id == user_id)
-    result = await session.execute(query)
-    moderator = result.scalar_one_or_none()
-
-    if not moderator or moderator.role != UserRole.MODERATOR:
-        await callback_query.message.edit_text(
-            "У вас нет доступа к этой функции."
-        )
-        return
-
-    # Получаем тикет из БД
-    ticket_query = select(Ticket).where(
-        (Ticket.id == ticket_id) &
-        (Ticket.moderator_id == moderator.id) &
-        (Ticket.status == TicketStatus.IN_PROGRESS)
-    ).options(selectinload(Ticket.user), selectinload(Ticket.messages))
-    ticket_result = await session.execute(ticket_query)
-    ticket = ticket_result.scalar_one_or_none()
-
-    if not ticket:
-        await callback_query.message.edit_text(
-            f"Тикет #{ticket_id} не найден или не находится в работе у вас.",
-            reply_markup=build_back_keyboard("mod:back_to_menu")
-        )
-        await callback_query.answer()
-        return
-
-    # Отправляем информацию о тикете
-    message_text = (
-        f"🔄 <b>Тикет #{ticket.id}</b>\n\n"
-        f"👤 Пользователь: {ticket.user.full_name}\n"
-        f"📝 Тема: {ticket.subject or 'Не указана'}\n"
-        f"📅 Создан: {ticket.created_at.strftime('%d.%m.%Y %H:%M')}\n\n"
-    )
-
-    # Отправляем сообщение модератору
-    kb = InlineKeyboardBuilder()
-    kb.add(InlineKeyboardButton(text="✅ Отметить как решённый", callback_data=f"mod:resolve_ticket:{ticket.id}"))
-    kb.add(InlineKeyboardButton(text="🔄 Переназначить", callback_data=f"mod:reassign_ticket:{ticket.id}"))
-    kb.add(InlineKeyboardButton(text="🔙 В меню", callback_data="mod:back_to_menu"))
-
-    await callback_query.message.edit_text(
-        message_text,
-        reply_markup=kb.as_markup()
-    )
-
-    # Отправляем историю сообщений отдельными сообщениями
-    if ticket.messages:
-        await callback_query.message.answer("📜 <b>История сообщений:</b>")
-
-        # Ограничиваем количество сообщений
-        max_messages = 20
-        start_idx = max(0, len(ticket.messages) - max_messages)
-
-        # Если в тикете много сообщений, добавляем информацию об ограничении
-        if len(ticket.messages) > max_messages:
-            await callback_query.message.answer(
-                f"<i>Показаны последние {max_messages} из {len(ticket.messages)} сообщений.</i>"
-            )
-
-        for msg in ticket.messages[start_idx:]:
-            if msg.sender_id == ticket.user_id:
-                sender = "Пользователь"
-            elif msg.sender_id == moderator.id:
-                sender = "Вы"
-            else:
-                sender = "Система"
-
-            time = msg.sent_at.strftime("%d.%m.%Y %H:%M")
-
-            if msg.message_type == MessageType.SYSTEM:
-                await callback_query.message.answer(f"🔔 <i>{msg.text}</i>")
-            elif msg.message_type == MessageType.TEXT:
-                await callback_query.message.answer(f"<b>{sender}</b> [{time}]:\n{msg.text}")
-            elif msg.message_type == MessageType.PHOTO:
-                caption = f"<b>{sender}</b> [{time}]:" + (f"\n{msg.text.replace('[ФОТО] ', '')}" if msg.text else "")
-                await bot.send_photo(
-                    chat_id=callback_query.from_user.id,
-                    photo=msg.file_id,
-                    caption=caption
-                )
-            elif msg.message_type == MessageType.VIDEO:
-                caption = f"<b>{sender}</b> [{time}]:" + (f"\n{msg.text.replace('[ВИДЕО] ', '')}" if msg.text else "")
-                await bot.send_video(
-                    chat_id=callback_query.from_user.id,
-                    video=msg.file_id,
-                    caption=caption
-                )
-            elif msg.message_type == MessageType.DOCUMENT:
-                caption = f"<b>{sender}</b> [{time}]:" + (
-                    f"\n{msg.text.replace('[ДОКУМЕНТ: ', '').split(']')[1] if ']' in msg.text else ""}" if msg.text else "")
-                await bot.send_document(
-                    chat_id=callback_query.from_user.id,
-                    document=msg.file_id,
-                    caption=caption
-                )
-
-        await callback_query.message.answer(
-            "<i>Чтобы ответить пользователю, просто отправьте сообщение в этот чат.</i>"
-        )
-
-    await state.set_state(ModeratorStates.WORKING_WITH_TICKET)
-    await callback_query.answer()
+    logger.info(f"Moderator {user_id} returned to main menu")
 
 
 @router.callback_query(F.data == "mod:user_menu")
-async def switch_to_user_menu(callback_query: CallbackQuery, state: FSMContext):
+async def switch_to_user_menu(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
     """
     Обработчик переключения на меню пользователя
     """
+    user_id = callback_query.from_user.id
+
+    # Получаем пользователя из БД
+    query = select(User).where(User.telegram_id == user_id)
+    result = await session.execute(query)
+    user = result.scalar_one_or_none()
+
+    language = user.language if user else "ru"
+
     await callback_query.message.edit_text(
-        "👤 <b>Меню пользователя</b>\n\n"
-        "Выберите действие из меню:",
-        reply_markup=build_user_main_menu()
+        _("user_main_menu", language),
+        reply_markup=KeyboardFactory.main_menu(UserRole.USER, language)
     )
 
     await state.set_state(UserStates.MAIN_MENU)
     await callback_query.answer()
 
+    logger.info(f"Moderator {user_id} switched to user menu")
 
-@router.callback_query(F.data.startswith("mod:page:"))
-async def paginate_tickets(callback_query: CallbackQuery, session: AsyncSession, state: FSMContext):
+
+def register_handlers(dp: Dispatcher):
     """
-    Обработчик пагинации списка тикетов
+    Регистрирует все обработчики данного модуля.
+
+    Args:
+        dp: Диспетчер
     """
-    user_id = callback_query.from_user.id
-    new_page = int(callback_query.data.split(":")[2])
-
-    # Получаем данные из состояния
-    state_data = await state.get_data()
-    tickets_data = state_data.get("tickets", [])
-
-    if not tickets_data:
-        await callback_query.message.edit_text(
-            "Данные о тикетах отсутствуют.",
-            reply_markup=build_back_keyboard("mod:back_to_menu")
-        )
-        await callback_query.answer()
-        return
-
-    # Формируем сообщение со списком тикетов
-    paginator = Paginator(tickets_data, page_size=5)
-
-    if new_page < 0 or new_page >= paginator.total_pages:
-        await callback_query.answer("Страница не существует")
-        return
-
-    page_items = paginator.get_page(new_page)
-
-    message_text = "📨 <b>Неназначенные тикеты</b>\n\n"
-    for item in page_items:
-        message_text += (
-            f"🔹 <b>Тикет #{item['id']}</b>\n"
-            f"👤 Пользователь: {item.get('user_name', 'Неизвестный')}\n"
-            f"📝 {item.get('subject', 'Без темы')}\n"
-            f"📅 Создан: {item.get('created_at', 'Неизвестно')}\n\n"
-        )
-
-    message_text += f"Страница {new_page + 1} из {paginator.total_pages}"
-
-    # Создаем клавиатуру с навигацией
-    kb = InlineKeyboardBuilder()
-
-    for item in page_items:
-        kb.add(InlineKeyboardButton(
-            text=f"Принять тикет #{item['id']}",
-            callback_data=f"mod:take_ticket:{item['id']}"
-        ))
-
-    # Добавляем навигационные кнопки
-    row = []
-    if paginator.has_prev(new_page):
-        row.append(InlineKeyboardButton(text="◀️", callback_data=f"mod:page:{new_page - 1}"))
-
-    row.append(InlineKeyboardButton(text="🔙 Назад", callback_data="mod:back_to_menu"))
-
-    if paginator.has_next(new_page):
-        row.append(InlineKeyboardButton(text="▶️", callback_data=f"mod:page:{new_page + 1}"))
-
-    kb.row(*row)
-
-    await callback_query.message.edit_text(
-        message_text,
-        reply_markup=kb.as_markup()
-    )
-
-    # Обновляем текущую страницу в состоянии
-    await state.update_data(page=new_page)
-    await callback_query.answer()
+    dp.include_router(router)

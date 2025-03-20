@@ -1,214 +1,339 @@
-from typing import List
-
-from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup, KeyboardButton, ReplyKeyboardMarkup
-from i18n_setup import gettext as _
+from typing import List, Optional, Union, Dict, Any
+from aiogram.types import (
+    InlineKeyboardMarkup, InlineKeyboardButton,
+    ReplyKeyboardMarkup, KeyboardButton, ReplyKeyboardRemove
+)
 from aiogram.utils.keyboard import InlineKeyboardBuilder
 
 from models import TicketStatus, UserRole
+from utils.i18n import _
 
 
-def build_language_keyboard() -> InlineKeyboardMarkup:
+class KeyboardFactory:
     """
-    Клавиатура для выбора языка.
+    Фабрика для создания клавиатур бота.
+    Содержит методы для создания различных типов клавиатур.
     """
-    kb = InlineKeyboardBuilder()
 
-    kb.add(InlineKeyboardButton(text="🇷🇺 Русский", callback_data="language:ru"))
-    kb.add(InlineKeyboardButton(text="🇬🇧 English", callback_data="language:en"))
-    kb.add(InlineKeyboardButton(text="🇺🇦 Українська", callback_data="language:uk"))
+    @staticmethod
+    def language_selection(user_language: str = None) -> InlineKeyboardMarkup:
+        """
+        Создает клавиатуру для выбора языка.
 
-    return kb.as_markup()
+        Args:
+            user_language: Текущий язык пользователя (для подсветки выбранного языка)
 
+        Returns:
+            InlineKeyboardMarkup: Клавиатура выбора языка
+        """
+        kb = InlineKeyboardBuilder()
 
-def build_user_main_menu() -> InlineKeyboardMarkup:
-    """
-    Главное меню для пользователя.
-    """
-    kb = InlineKeyboardBuilder()
+        # Определяем, какой язык сейчас выбран (если указан)
+        ru_text = "🇷🇺 Русский" + (" ✓" if user_language == "ru" else "")
+        en_text = "🇬🇧 English" + (" ✓" if user_language == "en" else "")
+        uk_text = "🇺🇦 Українська" + (" ✓" if user_language == "uk" else "")
 
-    kb.add(InlineKeyboardButton(text=_("✏️ Создать тикет"), callback_data="user:create_ticket"))
-    kb.add(InlineKeyboardButton(text=_("📋 История тикетов"), callback_data="user:ticket_history"))
-    kb.add(InlineKeyboardButton(text=_("📝 Активный тикет"), callback_data="user:active_ticket"))
-    kb.add(InlineKeyboardButton(text=_("🌐 Изменить язык"), callback_data="user:change_language"))
+        kb.add(InlineKeyboardButton(text=ru_text, callback_data="language:ru"))
+        kb.add(InlineKeyboardButton(text=en_text, callback_data="language:en"))
+        kb.add(InlineKeyboardButton(text=uk_text, callback_data="language:uk"))
 
-    # Размещаем кнопки в два столбца
-    kb.adjust(2)
+        # Добавляем кнопку "Назад", если пользователь уже выбрал язык
+        if user_language:
+            kb.add(InlineKeyboardButton(
+                text=_("action_back", user_language),
+                callback_data="user:back_to_menu"
+            ))
 
-    return kb.as_markup()
+        return kb.as_markup()
 
+    @staticmethod
+    def main_menu(role: UserRole, language: str = None) -> InlineKeyboardMarkup:
+        """
+        Создает главное меню в зависимости от роли пользователя.
 
-def build_moderator_main_menu() -> InlineKeyboardMarkup:
-    """
-    Главное меню для модератора.
-    """
-    kb = InlineKeyboardBuilder()
+        Args:
+            role: Роль пользователя
+            language: Язык пользователя
 
-    kb.add(InlineKeyboardButton(text=_("📨 Неназначенные тикеты"), callback_data="mod:unassigned_tickets"))
-    kb.add(InlineKeyboardButton(text=_("🔄 Переназначить текущий тикет"), callback_data="mod:reassign_ticket"))
-    kb.add(InlineKeyboardButton(text=_("📊 Моя статистика"), callback_data="mod:my_stats"))
-    kb.add(InlineKeyboardButton(text=_("👤 Меню пользователя"), callback_data="mod:user_menu"))
+        Returns:
+            InlineKeyboardMarkup: Клавиатура главного меню
+        """
+        kb = InlineKeyboardBuilder()
 
-    # Размещаем кнопки в два столбца
-    kb.adjust(2)
+        if role == UserRole.USER:
+            kb.add(InlineKeyboardButton(
+                text=_("menu_create_ticket", language),
+                callback_data="user:create_ticket"
+            ))
+            kb.add(InlineKeyboardButton(
+                text=_("menu_ticket_history", language),
+                callback_data="user:ticket_history"
+            ))
+            kb.add(InlineKeyboardButton(
+                text=_("menu_active_ticket", language),
+                callback_data="user:active_ticket"
+            ))
+            kb.add(InlineKeyboardButton(
+                text=_("menu_change_language", language),
+                callback_data="user:change_language"
+            ))
+        elif role == UserRole.MODERATOR:
+            kb.add(InlineKeyboardButton(
+                text=_("menu_unassigned_tickets", language),
+                callback_data="mod:unassigned_tickets"
+            ))
+            kb.add(InlineKeyboardButton(
+                text=_("menu_reassign_ticket", language),
+                callback_data="mod:reassign_ticket"
+            ))
+            kb.add(InlineKeyboardButton(
+                text=_("menu_my_stats", language),
+                callback_data="mod:my_stats"
+            ))
+            kb.add(InlineKeyboardButton(
+                text=_("menu_user_menu", language),
+                callback_data="mod:user_menu"
+            ))
+        elif role == UserRole.ADMIN:
+            kb.add(InlineKeyboardButton(
+                text=_("menu_general_stats", language),
+                callback_data="admin:stats"
+            ))
+            kb.add(InlineKeyboardButton(
+                text=_("menu_manage_moderators", language),
+                callback_data="admin:manage_mods"
+            ))
+            kb.add(InlineKeyboardButton(
+                text=_("menu_moderator_menu", language),
+                callback_data="admin:mod_menu"
+            ))
+            kb.add(InlineKeyboardButton(
+                text=_("menu_user_menu", language),
+                callback_data="admin:user_menu"
+            ))
 
-    return kb.as_markup()
+        # Размещаем кнопки в два столбца
+        kb.adjust(2)
 
+        return kb.as_markup()
 
-def build_admin_main_menu() -> InlineKeyboardMarkup:
-    """
-    Главное меню для админа.
-    """
-    kb = InlineKeyboardBuilder()
+    @staticmethod
+    def main_reply_keyboard(role: UserRole, language: str = None) -> ReplyKeyboardMarkup:
+        """
+        Создает основную reply-клавиатуру в зависимости от роли пользователя.
 
-    kb.add(InlineKeyboardButton(text=_("📈 Общая статистика"), callback_data="admin:stats"))
-    kb.add(InlineKeyboardButton(text=_("👨‍💼 Управление модераторами"), callback_data="admin:manage_mods"))
-    kb.add(InlineKeyboardButton(text=_("🔑 Меню модератора"), callback_data="admin:mod_menu"))
-    kb.add(InlineKeyboardButton(text=_("👤 Меню пользователя"), callback_data="admin:user_menu"))
+        Args:
+            role: Роль пользователя
+            language: Язык пользователя
 
-    # Размещаем кнопки в два столбца
-    kb.adjust(2)
+        Returns:
+            ReplyKeyboardMarkup: Reply-клавиатура
+        """
+        # Базовая кнопка меню для всех ролей
+        buttons = [[KeyboardButton(text="📋 Меню")]]
 
-    return kb.as_markup()
+        # Добавляем кнопки в зависимости от роли
+        if role == UserRole.USER:
+            buttons[0].append(KeyboardButton(text=_("menu_active_ticket", language)))
+            buttons.append([
+                KeyboardButton(text=_("menu_create_ticket", language)),
+                KeyboardButton(text=_("menu_ticket_history", language))
+            ])
+        elif role == UserRole.MODERATOR:
+            buttons[0].append(KeyboardButton(text=_("menu_active_ticket", language)))
+            buttons.append([
+                KeyboardButton(text=_("menu_unassigned_tickets", language)),
+                KeyboardButton(text=_("menu_my_stats", language))
+            ])
+        elif role == UserRole.ADMIN:
+            buttons[0].append(KeyboardButton(text=_("menu_general_stats", language)))
+            buttons.append([
+                KeyboardButton(text=_("menu_manage_moderators", language)),
+                KeyboardButton(text="🔍 Поиск тикета")
+            ])
 
+        # Создаем клавиатуру с resize_keyboard=True, чтобы она не занимала много места
+        return ReplyKeyboardMarkup(keyboard=buttons, resize_keyboard=True)
 
-def build_ticket_actions_keyboard(ticket_status: TicketStatus) -> InlineKeyboardMarkup:
-    """
-    Клавиатура действий с тикетом.
-    """
-    kb = InlineKeyboardBuilder()
+    @staticmethod
+    def ticket_actions(ticket_status: TicketStatus, ticket_id: int, language: str = None) -> InlineKeyboardMarkup:
+        """
+        Создает клавиатуру с действиями для тикета в зависимости от его статуса.
 
-    if ticket_status == TicketStatus.OPEN:
-        kb.add(InlineKeyboardButton(text=_("✅ Принять тикет"), callback_data="ticket:take"))
-    elif ticket_status == TicketStatus.IN_PROGRESS:
-        kb.add(InlineKeyboardButton(text=_("✅ Отметить как решённый"), callback_data="ticket:resolve"))
-        kb.add(InlineKeyboardButton(text=_("🔄 Переназначить"), callback_data="ticket:reassign"))
-    elif ticket_status == TicketStatus.RESOLVED:
-        kb.add(InlineKeyboardButton(text=_("⭐ Оценить и закрыть"), callback_data="ticket:rate"))
+        Args:
+            ticket_status: Статус тикета
+            ticket_id: ID тикета
+            language: Язык пользователя
 
-    kb.add(InlineKeyboardButton(text=_("🔙 Назад"), callback_data="ticket:back"))
+        Returns:
+            InlineKeyboardMarkup: Клавиатура с действиями
+        """
+        kb = InlineKeyboardBuilder()
 
-    return kb.as_markup()
+        if ticket_status == TicketStatus.OPEN:
+            kb.add(InlineKeyboardButton(
+                text=_("action_take_ticket", language),
+                callback_data=f"mod:take_ticket:{ticket_id}"
+            ))
+        elif ticket_status == TicketStatus.IN_PROGRESS:
+            kb.add(InlineKeyboardButton(
+                text=_("action_mark_resolved", language),
+                callback_data=f"mod:resolve_ticket:{ticket_id}"
+            ))
+            kb.add(InlineKeyboardButton(
+                text=_("action_reassign", language),
+                callback_data=f"mod:reassign_ticket:{ticket_id}"
+            ))
 
-
-def build_main_reply_keyboard(role: UserRole = UserRole.USER) -> ReplyKeyboardMarkup:
-    """
-    Создает основную клавиатуру для быстрого доступа к меню.
-
-    Args:
-        role: Роль пользователя (USER, MODERATOR, ADMIN)
-
-    Returns:
-        ReplyKeyboardMarkup: Клавиатура с кнопками быстрого доступа
-    """
-    # Базовая кнопка меню для всех ролей
-    buttons = [[KeyboardButton(text="📋 Меню")]]
-
-    # Добавляем кнопки в зависимости от роли
-    if role == UserRole.USER:
-        buttons[0].append(KeyboardButton(text="📝 Активный тикет"))
-        buttons.append([KeyboardButton(text="✏️ Новый тикет"), KeyboardButton(text="📋 История тикетов")])
-    elif role == UserRole.MODERATOR:
-        buttons[0].append(KeyboardButton(text="📝 Активный тикет"))
-        buttons.append([KeyboardButton(text="📨 Неназначенные тикеты"), KeyboardButton(text="📊 Моя статистика")])
-    elif role == UserRole.ADMIN:
-        buttons[0].append(KeyboardButton(text="📈 Статистика"))
-        buttons.append([KeyboardButton(text="👨‍💼 Управление модераторами"), KeyboardButton(text="🔍 Поиск тикета")])
-
-    # Создаем клавиатуру с resize_keyboard=True, чтобы она не занимала много места
-    return ReplyKeyboardMarkup(keyboard=buttons, resize_keyboard=True)
-
-
-def build_rating_keyboard() -> InlineKeyboardMarkup:
-    """
-    Клавиатура для оценки работы модератора.
-    """
-    kb = InlineKeyboardBuilder()
-
-    for i in range(1, 6):
-        stars = "⭐" * i
-        kb.add(InlineKeyboardButton(text=stars, callback_data=f"rating:{i}"))
-
-    return kb.as_markup()
-
-
-def build_moderator_list_keyboard(moderators: List[dict]) -> InlineKeyboardMarkup:
-    """
-    Клавиатура со списком модераторов.
-    """
-    kb = InlineKeyboardBuilder()
-
-    for mod in moderators:
-        name = mod.get("full_name", f"ID: {mod.get('telegram_id')}")
+        # Добавляем кнопку "Назад"
         kb.add(InlineKeyboardButton(
-            text=name,
-            callback_data=f"moderator:{mod.get('id')}"
+            text=_("action_back", language),
+            callback_data="mod:back_to_menu"
         ))
 
-    kb.add(InlineKeyboardButton(text=_("🔙 Назад"), callback_data="moderator:back"))
+        # Размещаем кнопки по одной в строке
+        kb.adjust(1)
 
-    return kb.as_markup()
+        return kb.as_markup()
 
+    @staticmethod
+    def rating_keyboard(language: str = None) -> InlineKeyboardMarkup:
+        """
+        Создает клавиатуру для оценки работы модератора.
 
-def build_tickets_list_keyboard(tickets: List[dict], page: int = 0, page_size: int = 5) -> InlineKeyboardMarkup:
-    """
-    Клавиатура со списком тикетов с пагинацией.
-    """
-    kb = InlineKeyboardBuilder()
+        Args:
+            language: Язык пользователя
 
-    # Вычисляем границы текущей страницы
-    start_idx = page * page_size
-    end_idx = min(start_idx + page_size, len(tickets))
+        Returns:
+            InlineKeyboardMarkup: Клавиатура с оценками
+        """
+        kb = InlineKeyboardBuilder()
 
-    # Добавляем тикеты текущей страницы
-    for i in range(start_idx, end_idx):
-        ticket = tickets[i]
-        ticket_id = ticket.get("id")
-        status = ticket.get("status", TicketStatus.OPEN)
+        for i in range(1, 6):
+            kb.add(InlineKeyboardButton(
+                text=_(f"rating_{i}", language),
+                callback_data=f"rating:{i}"
+            ))
 
-        # Добавляем эмодзи в зависимости от статуса тикета
-        status_emoji = {
-            TicketStatus.OPEN: "🆕",
-            TicketStatus.IN_PROGRESS: "🔄",
-            TicketStatus.RESOLVED: "✅",
-            TicketStatus.CLOSED: "🔒"
-        }.get(status, "❓")
+        # Размещаем все 5 кнопок в один ряд
+        kb.adjust(5)
+
+        return kb.as_markup()
+
+    @staticmethod
+    def back_button(callback_data: str = "back_to_menu", language: str = None) -> InlineKeyboardMarkup:
+        """
+        Создает клавиатуру только с кнопкой "Назад".
+
+        Args:
+            callback_data: Callback-данные для кнопки
+            language: Язык пользователя
+
+        Returns:
+            InlineKeyboardMarkup: Клавиатура с кнопкой "Назад"
+        """
+        kb = InlineKeyboardBuilder()
 
         kb.add(InlineKeyboardButton(
-            text=f"{status_emoji} Тикет #{ticket_id}",
-            callback_data=f"ticket:{ticket_id}"
+            text=_("action_back", language),
+            callback_data=callback_data
         ))
 
-    # Добавляем навигационные кнопки
-    row = []
-    if page > 0:
-        row.append(InlineKeyboardButton(text="◀️", callback_data=f"page:{page - 1}"))
+        return kb.as_markup()
 
-    row.append(InlineKeyboardButton(text=_("🔙 Назад"), callback_data="tickets:back"))
+    @staticmethod
+    def confirmation_keyboard(action: str, language: str = None) -> InlineKeyboardMarkup:
+        """
+        Создает клавиатуру для подтверждения действия.
 
-    if end_idx < len(tickets):
-        row.append(InlineKeyboardButton(text="▶️", callback_data=f"page:{page + 1}"))
+        Args:
+            action: Действие, которое нужно подтвердить (callback data)
+            language: Язык пользователя
 
-    kb.row(*row)
+        Returns:
+            InlineKeyboardMarkup: Клавиатура с кнопками "Да" и "Нет"
+        """
+        kb = InlineKeyboardBuilder()
 
-    return kb.as_markup()
+        kb.add(InlineKeyboardButton(
+            text=_("confirm_yes", language),
+            callback_data=f"confirm:{action}"
+        ))
+        kb.add(InlineKeyboardButton(
+            text=_("confirm_no", language),
+            callback_data=f"cancel:{action}"
+        ))
 
+        # Размещаем кнопки в один ряд
+        kb.adjust(2)
 
-def build_back_keyboard(callback_data: str = "back") -> InlineKeyboardMarkup:
-    """
-    Простая клавиатура с кнопкой "Назад".
-    """
-    kb = InlineKeyboardBuilder()
-    kb.add(InlineKeyboardButton(text=_("🔙 Назад"), callback_data=callback_data))
-    return kb.as_markup()
+        return kb.as_markup()
 
+    @staticmethod
+    def paginated_list(
+            items: List[Dict[str, Any]],
+            current_page: int,
+            page_size: int = 5,
+            action_prefix: str = "item",
+            back_callback: str = "back_to_menu",
+            language: str = None
+    ) -> InlineKeyboardMarkup:
+        """
+        Создает клавиатуру со списком элементов и кнопками пагинации.
 
-def build_confirm_keyboard(action: str) -> InlineKeyboardMarkup:
-    """
-    Клавиатура для подтверждения действия.
-    """
-    kb = InlineKeyboardBuilder()
+        Args:
+            items: Список элементов для отображения
+            current_page: Текущая страница (начиная с 0)
+            page_size: Количество элементов на странице
+            action_prefix: Префикс для callback данных
+            back_callback: Callback данные для кнопки "Назад"
+            language: Язык пользователя
 
-    kb.add(InlineKeyboardButton(text=_("✅ Да"), callback_data=f"confirm:{action}"))
-    kb.add(InlineKeyboardButton(text=_("❌ Нет"), callback_data=f"cancel:{action}"))
+        Returns:
+            InlineKeyboardMarkup: Клавиатура со списком и пагинацией
+        """
+        kb = InlineKeyboardBuilder()
 
-    return kb.as_markup()
+        # Вычисляем границы текущей страницы
+        total_pages = (len(items) + page_size - 1) // page_size if items else 0
+        start_idx = current_page * page_size
+        end_idx = min(start_idx + page_size, len(items))
+
+        # Добавляем элементы текущей страницы
+        for i in range(start_idx, end_idx):
+            item = items[i]
+            item_id = item.get("id")
+            item_text = item.get("text", f"Item #{item_id}")
+
+            kb.add(InlineKeyboardButton(
+                text=item_text,
+                callback_data=f"{action_prefix}:{item_id}"
+            ))
+
+        # Добавляем навигационные кнопки
+        row = []
+
+        # Кнопка "Назад" (предыдущая страница)
+        if current_page > 0:
+            row.append(InlineKeyboardButton(
+                text="◀️",
+                callback_data=f"page:{current_page - 1}"
+            ))
+
+        # Кнопка "Назад в меню"
+        row.append(InlineKeyboardButton(
+            text=_("action_back", language),
+            callback_data=back_callback
+        ))
+
+        # Кнопка "Вперед" (следующая страница)
+        if current_page < total_pages - 1:
+            row.append(InlineKeyboardButton(
+                text="▶️",
+                callback_data=f"page:{current_page + 1}"
+            ))
+
+        # Добавляем кнопки навигации одним рядом
+        kb.row(*row)
+
+        return kb.as_markup()

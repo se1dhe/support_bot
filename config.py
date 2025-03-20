@@ -1,15 +1,13 @@
-# config.py
-# ---------
-
 from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Tuple
+from typing import List, Optional
 
 from environs import Env
 
 
 @dataclass
 class DbConfig:
+    """Конфигурация базы данных"""
     host: str
     port: int
     user: str
@@ -17,31 +15,48 @@ class DbConfig:
     database: str
 
     def get_uri(self):
+        """
+        Возвращает URI для подключения к базе данных.
+
+        Returns:
+            str: URI подключения
+        """
         return f"mysql+aiomysql://{self.user}:{self.password}@{self.host}:{self.port}/{self.database}"
 
 
 @dataclass
 class TgBot:
+    """Конфигурация Telegram бота"""
     token: str
     admin_ids: List[int]
 
 
 @dataclass
 class Localization:
+    """Конфигурация локализации"""
     default_language: str
     languages: List[str]
-    domain: str
     locales_dir: Path
 
 
 @dataclass
 class Config:
+    """Основная конфигурация приложения"""
     tg_bot: TgBot
     db: DbConfig
     localization: Localization
 
 
-def load_config(path: str = None) -> Config:
+def load_config(path: Optional[str] = None) -> Config:
+    """
+    Загружает конфигурацию из .env файла.
+
+    Args:
+        path: Путь к .env файлу (опционально)
+
+    Returns:
+        Config: Объект с конфигурацией
+    """
     env = Env()
     env.read_env(path)
 
@@ -60,7 +75,6 @@ def load_config(path: str = None) -> Config:
         localization=Localization(
             default_language=env.str('DEFAULT_LANGUAGE', 'ru'),
             languages=env.list('LANGUAGES', ['ru', 'en', 'uk']),
-            domain='support_bot',
             locales_dir=Path(__file__).parent / 'locales',
         ),
     )
