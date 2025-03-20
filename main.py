@@ -9,7 +9,6 @@ from aiogram.fsm.storage.memory import MemoryStorage
 
 from config import load_config
 from database import init_db, create_tables
-from handlers import register_handlers
 from middlewares import setup_middlewares
 from utils.i18n import setup_i18n
 
@@ -25,6 +24,21 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+
+def register_handlers(dp: Dispatcher):
+    """
+    Регистрирует все обработчики.
+    """
+    from handlers import register_handlers as common_register_handlers
+    from handlers.user import register_handlers as user_register_handlers
+    from handlers.moderator import register_handlers as moderator_register_handlers
+    from handlers.admin import register_handlers as admin_register_handlers
+
+    # Регистрируем все обработчики
+    common_register_handlers(dp)
+    user_register_handlers(dp)
+    moderator_register_handlers(dp)
+    admin_register_handlers(dp)
 
 async def main():
     """
@@ -77,3 +91,4 @@ if __name__ == "__main__":
         asyncio.run(main())
     except (KeyboardInterrupt, SystemExit):
         logger.info("Бот остановлен")
+
